@@ -1,7 +1,6 @@
 import { ViteSSG } from "vite-ssg";
 import App from "./App.vue";
-
-const routes = [{ path: "/", component: App }];
+import { routes } from "./routes.js";
 
 // `export const createApp` is required instead of the original `createApp(App).mount('#app')`
 export const createApp = ViteSSG(
