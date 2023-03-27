@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 .next
+db
 
 # Logs
 logs
@@ -24,3 +25,6 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+*.tsbuildinfo
+next-env.d.ts

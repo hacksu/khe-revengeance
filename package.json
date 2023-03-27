@@ -5,7 +5,7 @@
   "description": "Kent Hack Enough is a hackathon happening in October 2023.",
   "main": "server/index.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --exec node --loader ts-node/esm ./server/index.ts"
+    "dev": "cross-env NODE_ENV=development nodemon --watch server --exec node --loader ts-node/esm ./server/index.ts"
   },
   "author": "HacKSU",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "next": "^13.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "remult": "^0.19.0",
     "tsx": "^3.12.6",
     "vite-ssg": "^0.22.1",
     "vue": "^3.2.47",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/connect": "^3.4.35",
     "@types/node": "^18.15.10",
+    "@types/react": "^18.0.30",
     "@vitejs/plugin-vue": "^4.1.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
