@@ -26,4 +26,4 @@ jobs:
 
       - name: Pull & Build
         run: |
-          ssh oracle 'cd /var/www/khe-revengeance/ && git pull && yarn install && yarn build-public'
+          ssh oracle 'cd /var/www/khe-revengeance/ && git fetch && git checkout production && git pull && yarn install && yarn build-public'
