@@ -1,0 +1,29 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  deploy:
+    name: "Deploy to server"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+    # needs: test
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/oracle.key
+          chmod 600 ~/.ssh/oracle.key
+          cat >>~/.ssh/config <<END
+          Host oracle
+            HostName $SSH_HOST
+            User $SSH_USERNAME
+            IdentityFile ~/.ssh/oracle.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Pull & Build
+        run: |
+          ssh oracle 'cd /var/www/khe-revengeance/ && git pull && yarn install && yarn build-public'
