@@ -123,6 +123,10 @@ export default {
 //   width: 100vw;
 // }
 
+.hacksu-box {
+  display: none;
+}
+
 .landing .back {
   // background: linear-gradient(45deg, #ffecb8, #ffe499 95%);
   //@include bg-primary;
