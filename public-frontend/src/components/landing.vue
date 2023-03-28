@@ -55,13 +55,13 @@
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
         <p title="Registration has not yet opened!" style="
-                font-size: 3vh;
-                max-width: 800px;
-                width: 80vw;
-                margin-left: auto;
-                margin-right: auto;
-                opacity: 0.5;
-              ">
+                  font-size: 3vh;
+                  max-width: 800px;
+                  width: 80vw;
+                  margin-left: auto;
+                  margin-right: auto;
+                  opacity: 0.5;
+                ">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -152,7 +152,7 @@ export default {
   max-width: 80vw;
   margin-left: auto;
   margin-right: auto;
-  color: #555555
+  color: #bdbdbd;
 }
 
 #apply-btn {
