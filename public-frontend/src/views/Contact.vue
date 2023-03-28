@@ -29,7 +29,7 @@
       <div class="formField">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-        </textarea>
+                    </textarea>
       </div>
 
       <div style="text-align: center;">
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import { SupportTicketController } from "@/../../global-includes/support-ticket.ts";
+
 export default {
   name: "Main",
   data() {
@@ -76,20 +78,14 @@ export default {
     }
   },
   methods: {
-    submitTicket() {
-      this.$parent.wrapper.ticketManager
-        .submitTicket(this.subject, this.content, this.email, this.name)
-        .then((data) => {
-          // TODO: Show ticket created success.
-          this.submitted = true;
-          console.log(data);
-        })
-        .catch((err) => {
-          // TODO: Show ticket creation error.
-          this.err =
-            "There was an error sending your message! :( <br>Make sure you're connected to the internet, and the form is completely filled out.<br>If this persists, you can email us at hacksu@cs.kent.edu";
-          throw err;
-        });
+    async submitTicket() {
+      await SupportTicketController.addTicketAndSendAlert({
+        subject: this.subject,
+        body: this.content,
+        theirEmail: this.email,
+        theirName: this.name,
+      });
+      this.submitted = true;
     },
   },
 };

@@ -6,7 +6,7 @@ export class SupportTicket {
   id!: string;
 
   @Fields.createdAt()
-  openedAt = new Date();
+  createdAt = new Date();
 
   @Fields.string()
   subject = "";
@@ -23,19 +23,9 @@ export class SupportTicket {
 
 export class SupportTicketController {
   @BackendMethod({ allowed: true })
-  static async sendEmail(ticket: SupportTicket) {
+  static async addTicketAndSendAlert(ticket: SupportTicket) {
     const emailRepo = remult.repo(SupportTicket);
-    await emailRepo.save(ticket);
-
-    const mailer = (await import("@sendgrid/mail")).default;
-    mailer.setApiKey("");
-
-    const msg = {
-      to: "test@example.com", // Change to your recipient
-      from: "test@example.com", // Change to your verified sender
-      subject: "Sending with SendGrid is Fun",
-      text: "and easy to do anywhere, even with Node.js",
-      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-    };
+    await SupportTicketController.sendAlert(await emailRepo.save(ticket));
   }
+  static async sendAlert(ticket: SupportTicket) {}
 }

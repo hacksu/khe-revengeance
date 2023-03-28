@@ -8,6 +8,7 @@ import next from "next";
 import { remultFastify } from "remult/remult-fastify";
 import { Email } from "../global-includes/email-address.js";
 import { SupportTicket } from "../global-includes/support-ticket.js";
+import { SupportTicketController } from "./db-controllers.js";
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -43,7 +44,12 @@ async function createDevServer() {
   const staffDevServer = await getStaffFrontendMiddleware();
   const app = fastify();
   await app.register(middie);
-  await app.register(remultFastify({ entities: [Email, SupportTicket] }));
+  await app.register(
+    remultFastify({
+      entities: [Email, SupportTicket],
+      controllers: [SupportTicketController],
+    })
+  );
   app.use(async (req: IncomingMessage, res: ServerResponse) => {
     if (!req.headers.host) {
       console.error("received request without Host header??");
