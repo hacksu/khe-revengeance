@@ -1,0 +1,30 @@
+.hacksu-box {
+    position: absolute;
+    background-image: url('@/assets/images/hacksu-box.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 40vh;
+    max-width: 50vw;
+    height: 40vh;
+    max-height: 50vw;
+    z-index: -1;
+    &.box1 {
+        background-position-y: 7vh;
+        background-position-x: -14vh;
+        left: 0px;
+        bottom: 0px;
+        @include display-not(mobile) {
+            bottom: 0px;
+        }
+        /*@include mobile {
+      top: calc(100vh - 50vw);
+    }*/
+    }
+    &.box2 {
+        transform: rotate(90deg);
+        background-position-x: -7vh;
+        background-position-y: -14vh;
+        right: 0px;
+        top: 0px;
+    }
+}

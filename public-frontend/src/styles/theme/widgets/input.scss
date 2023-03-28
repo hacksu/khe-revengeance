@@ -1,0 +1,10 @@
+@import '../colors.scss';
+@import './button.scss';
+
+@mixin input-primary {
+    @include rounded;
+    background-color: color('bg-secondary');
+    color: color('text-secondary');
+    padding: 12px;
+    border: none;
+}

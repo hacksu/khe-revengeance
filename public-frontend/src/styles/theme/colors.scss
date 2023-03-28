@@ -1,0 +1,19 @@
+
+
+$colors: (
+    error: #e87c72,
+
+    primary: #000000,
+    secondary: #000000,
+    
+    bg-primary: #000000,
+    text-primary: #fff,
+
+    bg-secondary: #ebeef0,
+    text-secondary: #000,
+
+);
+
+@function color($name) {
+    @return map-get($map: $colors, $key: $name);
+}
