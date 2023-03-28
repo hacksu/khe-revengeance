@@ -55,13 +55,13 @@
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
         <p title="Registration has not yet opened!" style="
-                font-size: 3vh;
-                max-width: 800px;
-                width: 80vw;
-                margin-left: auto;
-                margin-right: auto;
-                opacity: 0.5;
-              ">
+                  font-size: 3vh;
+                  max-width: 800px;
+                  width: 80vw;
+                  margin-left: auto;
+                  margin-right: auto;
+                  opacity: 0.5;
+                ">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -123,15 +123,20 @@ export default {
 //   width: 100vw;
 // }
 
+.hacksu-box {
+  display: none;
+}
+
 .landing .back {
   // background: linear-gradient(45deg, #ffecb8, #ffe499 95%);
   //@include bg-primary;
-  background-image: url('stars.png');
+  background-image: url('/stars.png');
+  background-position-x: -235px;
   height: 100%;
   width: 110vw;
   position: absolute;
   top: 0px;
-  left: -100px;
+  left: 0;
   z-index: -1;
   overflow: hidden;
 }
@@ -152,7 +157,7 @@ export default {
   max-width: 80vw;
   margin-left: auto;
   margin-right: auto;
-  color: #555555
+  color: #bdbdbd;
 }
 
 #apply-btn {

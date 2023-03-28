@@ -1,10 +1,11 @@
 import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
+import { fileURLToPath } from "url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: "./",
+  root: path.resolve(path.dirname(fileURLToPath(import.meta.url))),
   publicDir: "public",
   resolve: {
     alias: [
@@ -21,4 +22,7 @@ export default defineConfig({
   },
   plugins: [vue()],
   build: { outDir: "dist" },
+  ssgOptions: {
+    entry: "src/main.js",
+  },
 });

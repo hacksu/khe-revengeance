@@ -89,7 +89,7 @@ export default {
 
 #about-container .back {
   
-  background-image: url('stars.png');
+  background-image: url('/stars.png');
   display: inline-block;
   top: 0px;
   left: 0px;
