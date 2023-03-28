@@ -127,11 +127,12 @@ export default {
   // background: linear-gradient(45deg, #ffecb8, #ffe499 95%);
   //@include bg-primary;
   background-image: url('/stars.png');
+  background-position-x: -235px;
   height: 100%;
   width: 110vw;
   position: absolute;
   top: 0px;
-  left: -100px;
+  left: 0;
   z-index: -1;
   overflow: hidden;
 }
