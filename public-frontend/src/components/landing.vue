@@ -126,7 +126,7 @@ export default {
 .landing .back {
   // background: linear-gradient(45deg, #ffecb8, #ffe499 95%);
   //@include bg-primary;
-  background-image: url('stars.png');
+  background-image: url('/stars.png');
   height: 100%;
   width: 110vw;
   position: absolute;

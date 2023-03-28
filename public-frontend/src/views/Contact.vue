@@ -112,7 +112,7 @@ export default {
 
   .back {
     //@include bg-primary;
-    background-image: url('stars.png');
+    background-image: url('/stars.png');
     height: 100vh;
     width: 100%;
     position: fixed;
