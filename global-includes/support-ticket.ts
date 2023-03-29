@@ -1,6 +1,6 @@
 import { BackendMethod, Entity, Fields, remult } from "remult";
 
-@Entity("tickets", { allowApiInsert: true })
+@Entity("tickets", { allowApiCrud: false })
 export class SupportTicket {
   @Fields.uuid()
   id!: string;
