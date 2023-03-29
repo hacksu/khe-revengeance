@@ -6,7 +6,8 @@
   "main": "server/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch server --watch global-includes --exec node --loader ts-node/esm ./server/index.ts",
-    "build-public": "vite-ssg build -c public-frontend/vite.config.js"
+    "build-public": "cross-env NODE_ENV=production vite-ssg build -c public-frontend/vite.config.js",
+    "production": "cross-env NODE_ENV=production tsx ./server/index.ts"
   },
   "author": "HacKSU",
   "license": "MIT",
@@ -22,6 +23,7 @@
     "react-dom": "^18.2.0",
     "remult": "^0.19.0",
     "sass": "^1.60.0",
+    "serve-static": "^1.15.0",
     "tsx": "^3.12.6",
     "vite-ssg": "^0.22.1",
     "vue": "^3.2.47",
@@ -32,6 +34,7 @@
     "@types/connect": "^3.4.35",
     "@types/node": "^18.15.10",
     "@types/react": "^18.0.30",
+    "@types/serve-static": "^1.15.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
