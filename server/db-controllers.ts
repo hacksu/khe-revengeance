@@ -5,6 +5,10 @@ import { SupportTicketController } from "../global-includes/support-ticket.js";
 mailer.setApiKey(secrets.sendgridKey);
 
 SupportTicketController.sendAlert = async function (ticket) {
+  const timeString =
+    ticket.createdAt.toLocaleString("en-US", {
+      timeZone: "America/New_York",
+    }) + " US Eastern Time";
   const msg: MailDataRequired = {
     to: secrets.supportEmailRecipient,
     from: {
@@ -13,16 +17,21 @@ SupportTicketController.sendAlert = async function (ticket) {
     },
     subject: "KHE SUPPORT TICKET: " + ticket.subject,
     text:
-      `from: ${ticket.theirName}, ${ticket.theirEmail}\n` +
-      `time: ${ticket.createdAt.toLocaleString()}\n` +
+      `ticket id: ${ticket.id}\n` +
+      `ticket created at: ${timeString}\n` +
+      `sender name: ${ticket.theirName}\nsender email: ${ticket.theirEmail}\n` +
       `subject: ${ticket.subject}\n` +
-      `body:\n ${ticket.body}\n\n\n`,
+      `body:\n\n${ticket.body}\n\n\n`,
     asm: {
       groupId: 21989, // ID for "KHE Support Ticket Alerts" on sendgrid
     },
   };
   const sendResult = await mailer.send(msg);
-  console.log(sendResult);
+  console.log(
+    `sent email through sendgrid at ${timeString} for support ticket ` +
+      `${ticket.id}, received status code:`,
+    sendResult[0].statusCode
+  );
 };
 
 export { SupportTicketController };

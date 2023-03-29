@@ -92,6 +92,7 @@ async function createServer() {
   } else {
     // in production mode, we build our frontend code to HTML/CSS/JS and then
     // serve those files statically
+    console.log("building public site for production...");
     console.log(execSync("yarn build-public").toString());
     const publicFiles = fileServer(
       path.resolve(projectRoot, "public-frontend/dist"),
