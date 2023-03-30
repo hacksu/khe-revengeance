@@ -1,0 +1,82 @@
+# this configuration file will set up caddy to serve the public and staff sites,
+with automatic https
+
+# make sure the base html files aren't cached by visitor's browsers
+(file-server) {
+        encode zstd gzip
+        @html {
+                path */
+        }
+        header @html {
+                Cache-Control "max-age=0,no-store"
+        }
+}
+
+# log requests to a file
+(monitor) {
+        log {
+                output file /var/log/caddy/caddyhttp.json
+                format json
+        }
+}
+
+
+# for optimization, caddy will attempt to serve any static files that
+# are requested directly; requests that don't match static files will be
+# reverse proxied to the actual server. @notStatic is a matcher that will find
+# requests that don't match static files.
+
+# the syntax {path}.html makes it look for e.g. contact.html even when the
+# url is just khe.io/contact
+
+(matchNotStatic) {
+    @notStatic {
+        not {
+            file {
+                try_files {path} {path}.html
+            }
+        }
+    }
+}
+
+# add "dev." at the beginning of the next line to set up that subdomain
+khe.io {
+        import monitor
+        import file-server
+        import matchNotStatic
+
+        # assuming the repository is cloned to this location:
+        root * /var/www/khe-revengeance/public-frontend/dist
+
+        # outside the matcher we still have to rewrite the actual request
+        try_files {path} {path}.html
+
+        reverse_proxy @notStatic localhost:3000 {
+                # add headers to tell the api server where this request came from
+                header_up Host {host}
+                header_up X-Real-IP {remote}
+        }
+
+        file_server
+}
+
+# add "dev-" at the beginning of the next line to set up that subdomain
+staff.khe.io {
+        import monitor
+        import file-server
+        import matchNotStatic
+
+        # assuming the repository is cloned to this location:
+        root * /var/www/khe-revengeance/staff-frontend/dist
+
+        # outside the matcher we still have to rewrite the actual request
+        try_files {path} {path}.html
+
+        reverse_proxy @notStatic localhost:3000 {
+                # add headers to tell the api server where this request came from
+                header_up Host {host}
+                header_up X-Real-IP {remote}
+        }
+
+        file_server
+}
