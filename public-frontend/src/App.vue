@@ -12,7 +12,7 @@
       </div>
 
       <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
-        <p class="banner-link" @click="scrollTo('/', 'landing-container')">
+        <p class="banner-link" @click="scrollTo('/', '#landing-container')">
           Home
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
@@ -49,7 +49,6 @@
 <script>
 import scrollto from "vue-scrollto";
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
-import apiConfig from "./config/config";
 
 export default {
   name: "app",
@@ -255,12 +254,7 @@ export default {
     },
     scrollTo: function (page, el) {
       this.expandMenu = false;
-      if (this.$route.path !== page) {
-        this.$router.push(page);
-        this.scrollToEl = el;
-      } else {
-        scrollto.scrollTo(el, 300);
-      }
+      this.$router.push({ path: page, hash: el });
     },
   },
 };
