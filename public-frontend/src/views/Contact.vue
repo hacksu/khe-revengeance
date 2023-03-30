@@ -29,7 +29,7 @@
       <div class="formField">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-                    </textarea>
+                      </textarea>
       </div>
 
       <div style="text-align: center;">
@@ -93,6 +93,7 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
+@import '@/styles/space.scss';
 
 #contact {
   @include bg-primary;
@@ -105,18 +106,6 @@ export default {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-
-  .back {
-    //@include bg-primary;
-    background-image: url('/stars.png');
-    height: 100vh;
-    width: 100%;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: -1;
-    overflow: hidden;
-  }
 }
 
 @media only screen and (max-width: 768px) {

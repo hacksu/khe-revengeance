@@ -12,7 +12,7 @@
     </a> -->
 
     <div id="logo-container">
-      <img src="/2023_Logo.png" id="short-logo" />
+      <img src="/2023_Logo_Resized.png" id="short-logo" />
       <!-- <br /> -->
       <!-- <h2 class="kenthackenough">Kent Hack Enough</h2> -->
     </div>
@@ -55,13 +55,13 @@
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
         <p title="Registration has not yet opened!" style="
-                  font-size: 3vh;
-                  max-width: 800px;
-                  width: 80vw;
-                  margin-left: auto;
-                  margin-right: auto;
-                  opacity: 0.5;
-                ">
+                          font-size: 3vh;
+                          max-width: 800px;
+                          width: 80vw;
+                          margin-left: auto;
+                          margin-right: auto;
+                          opacity: 0.5;
+                        ">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -114,31 +114,11 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
+@import "@/styles/space.scss";
 
-// .landing {
-//   text-align: center;
-//   margin-left: auto;
-//   margin-right: auto;
-//   height: 100vh;
-//   width: 100vw;
-// }
 
 .hacksu-box {
   display: none;
-}
-
-.landing .back {
-  // background: linear-gradient(45deg, #ffecb8, #ffe499 95%);
-  //@include bg-primary;
-  background-image: url('/stars.png');
-  background-position-x: -235px;
-  height: 100%;
-  width: 110vw;
-  position: absolute;
-  top: 0px;
-  left: 0;
-  z-index: -1;
-  overflow: hidden;
 }
 
 .img-box {

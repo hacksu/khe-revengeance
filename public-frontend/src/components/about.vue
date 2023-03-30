@@ -11,7 +11,8 @@
     <div id="about-content-container">
       <img style="max-width: 80vh;" src="@/assets/text_rocket.png">
       <div id="about-text-container">
-        Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this space-fairing event as we work together to make outstanding projects!<br><br>
+        Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
+        space-fairing event as we work together to make outstanding projects!<br><br>
       </div>
     </div>
     <div id="colored-text-container">
@@ -20,7 +21,6 @@
     </div>
     <div class="back"></div>
   </div>
-
 </template>
 
 <script>
@@ -31,6 +31,7 @@ export default {
 
 <style scoped lang="scss">
 @import '@/styles/global.scss';
+@import '@/styles/space.scss';
 
 .image-box2 {
   background-position: 0vw 0vh;
@@ -86,21 +87,6 @@ export default {
   }
 }
 
-
-#about-container .back {
-  
-  background-image: url('/stars.png');
-  display: inline-block;
-  top: 0px;
-  left: 0px;
-  height: 100%;
-  width: 100%;
-  z-index: -2;
-  position: absolute;
-  
-}
-
-
 #about-content-container {
   margin: 60px 10vw;
   margin-top: 15px;
@@ -115,6 +101,7 @@ export default {
     width: 60vw;
     align-self: center;
   }
+
   z-index: 1;
   justify-content: space-between;
 }
