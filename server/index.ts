@@ -67,6 +67,8 @@ async function createServer() {
   await app.register(middie);
   // create api routes for database stuff
   await app.register(remultFastify(dbConfig));
+  // for sanity checks
+  app.get("/api/exists", (_, res) => res.send("yes"));
   defineRemoteProcedures();
   if (dev) {
     // in development mode, we create and use the vite and next.js development
@@ -100,9 +102,11 @@ async function createServer() {
       { extensions: ["html"] }
     );
 
-    // these static files could also be served from a more optimized file server
-    // like Caddy
+    // serve the built files if necessary; caddy or nginx could be set up to do
+    // this in production
     app.use(async (req: IncomingMessage, res: ServerResponse, next) => {
+      // add a header just so i can see that the request made it this far
+      res.setHeader("X-File-Server", "Fastify-Static-Server");
       if (!req.headers.host) {
         console.error("received request without Host header??");
         return;
