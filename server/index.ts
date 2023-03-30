@@ -13,9 +13,8 @@ import next from "next";
 import { remultFastify } from "remult/remult-fastify";
 
 // local modules
-import { Email } from "../global-includes/email-address.js";
-import { SupportTicket } from "../global-includes/support-ticket.js";
-import { SupportTicketController } from "./db-controllers.js";
+import { defineRemoteProcedures } from "./rpc-definitions.js";
+import { dbConfig } from "../global-includes/exports.js";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -67,12 +66,8 @@ async function createServer() {
   // enable express-style middleware
   await app.register(middie);
   // create api routes for database stuff
-  await app.register(
-    remultFastify({
-      entities: [Email, SupportTicket],
-      controllers: [SupportTicketController],
-    })
-  );
+  await app.register(remultFastify(dbConfig));
+  defineRemoteProcedures();
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request

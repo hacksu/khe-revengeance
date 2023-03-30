@@ -1,4 +1,5 @@
 import { BackendMethod, Entity, Fields, remult } from "remult";
+import { RemoteProcedures } from "./rpc-declarations.js";
 
 @Entity("tickets", { allowApiInsert: true })
 export class SupportTicket {
@@ -25,7 +26,6 @@ export class SupportTicketController {
   @BackendMethod({ allowed: true })
   static async addTicketAndSendAlert(ticket: SupportTicket) {
     const emailRepo = remult.repo(SupportTicket);
-    await SupportTicketController.sendAlert(await emailRepo.save(ticket));
+    await RemoteProcedures.sendAlert(await emailRepo.save(ticket));
   }
-  static async sendAlert(ticket: SupportTicket) {}
 }
