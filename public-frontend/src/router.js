@@ -45,7 +45,7 @@ export const routerConfig = {
       return {
         el: to.hash,
         behavior: "smooth",
-        top: 50,
+        top: 75,
       };
     }
   },

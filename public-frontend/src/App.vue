@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app-container">
     <div id="banner" style="z-index: 100">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
-        <p class="banner-link khe-link" id="kheTitle" @click="scrollTo('/', '#mainContainer')">
+        <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/', '#mainContainer')">
           KENT HACK ENOUGH
         </p>
 
@@ -12,24 +12,24 @@
       </div>
 
       <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
-        <p class="banner-link" @click="scrollTo('/', '#landing-container')">
+        <p class="banner-link" @click="navigateTo('/', '#app')">
           Home
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
-        <p class="banner-link" id="faq-scrollto" @click="scrollTo('/', '#faq-container')">
+        <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
           FAQ
         </p>
-        <p v-if="$data.showSponsors" class="banner-link" @click="scrollTo('/sponsor', '#sponsors')">
+        <p v-if="$data.showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
           Sponsors
         </p>
-        <p class="banner-link" @click="scrollTo('/contact', '#contact')">
+        <p class="banner-link" @click="navigateTo('/contact')">
           Contact
         </p>
         <!-- <p v-if="$data.showSchedule" class="banner-link" @click="scrollTo('/schedule')">
           Schedule
         </p> -->
-        <p class="banner-link" @click="scrollTo('/', '#map')" hidden>Virtual</p>
-        <p v-if="$data.showLive" class="banner-link" @click="scrollTo('/live')">
+        <p class="banner-link" @click="navigateTo('/', '#map')" hidden>Virtual</p>
+        <p v-if="$data.showLive" class="banner-link" @click="navigateTo('/live')">
           Live!
         </p>
         <!-- <p class="banner-link register-link" @click="scrollTo('/register', '#register')"
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import scrollto from "vue-scrollto";
+// import scrollto from "vue-scrollto";
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
 
 export default {
@@ -252,7 +252,7 @@ export default {
     togMenu: function () {
       this.expandMenu = !this.expandMenu;
     },
-    scrollTo: function (page, el) {
+    navigateTo: function (page, el) {
       this.expandMenu = false;
       this.$router.push({ path: page, hash: el });
     },
@@ -370,7 +370,7 @@ export default {
 //   /*filter: brightness(120%);*/
 // }
 
-#app {
+#app-container {
   // font-family: abel;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -380,6 +380,7 @@ export default {
   width: 100%;
   top: 0px;
   left: 0px;
+  min-height: 100vh;
 }
 
 #banner {
