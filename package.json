@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch server --watch global-includes --exec node --loader ts-node/esm ./server/index.ts",
     "build-public": "cross-env NODE_ENV=production vite-ssg build -c public-frontend/vite.config.js",
+    "build-staff": "cd staff-frontend && cross-env NODE_ENV=production next build && cross-env NODE_ENV=production next export -o dist",
     "production": "cross-env NODE_ENV=production tsx ./server/index.ts"
   },
   "author": "HacKSU",

@@ -2,7 +2,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { IncomingMessage, ServerResponse } from "http";
-import { execSync } from "child_process";
+import { exec } from "child_process";
 
 // dependencies installed from npm
 import fastify from "fastify";
@@ -89,14 +89,31 @@ async function createServer() {
   } else {
     // in production mode, we build our frontend code to HTML/CSS/JS and then
     // serve those files statically
-    console.log("building public site for production...");
-    console.log(execSync("yarn build-public").toString());
+    console.log("building site html for production...");
+
+    exec("yarn build-public", (err, stdout, stderr) => {
+      if (err) {
+        console.error("could not build public site!");
+        console.error(stderr);
+      } else {
+        console.log("built public site:");
+        console.log(stdout);
+      }
+    });
     const publicFiles = fileServer(
       path.resolve(projectRoot, "public-frontend/dist"),
       { extensions: ["html"] }
     );
 
-    // TODO: exec next.js build
+    exec("yarn build-staff", (err, stdout, stderr) => {
+      if (err) {
+        console.error("could not build staff site!");
+        console.error(stderr);
+      } else {
+        console.log("built staff site:");
+        console.log(stdout);
+      }
+    });
     const staffFiles = fileServer(
       path.resolve(projectRoot, "staff-frontend/dist"),
       { extensions: ["html"] }
