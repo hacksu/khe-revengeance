@@ -11,7 +11,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/oracle.key
-          chmod 600 ~/.ssh/oracle_prod.key
+          chmod 600 ~/.ssh/oracle.key
           cat >>~/.ssh/config <<END
           Host oracle_prod
             HostName $SSH_HOST
