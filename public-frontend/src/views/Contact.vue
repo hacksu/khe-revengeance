@@ -11,7 +11,7 @@
 
       <div class="formField">
         <span id="subjectTitle">Subject:</span>
-        <input type="text" placeholder="What do you need to talk to us about?" name="subject" class="contactTextField"
+        <input type="text" placeholder="What do you need to talk about?" name="subject" class="contactTextField"
           v-model="subject" />
       </div>
 
@@ -29,7 +29,7 @@
       <div class="formField">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-                                    </textarea>
+                                              </textarea>
       </div>
 
       <div style="text-align: center;">
@@ -111,7 +111,7 @@ export default {
 
 @media only screen and (max-width: 768px) {
   #contact {
-    padding: 1rem 0.5rem !important;
+    padding: 2rem 1rem !important;
   }
 }
 
@@ -142,6 +142,7 @@ export default {
   // outline: none;
   font-size: 20px;
   width: 100%;
+  box-sizing: border-box;
   // border-bottom: 2px solid white;
 }
 
@@ -150,6 +151,7 @@ textarea.contactTextField {
   width: 100%;
   max-width: 100%;
   min-width: 100%;
+  box-sizing: border-box;
 }
 
 #contactButton {

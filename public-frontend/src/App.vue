@@ -67,7 +67,7 @@ export default {
       showMLH: true,
       hasApp: false,
       hasCheckedForApp: false,
-      expandMenu: true,
+      expandMenu: false,
       shrinkBanner: false,
       user: this.userInitialState(),
       liveUpdates: {},
@@ -380,7 +380,6 @@ export default {
   display: flex;
   justify-content: space-between;
   z-index: 98;
-  padding-left: 20px;
 
   @include mobile {
     @include bg-primary;
@@ -587,6 +586,7 @@ export default {
   #bannerL {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
   #bannerR {
