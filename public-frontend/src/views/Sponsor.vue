@@ -28,22 +28,22 @@
       <br /><br />
     </div>
 
-    <div v-if="$parent.allowSponsorship">
+    <div v-if="allowSponsorship">
       <p style="
-              font-size: 5vmin;
-              max-width: 1200px;
-              margin-left: auto;
-              margin-right: auto;
-            ">
+                      font-size: 5vmin;
+                      max-width: 1200px;
+                      margin-left: auto;
+                      margin-right: auto;
+                    ">
         Looking to sponsor Kent Hack Enough?
       </p>
       <br />
       <p style="
-              font-size: 3vmin;
-              max-width: 1200px;
-              margin-left: auto;
-              margin-right: auto;
-            ">
+                      font-size: 3vmin;
+                      max-width: 1200px;
+                      margin-left: auto;
+                      margin-right: auto;
+                    ">
         We look forward to working with you for the 9th year of KHE! Below are
         the following three tiers for Kent Hack Enough 2020! We will issue an
         itemized invoice once tier is confirmed. Please reach out to us if you
@@ -78,14 +78,14 @@
           <div id="colorTier1">
             <!--<img src="@/assets/images/cassetteTape.png">-->
             <div style="
-                    transform: scale(0.5);
-                    height: 160px;
-                    width: calc(100% - 40px);
-                    padding: 20px;
-                    background-size: contain;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                  " id="cassette-img"></div>
+                            transform: scale(0.5);
+                            height: 160px;
+                            width: calc(100% - 40px);
+                            padding: 20px;
+                            background-size: contain;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                          " id="cassette-img"></div>
           </div>
           <h2>Cassette Tape</h2>
           <p class="specialText2">$250</p>
@@ -98,14 +98,14 @@
           <div id="colorTier2">
             <!--<img src="@/assets/images/sunglasses.png">-->
             <div style="
-                    transform: scale(0.6);
-                    height: 160px;
-                    width: calc(100% - 40px);
-                    padding: 20px;
-                    background-size: contain;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                  " id="sunglasses-img"></div>
+                            transform: scale(0.6);
+                            height: 160px;
+                            width: calc(100% - 40px);
+                            padding: 20px;
+                            background-size: contain;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                          " id="sunglasses-img"></div>
           </div>
 
           <h2>Sunglasses</h2>
@@ -119,14 +119,14 @@
           <div id="colorTier3">
             <!--<img src="@/assets/images/keyboard.png">-->
             <div style="
-                    transform: scale(0.85);
-                    height: 160px;
-                    width: calc(100% - 40px);
-                    padding: 20px;
-                    background-size: contain;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                  " id="keyboard-img"></div>
+                            transform: scale(0.85);
+                            height: 160px;
+                            width: calc(100% - 40px);
+                            padding: 20px;
+                            background-size: contain;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                          " id="keyboard-img"></div>
           </div>
 
           <h2>Keyboard</h2>
@@ -213,12 +213,9 @@
 </template>
 
 <script>
-import cassette from "../assets/cassette2020.png";
-import sunglasses from "../assets/SunglassesPink.svg";
-import keyboard from "../assets/keyboard.png";
 import Sponsors from "@/sponsors.js";
 export default {
-  name: "Map",
+  name: "Sponsor",
   computed: {},
   methods: {
     tier1: function () {
@@ -295,6 +292,7 @@ export default {
   },
   data() {
     return {
+      allowSponsorship: false,
       sponsors: Sponsors,
     };
   },

@@ -4,7 +4,7 @@
       POWERED BY
     </p>
 
-    <a id="small-hacksu-logo" href="http://hacksu.com">
+    <a id="small-hacksu-logo" href="https://hacksu.com">
       <img style="opacity: 0.5" id="powered-by-hacksu" src="@/assets/2019-hacksu-color.svg" />
     </a>
 

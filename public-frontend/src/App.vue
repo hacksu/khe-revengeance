@@ -19,24 +19,24 @@
         <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
           FAQ
         </p>
-        <p v-if="$data.showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
+        <p v-if="showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
           Sponsors
         </p>
         <p class="banner-link" @click="navigateTo('/contact')">
           Contact
         </p>
-        <!-- <p v-if="$data.showSchedule" class="banner-link" @click="scrollTo('/schedule')">
+        <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
           Schedule
-        </p> -->
+        </p>
         <p class="banner-link" @click="navigateTo('/', '#map')" hidden>Virtual</p>
-        <p v-if="$data.showLive" class="banner-link" @click="navigateTo('/live')">
+        <p v-if="showLive" class="banner-link" @click="navigateTo('/live')">
           Live!
         </p>
-        <!-- <p class="banner-link register-link" @click="scrollTo('/register', '#register')"
-          v-if="user._id == '' && $data.showRegister">
+        <p class="banner-link register-link" @click="scrollTo('/register', '#register')"
+          v-if="user._id == '' && showRegister">
           Register
-        </p> -->
-        <p class="banner-link logout-link" @click="logout()" v-if="user._id != '' && $data.showRegister">
+        </p>
+        <p class="banner-link logout-link" @click="logout()" v-if="user._id != '' && showRegister">
           Log out
         </p>
         <div class="padding" style="width: 50px"></div>
@@ -55,14 +55,12 @@ export default {
   components: {},
   data() {
     return {
-      showLogin: true,
-      showRegister: true, //true, //false,
-      registrationOpens: 'September 6th',
-      //showRegister: (window.location.href.indexOf("khe.io") >= 0) ? false : true, // Temporary disable
-      showSponsors: true, //true, //false,
-      allowSponsorship: false,
+      // showRegister: (window.location.href.indexOf("khe.io") >= 0) ? false : true,
+      showRegister: false,
+      // registrationOpens: 'September 6th',
+      showSponsors: true,
       showLive: false,
-      showSchedule: true, //true, //false,
+      showSchedule: false,
       showPasswordReset: false,
       showMLH: true,
       hasApp: false,
@@ -162,28 +160,6 @@ export default {
     handleScroll(event) {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
-    dispLogin: function () {
-      // Normally we could do a one line function like this inside an @click attribute,
-      // but this makes it easier to access from it's children
-      this.expandMenu = false;
-      this.showLogin = !this.showLogin;
-    },
-    dispRegister: function () {
-      this.expandMenu = false;
-      this.showRegister = !this.showRegister;
-    },
-    dispPasswordReset: function () {
-      this.expandMenu = false;
-      this.showPasswordReset = false;
-    },
-    switchLoginRegister: function () {
-      this.showRegister = !this.showRegister;
-      this.showLogin = !this.showLogin;
-    },
-    switchPasswordReset: function () {
-      this.showLogin = false;
-      this.showPasswordReset = !this.showPasswordReset;
-    },
     // getScores() {
     //   // LOADING LEADERBOARD:
     //   var vm = this;
@@ -227,16 +203,6 @@ export default {
         },
       };
     },
-    // logout: function () {
-    //   this.wrapper.userManager.logout();
-    //   //        .then(() => {
-    //   //        console.log("Logged out!");
-    //   //      }).catch((err) => {
-    //   //        console.error("Error logging out: ", err);
-    //   //      })
-    //   this.user = this.userInitialState();
-    //   this.$router.push({ path: "/" });
-    // },
     togMenu: function () {
       this.expandMenu = !this.expandMenu;
     },

@@ -55,13 +55,13 @@
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
         <p title="Registration has not yet opened!" style="
-                          font-size: 3vh;
-                          max-width: 800px;
-                          width: 80vw;
-                          margin-left: auto;
-                          margin-right: auto;
-                          opacity: 0.5;
-                        ">
+                            font-size: 3vh;
+                            max-width: 800px;
+                            width: 80vw;
+                            margin-left: auto;
+                            margin-right: auto;
+                            opacity: 0.5;
+                          ">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -77,38 +77,7 @@
 
 <script>
 export default {
-  name: "landing",
-  data() {
-    return {
-      scrollPos: 0,
-      mouseX: 0,
-      mouseY: 0,
-    };
-  },
-  mounted() {
-    this.handleScroll();
-    window.addEventListener("scroll", this.handleScroll);
-    document.onmousemove = this.handleMouseMove;
-  },
-  methods: {
-    handleScroll() {
-      this.scrollPos = window.scrollY;
-    },
-    handleMouseMove(e) {
-      this.mouseX = e.clientX;
-      this.mouseY = e.clientY;
-    },
-    logout: function () {
-      this.$parent.$parent.wrapper.userManager.logout();
-      //        .then(() => {
-      //        console.log("Logged out!");
-      //      }).catch((err) => {
-      //        console.error("Error logging out: ", err);
-      //      })
-      this.$parent.$parent.user = this.$parent.$parent.userInitialState();
-      this.$router.push({ path: "/" });
-    },
-  },
+  name: "landing"
 };
 </script>
 
