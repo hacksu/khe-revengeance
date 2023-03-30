@@ -29,16 +29,12 @@
       <div class="formField">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-                      </textarea>
+                                    </textarea>
       </div>
 
       <div style="text-align: center;">
-        <button id="contactButton" class="apply-link disabled" v-if="!subject || !name || !email || !content"
-          style="opacity: 0.5">
-          Send!
-        </button>
-
-        <button id="contactButton" class="apply-link" @click="submitTicket()" v-else>
+        <button id="contactButton" class="apply-link" :class="{ disabled: !formFilledOut }"
+          @click="formFilledOut && submitTicket()">
           Send!
         </button>
       </div>
@@ -53,7 +49,7 @@
 </template>
 
 <script>
-import { SupportTicketController } from "@/../../global-includes/support-ticket.ts";
+import { SupportTicketController } from "includes/support-ticket.ts";
 
 export default {
   name: "Main",
@@ -88,6 +84,11 @@ export default {
       this.submitted = true;
     },
   },
+  computed: {
+    formFilledOut() {
+      return this.subject && this.name && this.email && this.content;
+    }
+  }
 };
 </script>
 
@@ -160,6 +161,13 @@ textarea.contactTextField {
   width: 200px;
   height: 50px;
   font-size: 20px;
+  border: 2px solid white;
+
+  &.disabled {
+    outline: none;
+    border: none;
+    opacity: 0.5;
+  }
 }
 
 #contactButton:hover:not(.disabled) {
@@ -168,10 +176,6 @@ textarea.contactTextField {
   // background-color: $gold;
   // color: $dark-blue;
   // transition: 0.5s;
-}
-
-.disabled {
-  outline: none;
 }
 
 .error {

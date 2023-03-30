@@ -3,15 +3,18 @@ import path from "path";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath } from "url";
 
+const localRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)));
+const includesRoot = path.resolve(localRoot, "../global-includes/");
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: path.resolve(path.dirname(fileURLToPath(import.meta.url))),
+  root: localRoot,
   publicDir: "public",
   resolve: {
     alias: [
       {
-        find: /^~/,
-        replacement: "",
+        find: /^includes/,
+        replacement: includesRoot,
       },
       {
         find: "@",
