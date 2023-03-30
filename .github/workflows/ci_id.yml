@@ -18,7 +18,7 @@ jobs:
             User $SSH_USERNAME
             IdentityFile ~/.ssh/oracle.key
             StrictHostKeyChecking no
-          END
+
           Host oracle_dev
             HostName $SSH_HOST_DEV
             User $SSH_USERNAME
