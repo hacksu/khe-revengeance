@@ -12,6 +12,8 @@ In /server, there is a server application that ties everything together. In dev 
 
 [Install Node.js](https://nodejs.org/en), which will run our server-side code. Open the root directory of this repository in your terminal. Install [yarn](https://yarnpkg.com/), which will download the site's libraries, tools, and dependencies, by running `npm install -g yarn` in it. Install this project's specific dependencies by running `yarn install`. Then, run the project by inputting `yarn dev`.
 
+To add code this project, create a branch and make changes in it; then, to deploy your changes to https://dev.khe.io, merge them into the "dev-main" branch. To deploy changes to the real website, open a pull request for the "production" branch.
+
 # Why?
 
 The existing public site for KHE, which is written in Vue, is not in bad shape and mostly just needs a fresh coat of paint; so, I'm using it as a base with Vite as the build system responsible for it. The existing staff site for KHE is very old and written in AngularJS, so I think it should be mostly replaced with a Next.js project. Also, why not?

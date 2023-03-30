@@ -1,5 +1,5 @@
 # this configuration file will set up caddy to serve the public and staff sites,
-with automatic https
+# with automatic https
 
 # make sure the base html files aren't cached by visitor's browsers
 (file-server) {
