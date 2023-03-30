@@ -124,10 +124,11 @@ async function createServer() {
     app.use(async (req: IncomingMessage, res: ServerResponse, next) => {
       // add a header just so i can see that the request made it this far
       res.setHeader("X-File-Server", "Fastify-Static-Server");
-      if (!req.headers.host) {
+      const host = req.headers.host;
+      if (!host) {
         console.error("received request without Host header??");
         return;
-      } else if (req.headers.host.startsWith("staff.")) {
+      } else if (host.startsWith("staff.") || host.startsWith("dev-staff.")) {
         staffFiles(req, res, next);
       } else {
         publicFiles(req, res, next);
