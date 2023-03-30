@@ -1,8 +1,8 @@
 <template>
   <div id="app-container">
-    <div id="banner" style="z-index: 100">
+    <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
-        <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/', '#mainContainer')">
+        <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
           KENT HACK ENOUGH
         </p>
 
@@ -12,7 +12,7 @@
       </div>
 
       <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
-        <p class="banner-link" @click="navigateTo('/', '#app')">
+        <p class="banner-link" @click="navigateTo('/')">
           Home
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
@@ -67,7 +67,8 @@ export default {
       showMLH: true,
       hasApp: false,
       hasCheckedForApp: false,
-      expandMenu: false,
+      expandMenu: true,
+      shrinkBanner: false,
       user: this.userInitialState(),
       liveUpdates: {},
       events: [],
@@ -75,11 +76,6 @@ export default {
       scores: [],
       hamburgerIcon
     };
-  },
-  watch: {
-    '$route': function (to, from) {
-      this.handleScroll();
-    }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -164,15 +160,7 @@ export default {
   },
   methods: {
     handleScroll(event) {
-      let ok = true;
-      if (this.$route.name === 'apply') {
-        ok = false;
-      }
-      if (ok && (document.documentElement.scrollTop > 0 || this.$route.name !== 'home')) {
-        document.getElementById('banner').classList.add('scrolled');
-      } else {
-        document.getElementById('banner').classList.remove('scrolled');
-      }
+      this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
     dispLogin: function () {
       // Normally we could do a one line function like this inside an @click attribute,

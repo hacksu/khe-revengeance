@@ -47,6 +47,11 @@ export const routerConfig = {
         behavior: "smooth",
         top: 75,
       };
+    } else {
+      return {
+        top: 0,
+        behavior: "smooth",
+      };
     }
   },
 };
