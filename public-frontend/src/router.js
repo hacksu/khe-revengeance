@@ -1,6 +1,7 @@
 import Home from "./views/Home.vue";
 import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
+import NewLogin from "./views/NewLogin.vue";
 
 export const routerConfig = {
   routes: [
@@ -14,11 +15,11 @@ export const routerConfig = {
     //   name: 'register',
     //   component: Register,
     // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: Login,
-    // },
+    {
+      path: "/login",
+      name: "login",
+      component: NewLogin,
+    },
     // {
     //   path: '/apply',
     //   name: 'apply',
