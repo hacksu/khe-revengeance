@@ -6,5 +6,5 @@ import { SupportTicket } from "./support-ticket.js";
  * only imported on the backend.
  */
 export class RemoteProcedures {
-  static async sendAlert(ticket: SupportTicket) {}
+  static sendAlert: (ticket: SupportTicket) => Promise<void>;
 }

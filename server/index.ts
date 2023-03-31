@@ -5,16 +5,15 @@ import { IncomingMessage, ServerResponse } from "http";
 import { exec } from "child_process";
 
 // dependencies installed from npm
-import fastify from "fastify";
-import middie from "@fastify/middie";
+import express from "express";
 import fileServer from "serve-static";
 import { createServer as createViteServer } from "vite";
 import next from "next";
-import { remultFastify } from "remult/remult-fastify";
 
 // local modules
 import { defineRemoteProcedures } from "./rpc-definitions.js";
-import { dbConfig } from "../global-includes/exports.js";
+import { remultConfig } from "../global-includes/exports.js";
+import { registerAuthMiddleware } from "./auth.js";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -59,24 +58,23 @@ async function getStaffDevServer() {
   return app.getRequestHandler();
 }
 
-// create the top-level fastify app that will route traffic to the appropriate
+// create the top-level express app that will route traffic to the appropriate
 // place
 async function createServer() {
-  const app = fastify();
-  // enable express-style middleware
-  await app.register(middie);
+  const app = express();
   // create api routes for database stuff
-  await app.register(remultFastify(dbConfig));
+  app.use(remultConfig);
   // for sanity checks
-  app.get("/api/exists", (_, res) => res.send("yes"));
+  app.use("/api/exists", (_req, res, _next) => res.end("yes"));
   defineRemoteProcedures();
+  registerAuthMiddleware(app);
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request
     const publicDevServer = await getPublicDevServer();
     const staffDevServer = await getStaffDevServer();
 
-    app.use(async (req: IncomingMessage, res: ServerResponse) => {
+    app.get("*", async (req, res) => {
       if (!req.headers.host) {
         console.error("received request without Host header??");
         return;
@@ -123,7 +121,7 @@ async function createServer() {
     // this in production
     app.use(async (req: IncomingMessage, res: ServerResponse, next) => {
       // add a header just so i can see that the request made it this far
-      res.setHeader("X-File-Server", "Fastify-Static-Server");
+      res.setHeader("X-File-Server", "Express-Static-Server");
       const host = req.headers.host;
       if (!host) {
         console.error("received request without Host header??");
@@ -138,7 +136,7 @@ async function createServer() {
 
   app.listen({ port: 3000 }, () =>
     console.log(
-      "fastify server in existence at http://localhost:3000 " +
+      "express server in existence at http://localhost:3000 " +
         "and http://staff.localhost:3000"
     )
   );
