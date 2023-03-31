@@ -30,3 +30,4 @@ lerna-debug.log*
 next-env.d.ts
 
 secrets.json
+secrets.yaml

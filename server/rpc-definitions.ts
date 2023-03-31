@@ -1,13 +1,9 @@
 import fs from "fs";
 import mailer, { MailDataRequired } from "@sendgrid/mail";
+import { parse } from "yaml";
 import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
 
-// reading this file manually is slightly more secure than importing it, bc if
-// anyone ever accidentally imports this file in the frontend, secrets.json will
-// not be included as code
-const secrets = JSON.parse(
-  fs.readFileSync("./secrets.json", { encoding: "utf-8" })
-);
+const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
 mailer.setApiKey(secrets.sendgridKey);
 
 export function defineRemoteProcedures() {
