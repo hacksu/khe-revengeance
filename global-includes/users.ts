@@ -12,6 +12,10 @@ export enum UserRole {
   Admin = "admin",
 }
 
+export interface HackathonRegistration {
+  // TODO: define registration fields
+}
+
 @Entity("users", { allowApiCrud: false, allowApiRead: UserRole.Admin })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -27,43 +31,57 @@ export class User extends EntityBase {
   @Fields.string()
   externalID?: string;
 
+  @Fields.string()
+  email!: string;
+
   // we only really need one role but having roles[] complies with remult's
   // UserInfo interface for quick allowApiX checks
   @Fields.object()
   roles: UserRole[] = [UserRole.Normal];
 
   @Fields.string()
-  roleReason = "";
+  externalRole = "";
+
+  @Fields.object()
+  registration?: HackathonRegistration;
 
   /** Called on backend when login succeeds; token is then sent to client */
   @BackendMethod({ allowed: false })
   static async loginFromOAuth(
     authProvider: AuthMethod,
     externalID: string,
+    email: string,
     shouldHaveRole: UserRole,
-    roleReason: string = ""
+    externalRole: string = ""
   ) {
     const users = remult.repo(User);
-    let user = await users.findFirst({
+    let user: Partial<User> = await users.findFirst({
       externalID,
       method: authProvider,
     });
+    let userUpdated = false;
     if (!user) {
-      const newUser: Partial<User> = {
+      user = {
         externalID,
         method: authProvider,
         roles: [shouldHaveRole],
+        email,
       };
-      user = await users.save(newUser);
-    } else if (
+      userUpdated = true;
+    }
+    if (
+      !user.roles ||
       user.roles[0] != shouldHaveRole ||
-      user.roleReason != roleReason
+      user.externalRole != externalRole
     ) {
       user.roles = [shouldHaveRole];
-      user.roleReason = roleReason;
+      user.externalRole = externalRole;
+      userUpdated = true;
+    }
+    if (userUpdated) {
       user = await users.save(user);
     }
-    return user;
+    return user as User;
   }
 
   @BackendMethod({ allowed: true })
