@@ -58,6 +58,7 @@ export const routerConfig = {
       return {
         top: 0,
         behavior: "smooth",
+        el: "#app", // 😬
       };
     }
   },
