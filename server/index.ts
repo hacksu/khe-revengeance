@@ -62,7 +62,7 @@ async function getStaffDevServer() {
 // place
 async function createServer() {
   const app = express();
-  registerAuthMiddleware(app);
+  registerAuthMiddleware(app, remultConfig);
   // create api routes for database stuff
   app.use(remultConfig);
   // for sanity checks

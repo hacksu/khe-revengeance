@@ -24,7 +24,7 @@ export class User extends EntityBase {
   @Fields.createdAt()
   createdAt = new Date();
 
-  @Fields.object()
+  @Fields.string()
   method!: AuthMethod;
 
   /** User's ID in Github or Discord */

@@ -10,10 +10,11 @@ import { VerifyCallback } from "passport-oauth2";
 import { App as GitHubApp } from "octokit";
 import { parse } from "yaml";
 import session from "express-session";
+import type { RemultServer } from "remult/server/expressBridge.js";
+import { remult } from "remult";
+import MongoStore from "connect-mongo";
 
 import { AuthMethod, User, UserRole } from "../global-includes/users.js";
-import { remultConfig } from "../global-includes/exports.js";
-import { remult } from "remult";
 
 const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
 
@@ -130,12 +131,19 @@ passport.deserializeUser(function (
   });
 });
 
-export function registerAuthMiddleware(app: Express) {
+export function registerAuthMiddleware(
+  app: Express,
+  remultConfig: RemultServer
+) {
   app.use(
     session({
       secret: secrets.sessionSecret,
       resave: false,
       saveUninitialized: false,
+      cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+      },
+      store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1/khe2023" }),
     })
   );
   app.use(remultConfig.withRemult, passport.session());
