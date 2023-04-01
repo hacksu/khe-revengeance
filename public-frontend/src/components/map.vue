@@ -12,8 +12,8 @@
             <p>Design Innovation Hub, Art Bldg, Kent, OH 44243</p>
             <h3>Parking</h3>
             <p>
-              The easiest parking space to use will be the Student Center Visitor Lot. 
-              After parking, walk towards the visitor center, and head left between the buildings. 
+              The easiest parking space to use will be the Student Center Visitor Lot.
+              After parking, walk towards the visitor center, and head left between the buildings.
               The DI Hub is located near the Honors College.
             </p>
             <!-- <p>
@@ -66,9 +66,6 @@ export default {
     // const iframe = this.$el.getElementsByTagName("iframe")[0];
     // iframe.addEventListener("load", console.log);
     document.addEventListener("scroll", this.preventScroll);
-    document.addEventListener("focus", (event) => {
-      console.log("fuck, did focus");
-    });
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.preventScroll);
