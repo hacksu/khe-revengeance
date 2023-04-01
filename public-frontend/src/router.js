@@ -2,6 +2,7 @@ import Home from "./views/Home.vue";
 import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
 import NewLogin from "./views/NewLogin.vue";
+import Profile from "./views/Profile.vue";
 
 export const routerConfig = {
   routes: [
@@ -34,6 +35,11 @@ export const routerConfig = {
       path: "/contact",
       name: "contact",
       component: Contact,
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile,
     },
     // {
     //   path: '/schedule',

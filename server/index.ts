@@ -62,12 +62,12 @@ async function getStaffDevServer() {
 // place
 async function createServer() {
   const app = express();
+  registerAuthMiddleware(app);
   // create api routes for database stuff
   app.use(remultConfig);
   // for sanity checks
   app.use("/api/exists", (_req, res, _next) => res.end("yes"));
   defineRemoteProcedures();
-  registerAuthMiddleware(app);
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request

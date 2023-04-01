@@ -12,9 +12,11 @@ import session from "express-session";
 
 import { AuthMethod, User, UserRole } from "../global-includes/users.js";
 import { remultConfig } from "../global-includes/exports.js";
+import { remult } from "remult";
 
 const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
 
+// authenticating via GithubLogin
 passport.use(
   new GitHubStrategy(
     {
@@ -22,14 +24,17 @@ passport.use(
       clientSecret: secrets.githubOAuthClientSecret,
       callbackURL: "http://localhost:3000/login/github/callback",
     },
+    /** This function needs to take a GitHub login and either find or create a
+     * matching User object from our db. This also automatically updates the
+     * role the User should have based on their status within the HacKSU Github
+     * org */
     async function (
       accessToken: string,
       refreshToken: string,
       profile: GithubProfile,
       done: VerifyCallback
     ) {
-      console.log(profile);
-
+      console.log("authenticating with github strategy");
       const app = new GitHubApp({
         appId: 262520, // https://github.com/apps/hacksu-read
         privateKey: secrets.githubOrgPrivateKey,
@@ -37,40 +42,55 @@ passport.use(
       // https://github.com/organizations/hacksu/settings/installations/33272343
       const orgOctokit = await app.getInstallationOctokit(33272343);
       let roleUserShouldHave = UserRole.Normal;
+      let roleReason = "";
       if (profile.username) {
-        const team = await orgOctokit.rest.teams.getMembershipForUserInOrg({
+        const team = await orgOctokit.rest.orgs.getMembershipForUser({
           org: "hacksu",
-          team_slug: "ssh",
-          username: profile.username!,
+          username: profile.username,
         });
         if (team.data.state == "active") {
-          console.log("user in ssh team");
-          roleUserShouldHave = UserRole.Admin;
+          if (team.data.role == "admin") {
+            roleUserShouldHave = UserRole.Admin;
+            roleReason = `admin of HacKSU organization on GitHub`;
+          } else {
+            // set up a team for khe staff and check membership and assign UserRole.Staff?
+          }
         }
       }
-
+      console.log("github authentication successful");
       done(
         null,
         await User.loginFromOAuth(
           AuthMethod.Github,
           profile.id,
-          roleUserShouldHave
+          roleUserShouldHave,
+          roleReason
         )
       );
     }
   )
 );
 
+// this function takes a User object returned by an authentication strategy
+// after login and saves its id in the data for the newly created active session
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  done(null, (user as User).id);
 });
 
-passport.deserializeUser(function (obj, done) {
-  done(null, obj as User);
+// this function takes an id that was saved in the data for an active session
+// and turns it into a User object that can be accessed in request data later
+passport.deserializeUser(function (
+  id: string,
+  done: (err: any, user?: User | null) => void
+) {
+  // this seems cacheable
+  const users = remult.repo(User);
+  users.findFirst({ id }).then((user) => {
+    done(null, user);
+  });
 });
 
 export function registerAuthMiddleware(app: Express) {
-  app.use(passport.initialize());
   app.use(
     session({
       secret: secrets.sessionSecret,
@@ -78,7 +98,10 @@ export function registerAuthMiddleware(app: Express) {
       saveUninitialized: false,
     })
   );
-  app.use(passport.session());
+  app.use(remultConfig.withRemult, passport.session());
+  app.get("/logout", function (req, res) {
+    req.session.destroy(() => res.redirect("/"));
+  });
   app.get(
     "/login/github",
     passport.authenticate("github", { scope: ["user:email"] })
@@ -88,7 +111,7 @@ export function registerAuthMiddleware(app: Express) {
     remultConfig.withRemult,
     passport.authenticate("github", { failureRedirect: "/login" }),
     function (req, res) {
-      res.redirect("/");
+      res.redirect("/profile");
     }
   );
 }
