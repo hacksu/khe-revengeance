@@ -3,8 +3,9 @@ import { Express } from "express";
 import passport from "passport";
 import {
   Strategy as GitHubStrategy,
-  Profile as GithubProfile,
+  Profile as GitHubProfile,
 } from "passport-github2";
+import { Strategy as DiscordStrategy } from "passport-discord";
 import { VerifyCallback } from "passport-oauth2";
 import { App as GitHubApp } from "octokit";
 import { parse } from "yaml";
@@ -16,13 +17,14 @@ import { remult } from "remult";
 
 const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
 
-// authenticating via GithubLogin
+// authenticating via Github login
 passport.use(
   new GitHubStrategy(
     {
       clientID: secrets.githubOAuthClientID,
       clientSecret: secrets.githubOAuthClientSecret,
-      callbackURL: "http://localhost:3000/login/github/callback",
+      callbackURL: "http://127.0.0.1:3000/login/github/callback",
+      scope: ["user:email"],
     },
     /** This function needs to take a GitHub login and either find or create a
      * matching User object from our db. This also automatically updates the
@@ -31,10 +33,9 @@ passport.use(
     async function (
       accessToken: string,
       refreshToken: string,
-      profile: GithubProfile,
+      profile: GitHubProfile,
       done: VerifyCallback
     ) {
-      console.log("authenticating with github strategy");
       const app = new GitHubApp({
         appId: 262520, // https://github.com/apps/hacksu-read
         privateKey: secrets.githubOrgPrivateKey,
@@ -42,7 +43,7 @@ passport.use(
       // https://github.com/organizations/hacksu/settings/installations/33272343
       const orgOctokit = await app.getInstallationOctokit(33272343);
       let roleUserShouldHave = UserRole.Normal;
-      let roleReason = "";
+      let externalRole = "";
       if (profile.username) {
         const team = await orgOctokit.rest.orgs.getMembershipForUser({
           org: "hacksu",
@@ -51,22 +52,61 @@ passport.use(
         if (team.data.state == "active") {
           if (team.data.role == "admin") {
             roleUserShouldHave = UserRole.Admin;
-            roleReason = `admin of HacKSU organization on GitHub`;
+            externalRole = `@${profile.username}, admin of HacKSU organization on GitHub`;
           } else {
             // set up a team for khe staff and check membership and assign UserRole.Staff?
           }
         }
       }
-      console.log("github authentication successful");
-      done(
-        null,
-        await User.loginFromOAuth(
-          AuthMethod.Github,
-          profile.id,
-          roleUserShouldHave,
-          roleReason
-        )
-      );
+      if (!profile.emails?.length) {
+        done(new Error("did not get email from GitHub"));
+      } else {
+        done(
+          null,
+          await User.loginFromOAuth(
+            AuthMethod.Github,
+            profile.id,
+            profile.emails[0].value,
+            roleUserShouldHave,
+            externalRole
+          )
+        );
+      }
+    }
+  )
+);
+
+passport.use(
+  new DiscordStrategy(
+    {
+      clientID: secrets.discordOAuthClientID,
+      clientSecret: secrets.discordOAuthClientSecret,
+      callbackURL: "http://127.0.0.1:3000/login/discord/callback",
+      scope: ["identify", "email"],
+    },
+    async function (accessToken, refreshToken, profile, done) {
+      if (!profile.email) {
+        done(new Error("did not get email from discord"));
+      } else {
+        // TODO: figure out a discord role situation that makes sense
+        const adminIDsOnDiscord = ["402326044872409100", "344132856685002764"];
+        let userRole = UserRole.Normal;
+        let externalRole = "";
+        if (adminIDsOnDiscord.includes(profile.id)) {
+          userRole = UserRole.Admin;
+          externalRole = `@${profile.username}, on the list of important Discord users in server/auth.ts`;
+        }
+        done(
+          null,
+          await User.loginFromOAuth(
+            AuthMethod.Discord,
+            profile.id,
+            profile.email,
+            userRole,
+            externalRole
+          )
+        );
+      }
     }
   )
 );
@@ -102,14 +142,20 @@ export function registerAuthMiddleware(app: Express) {
   app.get("/logout", function (req, res) {
     req.session.destroy(() => res.redirect("/"));
   });
-  app.get(
-    "/login/github",
-    passport.authenticate("github", { scope: ["user:email"] })
-  );
+  app.get("/login/github", passport.authenticate("github"));
   app.get(
     "/login/github/callback",
     remultConfig.withRemult,
     passport.authenticate("github", { failureRedirect: "/login" }),
+    function (req, res) {
+      res.redirect("/profile");
+    }
+  );
+  app.get("/login/discord", passport.authenticate("discord"));
+  app.get(
+    "/login/discord/callback",
+    remultConfig.withRemult,
+    passport.authenticate("discord", { failureRedirect: "/login" }),
     function (req, res) {
       res.redirect("/profile");
     }
