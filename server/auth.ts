@@ -1,4 +1,4 @@
-import { Express } from "express";
+import { ErrorRequestHandler, Express } from "express";
 import passport from "passport";
 import {
   Strategy as GitHubStrategy,
@@ -125,7 +125,11 @@ passport.deserializeUser(function (
   // this seems cacheable
   const users = remult.repo(User);
   users.findFirst({ id }).then((user) => {
-    done(null, user);
+    if (user) {
+      done(null, user);
+    } else {
+      done(new Error("user from session not found"));
+    }
   });
 });
 
@@ -167,4 +171,13 @@ export function registerAuthMiddleware(
       res.redirect("/profile");
     }
   );
+  // handle unrecoverable errors by logging the user out and sending them back
+  // to the home page
+  app.use(function (err, req, res, next) {
+    if (err) {
+      req.session.destroy(() => res.redirect("/"));
+    } else {
+      next();
+    }
+  } as ErrorRequestHandler);
 }
