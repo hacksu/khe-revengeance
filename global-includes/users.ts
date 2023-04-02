@@ -1,4 +1,5 @@
 import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
+import { rawObj } from "./adaptations.js";
 
 export enum AuthMethod {
   Discord = "Discord",
@@ -13,7 +14,7 @@ export enum UserRole {
 }
 
 export interface HackathonRegistration {
-  // TODO: define registration fields
+  submitted: boolean;
 }
 
 @Entity("users", { allowApiCrud: false, allowApiRead: UserRole.Admin })
@@ -36,14 +37,14 @@ export class User extends EntityBase {
 
   // we only really need one role but having roles[] complies with remult's
   // UserInfo interface for quick allowApiX checks
-  @Fields.object()
+  @rawObj()
   roles: UserRole[] = [UserRole.Normal];
 
   @Fields.string()
   externalRole = "";
 
-  @Fields.object()
-  registration?: HackathonRegistration;
+  @rawObj()
+  registration: HackathonRegistration = { submitted: false };
 
   /** Called on backend when OAuth succeeds; a session is then created using the
    * returned User object */
