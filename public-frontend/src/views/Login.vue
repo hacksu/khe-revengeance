@@ -48,10 +48,6 @@ h2 {
     display: block;
     width: 275px;
 
-    &:hover {
-        background-color: rgb(46, 75, 75);
-    }
-
     img {
         height: 1.4em;
         width: auto;

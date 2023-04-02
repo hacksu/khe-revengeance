@@ -25,4 +25,7 @@
   justify-content: center;
   color: white;
   text-decoration: none;
+  &:hover {
+    background-color: rgb(46, 75, 75);
+  }
 }
