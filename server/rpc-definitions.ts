@@ -1,10 +1,9 @@
-import fs from "fs";
 import mailer, { MailDataRequired } from "@sendgrid/mail";
-import { parse } from "yaml";
-import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
 
-const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
-mailer.setApiKey(secrets.sendgridKey);
+import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
+import { config } from "./config.js";
+
+mailer.setApiKey(config.sendgridKey);
 
 export function defineRemoteProcedures() {
   RemoteProcedures.sendAlert = async function (ticket) {
@@ -13,7 +12,7 @@ export function defineRemoteProcedures() {
         timeZone: "America/New_York",
       }) + " US Eastern Time";
     const msg: MailDataRequired = {
-      to: secrets.supportEmailRecipient,
+      to: config.supportEmailRecipient,
       from: {
         name: "KHE Support Ticket Alert",
         email: "khe-support-ticket@em3798.khe.io",
