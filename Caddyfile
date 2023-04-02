@@ -60,7 +60,7 @@ khe.io {
         file_server
 }
 
-# add "dev-" at the beginning of the next line to set up that subdomain
+# change to staff.dev.khe.io to set up that subdomain
 staff.khe.io {
         import monitor
         import file-server

@@ -31,11 +31,7 @@ const projectRoot = path.resolve(
 console.log("project root directory:", projectRoot);
 
 function isHostnameStaff(host: string) {
-  return (
-    host.startsWith("staff.") ||
-    host.startsWith("dev-staff.") ||
-    host.startsWith("localhost-staff.")
-  );
+  return host.startsWith("staff.");
 }
 
 // create a vite server that will constantly rebuild the public frontend code
