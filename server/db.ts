@@ -1,13 +1,13 @@
 import { MongoClient } from "mongodb";
 import { MongoDataProvider } from "remult/remult-mongo";
 import { remultExpress } from "remult/remult-express";
-import { Email } from "../global-includes/email-address.js";
+import { Email } from "../global-includes/email-address.ts";
 import {
   SupportTicket,
   SupportTicketController,
-} from "../global-includes/support-ticket.js";
-import { User } from "../global-includes/users.js";
-import { config } from "../server/config.js";
+} from "../global-includes/support-ticket.ts";
+import { User } from "../global-includes/users.ts";
+import { config } from "../server/config.ts";
 
 export const remultConfig = remultExpress({
   dataProvider: async () => {

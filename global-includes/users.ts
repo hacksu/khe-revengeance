@@ -1,5 +1,5 @@
 import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
-import { rawObj } from "./adaptations.js";
+import { rawObj } from "./adaptations.ts";
 
 export enum AuthMethod {
   Discord = "Discord",

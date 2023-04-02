@@ -1,5 +1,5 @@
 import { BackendMethod, Entity, Fields, remult } from "remult";
-import { RemoteProcedures } from "./rpc-declarations.js";
+import { RemoteProcedures } from "./rpc-declarations.ts";
 
 @Entity("tickets", { allowApiCrud: false })
 export class SupportTicket {

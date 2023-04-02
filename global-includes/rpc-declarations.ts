@@ -1,4 +1,4 @@
-import { SupportTicket } from "./support-ticket.js";
+import { SupportTicket } from "./support-ticket.ts";
 
 /**
  * This class declares functions that can be called in remult BackendMethods to

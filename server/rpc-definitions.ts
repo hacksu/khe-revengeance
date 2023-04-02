@@ -1,7 +1,7 @@
 import mailer, { MailDataRequired } from "@sendgrid/mail";
 
-import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
-import { config } from "./config.js";
+import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
+import { config } from "./config.ts";
 
 mailer.setApiKey(config.sendgridKey);
 

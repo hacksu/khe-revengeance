@@ -11,11 +11,11 @@ import { createServer as createViteServer } from "vite";
 import next from "next";
 
 // local modules
-import { defineRemoteProcedures } from "./rpc-definitions.js";
-import { remultConfig } from "./db.js";
-import { registerAuthMiddleware } from "./auth.js";
-import { config } from "./config.js";
-import { UserRole } from "../global-includes/users.js";
+import { defineRemoteProcedures } from "./rpc-definitions.ts";
+import { remultConfig } from "./db.ts";
+import { registerAuthMiddleware } from "./auth.ts";
+import { config } from "./config.ts";
+import { UserRole } from "../global-includes/users.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool

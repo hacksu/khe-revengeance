@@ -1,4 +1,4 @@
-import type { User as CustomUser } from "../global-includes/users.js";
+import type { User as CustomUser } from "../global-includes/users.ts";
 
 export {};
 
