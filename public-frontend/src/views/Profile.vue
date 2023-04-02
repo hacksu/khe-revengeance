@@ -13,14 +13,16 @@
 <script setup>
 // get user profile; save in state. if admin/staff, that should be displayed and a link to the staff site should appear.
 import { User, UserRole } from "includes/users.ts";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 let user = ref({});
-User.getOwnUserInfo().then(u => {
-    if (u) {
-        user.value = u;
-        localStorage.setItem("lastIDProvider", u.method);
-        // TODO: globally store login status/account to be used on other pages
-    }
+onMounted(() => {
+    User.getOwnUserInfo().then(u => {
+        if (u) {
+            user.value = u;
+            localStorage.setItem("lastIDProvider", u.method);
+            // TODO: globally store login status/account to be used on other pages
+        }
+    })
 })
 const isStaff = computed(() => {
     return (
@@ -28,7 +30,10 @@ const isStaff = computed(() => {
         user.value?.roles?.includes(UserRole.Admin)
     );
 });
-const staffSite = location.protocol + "//staff." + location.host;
+let staffSite;
+if (typeof window !== "undefined") {
+    staffSite = window.location.protocol + "//staff." + window.location.host;
+}
 </script>
 
 <style scoped lang="scss">
