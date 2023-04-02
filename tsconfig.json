@@ -17,5 +17,8 @@
         "skipLibCheck": true,
         "noEmit": true,
         "experimentalDecorators": true,
+        "types": [
+            "./server/types.d.ts"
+        ]
     },
 }
