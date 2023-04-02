@@ -6,9 +6,11 @@
   "main": "server/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch server --watch global-includes --exec node --loader ts-node/esm ./server/index.ts",
+    "serve-public": "vite serve -c public-frontend/vite.config.js",
     "build-public": "cross-env NODE_ENV=production vite-ssg build -c public-frontend/vite.config.js",
     "build-staff": "cd staff-frontend && cross-env NODE_ENV=production next build && cross-env NODE_ENV=production next export -o dist",
-    "production": "cross-env NODE_ENV=production tsx ./server/index.ts"
+    "production": "cross-env NODE_ENV=production tsx ./server/index.ts",
+    "acquire-urls": "hostile set 127.0.0.1 localhost.khe.io && hostile set 127.0.0.1 staff.localhost.khe.io"
   },
   "author": "HacKSU",
   "license": "MIT",
@@ -21,6 +23,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "hostile": "^1.3.3",
     "mongodb": "^5.1.0",
     "next": "^13.2.4",
     "octokit": "^2.0.14",
