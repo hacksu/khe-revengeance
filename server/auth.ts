@@ -113,7 +113,7 @@ passport.use(
 // this function takes a User object returned by an authentication strategy
 // after login and saves its id in the data for the newly created active session
 passport.serializeUser(function (user, done) {
-  done(null, (user as User).id);
+  done(null, user.id);
 });
 
 // this function takes an id that was saved in the data for an active session

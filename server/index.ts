@@ -15,6 +15,7 @@ import { defineRemoteProcedures } from "./rpc-definitions.js";
 import { remultConfig } from "./db.js";
 import { registerAuthMiddleware } from "./auth.js";
 import { config } from "./config.js";
+import { UserRole } from "../global-includes/users.js";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -71,7 +72,14 @@ async function createServer() {
   // create api routes for database stuff
   app.use(remultConfig);
   // for sanity checks
-  app.use("/api/exists", (_req, res, _next) => res.end("yes"));
+  app.get("/api/exists", (_req, res, _next) => res.end("yes"));
+  app.get("/meta/log/:logtype", (req, res) => {
+    if (req.user?.roles?.includes(UserRole.Admin)) {
+      res.sendFile(`/opt/pm2/logs/khe-revengeance-${req.params.logtype}.log`);
+    } else {
+      res.sendStatus(403);
+    }
+  });
   defineRemoteProcedures();
   if (dev) {
     // in development mode, we create and use the vite and next.js development
