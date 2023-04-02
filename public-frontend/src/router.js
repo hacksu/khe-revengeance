@@ -1,7 +1,7 @@
 import Home from "./views/Home.vue";
 import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
-import NewLogin from "./views/NewLogin.vue";
+import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 
 export const routerConfig = {
@@ -19,7 +19,7 @@ export const routerConfig = {
     {
       path: "/login",
       name: "login",
-      component: NewLogin,
+      component: Login,
     },
     // {
     //   path: '/apply',

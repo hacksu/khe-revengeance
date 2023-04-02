@@ -6,7 +6,7 @@
         <p v-if="isStaff">You are authenticated as: {{ user.externalRole }}.
             Feel free to visit the <a :href="staffSite">staff site.</a>
         </p>
-        <a v-if="user.id" href="/logout"><button>Log Out</button></a>
+        <a v-if="user.id" class="largeButton" style="width: 200px" href="/logout">Log Out</a>
     </div>
 </template>
 
@@ -16,11 +16,13 @@ import { User, UserRole } from "includes/users.ts";
 import { ref, computed } from "vue";
 let user = ref({});
 User.getOwnUserInfo().then(u => {
-    console.log(u);
-    user.value = u;
+    if (u) {
+        user.value = u;
+        localStorage.setItem("lastIDProvider", u.method);
+        // TODO: globally store login status/account to be used on other pages
+    }
 })
 const isStaff = computed(() => {
-    // 
     return (
         user.value?.roles?.includes(UserRole.Staff) ||
         user.value?.roles?.includes(UserRole.Admin)

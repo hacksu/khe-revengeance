@@ -45,7 +45,8 @@ export class User extends EntityBase {
   @Fields.object()
   registration?: HackathonRegistration;
 
-  /** Called on backend when login succeeds; token is then sent to client */
+  /** Called on backend when OAuth succeeds; a session is then created using the
+   * returned User object */
   @BackendMethod({ allowed: false })
   static async loginFromOAuth(
     authProvider: AuthMethod,
