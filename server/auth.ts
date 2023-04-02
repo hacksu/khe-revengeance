@@ -1,4 +1,3 @@
-import fs from "fs";
 import { Express } from "express";
 import passport from "passport";
 import {
@@ -8,23 +7,21 @@ import {
 import { Strategy as DiscordStrategy } from "passport-discord";
 import { VerifyCallback } from "passport-oauth2";
 import { App as GitHubApp } from "octokit";
-import { parse } from "yaml";
 import session from "express-session";
 import type { RemultServer } from "remult/server/expressBridge.js";
 import { remult } from "remult";
 import MongoStore from "connect-mongo";
 
 import { AuthMethod, User, UserRole } from "../global-includes/users.js";
-
-const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
+import { config } from "./config.js";
 
 // authenticating via Github login
 passport.use(
   new GitHubStrategy(
     {
-      clientID: secrets.githubOAuthClientID,
-      clientSecret: secrets.githubOAuthClientSecret,
-      callbackURL: "http://127.0.0.1:3000/login/github/callback",
+      clientID: config.githubOAuthClientID,
+      clientSecret: config.githubOAuthClientSecret,
+      callbackURL: config.publicSite + "/login/github/callback",
       scope: ["user:email"],
     },
     /** This function needs to take a GitHub login and either find or create a
@@ -38,11 +35,12 @@ passport.use(
       done: VerifyCallback
     ) {
       const app = new GitHubApp({
-        appId: 262520, // https://github.com/apps/hacksu-read
-        privateKey: secrets.githubOrgPrivateKey,
+        appId: config.githubOrgAppID,
+        privateKey: config.githubOrgPrivateKey,
       });
-      // https://github.com/organizations/hacksu/settings/installations/33272343
-      const orgOctokit = await app.getInstallationOctokit(33272343);
+      const orgOctokit = await app.getInstallationOctokit(
+        config.githubOrgAppInstallation
+      );
       let roleUserShouldHave = UserRole.Normal;
       let externalRole = "";
       if (profile.username) {
@@ -53,7 +51,7 @@ passport.use(
         if (team.data.state == "active") {
           if (team.data.role == "admin") {
             roleUserShouldHave = UserRole.Admin;
-            externalRole = `@${profile.username}, admin of HacKSU organization on GitHub`;
+            externalRole = `@${profile.username}, an admin of the HacKSU organization on GitHub`;
           } else {
             // set up a team for khe staff and check membership and assign UserRole.Staff?
           }
@@ -80,9 +78,9 @@ passport.use(
 passport.use(
   new DiscordStrategy(
     {
-      clientID: secrets.discordOAuthClientID,
-      clientSecret: secrets.discordOAuthClientSecret,
-      callbackURL: "http://127.0.0.1:3000/login/discord/callback",
+      clientID: config.discordOAuthClientID,
+      clientSecret: config.discordOAuthClientSecret,
+      callbackURL: config.publicSite + "/login/discord/callback",
       scope: ["identify", "email"],
     },
     async function (accessToken, refreshToken, profile, done) {
@@ -137,13 +135,14 @@ export function registerAuthMiddleware(
 ) {
   app.use(
     session({
-      secret: secrets.sessionSecret,
+      secret: config.sessionSecret,
       resave: false,
       saveUninitialized: false,
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+        domain: ".khe.io", // assuming this site will be served under this domain!
       },
-      store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1/khe2023" }),
+      store: MongoStore.create({ mongoUrl: config.mongoURI }),
     })
   );
   app.use(remultConfig.withRemult, passport.session());

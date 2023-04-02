@@ -1,6 +1,6 @@
 // built-in node.js modules
 import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, parse as parseURL } from "url";
 import { IncomingMessage, ServerResponse } from "http";
 import { exec } from "child_process";
 
@@ -12,8 +12,9 @@ import next from "next";
 
 // local modules
 import { defineRemoteProcedures } from "./rpc-definitions.js";
-import { remultConfig } from "../global-includes/exports.js";
+import { remultConfig } from "./db.js";
 import { registerAuthMiddleware } from "./auth.js";
+import { config } from "./config.js";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -28,6 +29,14 @@ const projectRoot = path.resolve(
   ".."
 );
 console.log("project root directory:", projectRoot);
+
+function isHostnameStaff(host: string) {
+  return (
+    host.startsWith("staff.") ||
+    host.startsWith("dev-staff.") ||
+    host.startsWith("localhost-staff.")
+  );
+}
 
 // create a vite server that will constantly rebuild the public frontend code
 // for fast development
@@ -47,8 +56,8 @@ async function getPublicDevServer() {
 async function getStaffDevServer() {
   const staffFrontendDir = path.resolve(projectRoot, "staff-frontend");
   const app = next({
-    hostname: "staff.localhost",
-    port: 3000,
+    hostname: parseURL(config.staffSite).host!,
+    port: config.port,
     dir: staffFrontendDir,
     dev,
   });
@@ -78,7 +87,7 @@ async function createServer() {
       if (!req.headers.host) {
         console.error("received request without Host header??");
         return;
-      } else if (req.headers.host.startsWith("staff.")) {
+      } else if (isHostnameStaff(req.headers.host)) {
         await staffDevServer(req, res);
       } else {
         publicDevServer(req, res);
@@ -119,14 +128,14 @@ async function createServer() {
 
     // serve the built files if necessary; caddy or nginx could be set up to do
     // this in production
-    app.use(async (req: IncomingMessage, res: ServerResponse, next) => {
+    app.get("*", async (req: IncomingMessage, res: ServerResponse, next) => {
       // add a header just so i can see that the request made it this far
       res.setHeader("X-File-Server", "Express-Static-Server");
       const host = req.headers.host;
       if (!host) {
         console.error("received request without Host header??");
         return;
-      } else if (host.startsWith("staff.") || host.startsWith("dev-staff.")) {
+      } else if (isHostnameStaff(host)) {
         staffFiles(req, res, next);
       } else {
         publicFiles(req, res, next);
@@ -134,12 +143,12 @@ async function createServer() {
     });
   }
 
-  app.listen({ port: 3000 }, () =>
+  app.listen({ port: config.port }, () => {
     console.log(
-      "express server in existence at http://localhost:3000 " +
-        "and http://staff.localhost:3000"
-    )
-  );
+      `express server in existence at ${config.publicSite} ` +
+        `and ${config.staffSite}`
+    );
+  });
 }
 
 createServer();

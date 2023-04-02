@@ -1,19 +1,17 @@
-import { Email } from '../../global-includes/email-address';
-import { remult } from "remult";
 import { useState, useEffect } from "react";
+import { User } from "../../global-includes/users.ts";
 
 function HomePage() {
-    const emailDB = remult.repo(Email);
-    const [emails, setEmails] = useState([]);
-    useEffect(async () => {
-        setEmails(await emailDB.find());
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        User.getOwnUserInfo().then(u => {
+            setUser(u);
+        })
     }, []);
     return <>
-        <div>Hello staff</div>
+        <div>Hello</div>
         <img src="/cat.jpg" />
-        <ul>
-            {emails.map(e => <li>{e.address}</li>)}
-        </ul>
+        <p>{user?.externalRole}</p>
     </>;
 }
 
