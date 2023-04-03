@@ -19,6 +19,17 @@
 
     <div id="landing-content-container">
       <p id="date">Blasting off this October</p>
+      <div id="email-input-container">
+        <span id="email-input-label">Sign up to get registration information:</span>
+        <div id="email-input">
+          <input @keyup.enter="submitEmail" type="email" :disabled="updatesEmailSubmitted"
+            placeholder="sic-itur@astra.com" v-model="updatesEmail" />
+          <button @click="submitEmail" :disabled="updatesEmailSubmitted">
+            <span :class="{ rocketing: updatesEmailSubmitted }">🚀</span>
+          </button>
+          <span id="thank-you-message" v-if="updatesEmailSubmitted">{{ thankYou }}</span>
+        </div>
+      </div>
       <!-- <span v-if="$parent.$parent.showRegister">
         <router-link tag="button" :to="{ name: 'register' }" id="apply-btn" class="register-now"
           v-if="$parent.$parent.user._id == ''">
@@ -54,14 +65,7 @@
         </div>
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
-        <p title="Registration has not yet opened!" style="
-                            font-size: 3vh;
-                            max-width: 800px;
-                            width: 80vw;
-                            margin-left: auto;
-                            margin-right: auto;
-                            opacity: 0.5;
-                          ">
+        <p title="Registration has not yet opened!" class="registration-opens">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -77,7 +81,25 @@
 
 <script>
 export default {
-  name: "landing"
+  name: "landing",
+  data: () => ({
+    updatesEmail: "",
+    updatesEmailSubmitted: false,
+    thankYou: ""
+  }),
+  methods: {
+    async typeThankYou() {
+      for (const char of "Got it, thanks!") {
+        this.thankYou += char;
+        await new Promise(res => setTimeout(res, 50));
+      }
+    },
+    submitEmail() {
+      this.updatesEmailSubmitted = true;
+      this.updatesEmail = "";
+      setTimeout(this.typeThankYou, 1000);
+    }
+  }
 };
 </script>
 
@@ -102,8 +124,8 @@ export default {
 }
 
 #date {
-  font-size: 3.5vh;
-  max-width: 80vw;
+  font-size: 1.8em;
+  max-width: 90vw;
   margin-left: auto;
   margin-right: auto;
   color: #bdbdbd;
@@ -136,9 +158,98 @@ export default {
   position: relative;
 }
 
+@keyframes rocket-away {
+  0% {
+    transform: translate(0px, 0px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(20px, -20px);
+    opacity: 0;
+  }
+}
+
+.rocketing {
+  animation-name: rocket-away;
+  animation-duration: 0.75s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  display: inline-block;
+}
+
+#email-input-container {
+  & * {
+    box-sizing: border-box;
+  }
+
+  background-color: #000d;
+  box-shadow: 0 0 20px 15px #000d;
+  padding: 2px;
+  width: 450px;
+  max-width: 80vw;
+  margin: 1.5vh auto;
+  font-size: 1.25em;
+
+  #email-input-label {
+    display: block;
+    margin: 14px 8px;
+    color: #bdbdbd;
+    font-size: 1.2em;
+  }
+
+  #email-input {
+    display: flex;
+    height: 40px;
+    border-radius: 5px;
+    overflow: clip;
+    position: relative;
+
+    #thank-you-message {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 20px;
+      padding: 5px;
+      color: black;
+      height: 40px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      // justify-content: center;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+      font-size: 20px;
+      padding: 5px;
+      background-color: white;
+
+      &:disabled {
+        color: white;
+      }
+    }
+
+    button {
+      width: 45px;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+      transition: background-color 0.25s;
+
+      &:disabled {
+        background-color: white;
+      }
+    }
+  }
+}
+
 #logo-container {
   /*height: 130px;*/
-  margin-top: 150px;
+  margin-top: 22vh;
 
   img {
     height: 70%;
@@ -151,12 +262,9 @@ export default {
 
   #short-logo {
     margin-top: 20px;
-    width: 25vw;
+    width: 350px;
+    max-width: 70vw;
     height: auto;
-
-    @media only screen and (max-width: $md-bp) {
-      width: 50vw;
-    }
   }
 }
 
@@ -201,6 +309,15 @@ export default {
 
 .mlh-conduct {
   color: color('secondary')
+}
+
+.registration-opens {
+  font-size: 3vh;
+  max-width: 800px;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.5;
 }
 
 @keyframes fadein {
