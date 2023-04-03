@@ -43,11 +43,9 @@ if (typeof window !== "undefined") {
 #profile {
     @include bg-primary;
     text-align: left;
-    // padding: 2rem 6rem;
-    padding: 100px 6rem 100px 6rem;
+    padding: 100px 1em;
     font-size: 20px;
     line-height: 30px;
-    // height: 100vh;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
