@@ -22,12 +22,12 @@
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
         <div id="email-input">
+          <span id="thank-you-message" v-if="updatesEmailSubmitted">Thank you 💖</span>
           <input @keyup.enter="submitEmail" type="email" :disabled="updatesEmailSubmitted"
             :placeholder="updatesEmailPlaceholder || 'sic-itur@astra.com'" v-model="updatesEmail" />
           <button @click="submitEmail" :disabled="updatesEmailSubmitted">
             <span :class="{ rocketing: updatesEmailSubmitted }">🚀</span>
           </button>
-          <span id="thank-you-message" v-if="updatesEmailSubmitted">{{ thankYou }}</span>
         </div>
         <span v-if="updatesEmailError" style="font-size: small; color: red">{{ updatesEmailError }}</span>
       </div>
@@ -90,7 +90,6 @@ export default {
     updatesEmail: "",
     updatesEmailSubmitted: false,
     updatesEmailError: "",
-    thankYou: "",
     updatesEmailPlaceholder: ""
   }),
   mounted() {
@@ -100,12 +99,6 @@ export default {
     }
   },
   methods: {
-    async typeThankYou() {
-      for (const char of "Got it, thanks!") {
-        this.thankYou += char;
-        await new Promise(res => setTimeout(res, 50));
-      }
-    },
     async submitEmail() {
       const emails = remult.repo(Email);
       const email = { address: this.updatesEmail };
@@ -120,7 +113,6 @@ export default {
       this.updatesEmailError = "";
       this.updatesEmailSubmitted = true;
       this.updatesEmail = "";
-      setTimeout(this.typeThankYou, 1000);
     }
   }
 };
@@ -129,6 +121,8 @@ export default {
 <style scoped lang="scss">
 @import "@/styles/global.scss";
 @import "@/styles/space.scss";
+
+$text-color: #bdbdbd;
 
 
 .hacksu-box {
@@ -151,7 +145,7 @@ export default {
   max-width: 90vw;
   margin-left: auto;
   margin-right: auto;
-  color: #bdbdbd;
+  color: $text-color;
 }
 
 #apply-btn {
@@ -199,6 +193,23 @@ export default {
   display: inline-block;
 }
 
+@keyframes fadingOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@mixin fadeOutInput {
+  animation-name: fadingOut;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
 #email-input-container {
   & * {
     box-sizing: border-box;
@@ -215,7 +226,7 @@ export default {
   #email-input-label {
     display: block;
     margin: 14px 8px;
-    color: #bdbdbd;
+    color: $text-color;
     font-size: 1.2em;
   }
 
@@ -232,12 +243,12 @@ export default {
       top: 0;
       font-size: 20px;
       padding: 5px;
-      color: black;
+      color: $text-color;
       height: 40px;
       width: 100%;
       display: flex;
       align-items: center;
-      // justify-content: center;
+      justify-content: center;
     }
 
     input {
@@ -251,6 +262,7 @@ export default {
 
       &:disabled {
         color: white;
+        @include fadeOutInput;
       }
     }
 
@@ -263,6 +275,7 @@ export default {
 
       &:disabled {
         background-color: white;
+        @include fadeOutInput;
       }
     }
   }
