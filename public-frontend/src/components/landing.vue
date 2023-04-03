@@ -23,12 +23,13 @@
         <span id="email-input-label">Sign up to get registration information:</span>
         <div id="email-input">
           <input @keyup.enter="submitEmail" type="email" :disabled="updatesEmailSubmitted"
-            placeholder="sic-itur@astra.com" v-model="updatesEmail" />
+            :placeholder="updatesEmailPlaceholder || 'sic-itur@astra.com'" v-model="updatesEmail" />
           <button @click="submitEmail" :disabled="updatesEmailSubmitted">
             <span :class="{ rocketing: updatesEmailSubmitted }">🚀</span>
           </button>
           <span id="thank-you-message" v-if="updatesEmailSubmitted">{{ thankYou }}</span>
         </div>
+        <span v-if="updatesEmailError" style="font-size: small; color: red">{{ updatesEmailError }}</span>
       </div>
       <!-- <span v-if="$parent.$parent.showRegister">
         <router-link tag="button" :to="{ name: 'register' }" id="apply-btn" class="register-now"
@@ -80,13 +81,24 @@
 </template>
 
 <script>
+import { remult } from 'remult';
+import { Email } from 'includes/email-address';
+
 export default {
   name: "landing",
   data: () => ({
     updatesEmail: "",
     updatesEmailSubmitted: false,
-    thankYou: ""
+    updatesEmailError: "",
+    thankYou: "",
+    updatesEmailPlaceholder: ""
   }),
+  mounted() {
+    const prevUpdatesEmail = localStorage.getItem("updatesEmail");
+    if (prevUpdatesEmail) {
+      this.updatesEmailPlaceholder = "Added: " + prevUpdatesEmail;
+    }
+  },
   methods: {
     async typeThankYou() {
       for (const char of "Got it, thanks!") {
@@ -94,7 +106,18 @@ export default {
         await new Promise(res => setTimeout(res, 50));
       }
     },
-    submitEmail() {
+    async submitEmail() {
+      const emails = remult.repo(Email);
+      const email = { address: this.updatesEmail };
+      try {
+        await emails.insert(email);
+      } catch (e) {
+        console.log(e);
+        this.updatesEmailError = e.modelState?.address || "We already have that email!";
+        return;
+      }
+      localStorage.setItem("updatesEmail", this.updatesEmail);
+      this.updatesEmailError = "";
       this.updatesEmailSubmitted = true;
       this.updatesEmail = "";
       setTimeout(this.typeThankYou, 1000);
@@ -161,18 +184,16 @@ export default {
 @keyframes rocket-away {
   0% {
     transform: translate(0px, 0px);
-    opacity: 1;
   }
 
   100% {
-    transform: translate(20px, -20px);
-    opacity: 0;
+    transform: translate(30px, -30px);
   }
 }
 
 .rocketing {
   animation-name: rocket-away;
-  animation-duration: 0.75s;
+  animation-duration: 0.5s;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
   display: inline-block;
