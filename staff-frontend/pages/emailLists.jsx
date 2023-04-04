@@ -15,18 +15,26 @@ export default function EmailLists() {
             setEmails(rows);
         });
     }, [list]);
-    const allLists = Object.values(EmailSource).map(l => ({ key: l, label: l }));
+    const cardStyle = {
+        width: 200,
+        margin: 6
+    }
+    const cardBodyStyle = {
+        padding: 15, textOverflow: "ellipsis",
+        overflow: "hidden"
+    }
+    const allLists = Object.values(EmailSource).sort().map(l => ({ key: l, label: l }));
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Title style={{ paddingLeft: 20 }} level={5}>Email Lists</Title>
                 <Menu title="Email Lists" mode="vertical" onClick={e => setList(e.key)}
-                    items={allLists}
-                    selectedKeys={[list]} className={layoutStyle.sidebarWidth} />
+                    items={allLists} selectedKeys={[list]}
+                    className={layoutStyle.sidebarWidth} />
             </Sider>
             <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', maxHeight: "80vh", alignContent: 'start', padding: 10 }}>
-                {emails.filter(e => e.source == list).map(e =>
-                    <Card style={{ width: 200, margin: 6 }} bodyStyle={{ padding: 15 }}>
+                {emails.map((e, i) =>
+                    <Card key={i} style={cardStyle} bodyStyle={cardBodyStyle}>
                         {e.address}
                     </Card>
                 )}
