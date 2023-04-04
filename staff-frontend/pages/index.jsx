@@ -1,18 +1,11 @@
-import { useState, useEffect } from "react";
-import { User } from "../../global-includes/users.ts";
+import React, { useState, useEffect } from "react";
+import Layout from "../layouts/layout.jsx";
 
 function HomePage() {
-    const [user, setUser] = useState(null);
-    useEffect(() => {
-        User.getOwnUserInfo().then(u => {
-            setUser(u);
-        })
-    }, []);
-    return <>
-        <div>Hello</div>
-        <img src="/cat.jpg" />
-        <p>{user?.externalRole}</p>
-    </>;
-}
+
+    return <Layout>
+        <p>hello!</p>
+    </Layout>
+};
 
 export default HomePage;
