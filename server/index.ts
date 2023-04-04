@@ -15,7 +15,7 @@ import { defineRemoteProcedures } from "./rpc-definitions.ts";
 import { remultConfig } from "./db.ts";
 import { registerAuthMiddleware } from "./auth.ts";
 import { config } from "./config.ts";
-import { UserRole } from "../global-includes/users.ts";
+import { UserRole } from "../global-includes/common.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool

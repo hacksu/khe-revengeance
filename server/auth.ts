@@ -12,7 +12,8 @@ import type { RemultServer } from "remult/server/expressBridge.js";
 import { remult } from "remult";
 import MongoStore from "connect-mongo";
 
-import { AuthMethod, User, UserRole } from "../global-includes/users.ts";
+import { AuthMethod, User } from "../global-includes/users.ts";
+import { UserRole } from "../global-includes/common.ts";
 import { config } from "./config.ts";
 
 // authenticating via Github login

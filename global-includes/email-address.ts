@@ -1,5 +1,12 @@
-import { Entity, Fields } from "remult";
-import { UserRole } from "./users.ts";
+import { BackendMethod, Entity, Fields, remult } from "remult";
+import { UserRole } from "./common.ts";
+import { User } from "./users.ts";
+
+export enum EmailSource {
+  // reserved for emails drawn directly from user accounts
+  SiteUsers = "SiteUsers",
+  Early2023 = "2023EarlySignup",
+}
 
 @Entity<Email>("emails", {
   allowApiCrud: UserRole.Admin,
@@ -23,5 +30,25 @@ export class Email {
   address = "";
 
   @Fields.string()
-  source = "2023EarlySignup";
+  source: EmailSource = EmailSource.Early2023;
+
+  @BackendMethod({ allowed: UserRole.Admin })
+  static async getAllEmails(source?: string) {
+    let fromList = await remult
+      .repo(Email)
+      .find(source ? { where: { source: source } } : {});
+    if (source == "SiteUsers") {
+      const fromUsers = await remult
+        .repo(User)
+        .find({ where: { receivingEmails: true } });
+      fromList = fromList.concat(
+        fromUsers.map((u) => ({
+          address: u.email,
+          subscribedAt: u.createdAt,
+          source: EmailSource.SiteUsers,
+        }))
+      );
+    }
+    return fromList;
+  }
 }

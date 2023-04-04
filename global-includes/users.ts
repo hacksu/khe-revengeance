@@ -1,5 +1,6 @@
 import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
 import { rawObj } from "./adaptations.ts";
+import { UserRole } from "./common.ts";
 
 export enum AuthMethod {
   Discord = "Discord",
@@ -7,17 +8,17 @@ export enum AuthMethod {
   Local = "Local",
 }
 
-export enum UserRole {
-  Normal = "normal",
-  Staff = "staff",
-  Admin = "admin",
-}
-
 export interface HackathonRegistration {
+  // TODO: create registration fields
   submitted: boolean;
 }
 
-@Entity("users", { allowApiCrud: false, allowApiRead: UserRole.Admin })
+@Entity<User>("users", {
+  allowApiCrud: UserRole.Admin,
+  allowApiUpdate(entity, c) {
+    return !!c && c.authenticated() && entity?.id == c.user?.id;
+  },
+})
 export class User extends EntityBase {
   @Fields.uuid()
   id!: string;
@@ -45,6 +46,9 @@ export class User extends EntityBase {
 
   @rawObj()
   registration: HackathonRegistration = { submitted: false };
+
+  @Fields.boolean()
+  receivingEmails: boolean = true;
 
   /** Called on backend when OAuth succeeds; a session is then created using the
    * returned User object */
