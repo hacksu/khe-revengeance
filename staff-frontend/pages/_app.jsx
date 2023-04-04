@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { useRouter } from "next/router";
 import { User } from "../../global-includes/users.ts";
+import "./index.css";
 
 const UserContext = createContext();
 
@@ -9,7 +9,10 @@ function UserProvider({ children }) {
     useEffect(() => {
         User.getOwnUserInfo().then(u => {
             if (!u) {
-                location.assign(location.protocol + "//" + location.host.replace("staff.", "") + "/login");
+                location.assign(
+                    location.protocol + "//" +
+                    location.host.replace("staff.", "") + "/login"
+                );
             } else {
                 setUser(u);
             }

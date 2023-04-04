@@ -1,6 +1,6 @@
 import Layout from "../layouts/layout";
 
 
-export default function () {
+export default function Tickets() {
     return <Layout><p>tickets</p></Layout>;
 }
