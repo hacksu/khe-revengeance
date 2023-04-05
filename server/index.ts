@@ -1,20 +1,21 @@
 // built-in node.js modules
 import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, parse as parseURL } from "url";
 import { IncomingMessage, ServerResponse } from "http";
-import { execSync } from "child_process";
+import { exec } from "child_process";
 
 // dependencies installed from npm
-import fastify from "fastify";
-import middie from "@fastify/middie";
+import express from "express";
 import fileServer from "serve-static";
 import { createServer as createViteServer } from "vite";
 import next from "next";
-import { remultFastify } from "remult/remult-fastify";
 
 // local modules
-import { defineRemoteProcedures } from "./rpc-definitions.js";
-import { dbConfig } from "../global-includes/exports.js";
+import { defineRemoteProcedures } from "./rpc-definitions.ts";
+import { remultConfig } from "./db.ts";
+import { registerAuthMiddleware } from "./auth.ts";
+import { config } from "./config.ts";
+import { UserRole } from "../global-includes/common.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -29,6 +30,10 @@ const projectRoot = path.resolve(
   ".."
 );
 console.log("project root directory:", projectRoot);
+
+function isHostnameStaff(host: string) {
+  return host.startsWith("staff.");
+}
 
 // create a vite server that will constantly rebuild the public frontend code
 // for fast development
@@ -48,8 +53,8 @@ async function getPublicDevServer() {
 async function getStaffDevServer() {
   const staffFrontendDir = path.resolve(projectRoot, "staff-frontend");
   const app = next({
-    hostname: "staff.localhost",
-    port: 3000,
+    hostname: parseURL(config.staffSite).host!,
+    port: config.port,
     dir: staffFrontendDir,
     dev,
   });
@@ -59,16 +64,22 @@ async function getStaffDevServer() {
   return app.getRequestHandler();
 }
 
-// create the top-level fastify app that will route traffic to the appropriate
+// create the top-level express app that will route traffic to the appropriate
 // place
 async function createServer() {
-  const app = fastify();
-  // enable express-style middleware
-  await app.register(middie);
+  const app = express();
+  registerAuthMiddleware(app, remultConfig);
   // create api routes for database stuff
-  await app.register(remultFastify(dbConfig));
+  app.use(remultConfig);
   // for sanity checks
-  app.get("/api/exists", (_, res) => res.send("yes"));
+  app.get("/api/exists", (_req, res, _next) => res.end("yes"));
+  app.get("/meta/log/:logtype", (req, res) => {
+    if (req.user?.roles?.includes(UserRole.Admin)) {
+      res.sendFile(`/opt/pm2/logs/khe-revengeance-${req.params.logtype}.log`);
+    } else {
+      res.sendStatus(403);
+    }
+  });
   defineRemoteProcedures();
   if (dev) {
     // in development mode, we create and use the vite and next.js development
@@ -76,11 +87,11 @@ async function createServer() {
     const publicDevServer = await getPublicDevServer();
     const staffDevServer = await getStaffDevServer();
 
-    app.use(async (req: IncomingMessage, res: ServerResponse) => {
+    app.get("*", async (req, res) => {
       if (!req.headers.host) {
         console.error("received request without Host header??");
         return;
-      } else if (req.headers.host.startsWith("staff.")) {
+      } else if (isHostnameStaff(req.headers.host)) {
         await staffDevServer(req, res);
       } else {
         publicDevServer(req, res);
@@ -89,14 +100,31 @@ async function createServer() {
   } else {
     // in production mode, we build our frontend code to HTML/CSS/JS and then
     // serve those files statically
-    console.log("building public site for production...");
-    console.log(execSync("yarn build-public").toString());
+    console.log("building site html for production...");
+
+    exec("yarn build-public", (err, stdout, stderr) => {
+      if (err) {
+        console.error("could not build public site!");
+        console.error(stderr);
+      } else {
+        console.log("built public site:");
+        console.log(stdout);
+      }
+    });
     const publicFiles = fileServer(
       path.resolve(projectRoot, "public-frontend/dist"),
       { extensions: ["html"] }
     );
 
-    // TODO: exec next.js build
+    exec("yarn build-staff", (err, stdout, stderr) => {
+      if (err) {
+        console.error("could not build staff site!");
+        console.error(stderr);
+      } else {
+        console.log("built staff site:");
+        console.log(stdout);
+      }
+    });
     const staffFiles = fileServer(
       path.resolve(projectRoot, "staff-frontend/dist"),
       { extensions: ["html"] }
@@ -104,13 +132,14 @@ async function createServer() {
 
     // serve the built files if necessary; caddy or nginx could be set up to do
     // this in production
-    app.use(async (req: IncomingMessage, res: ServerResponse, next) => {
+    app.get("*", async (req: IncomingMessage, res: ServerResponse, next) => {
       // add a header just so i can see that the request made it this far
-      res.setHeader("X-File-Server", "Fastify-Static-Server");
-      if (!req.headers.host) {
+      res.setHeader("X-File-Server", "Express-Static-Server");
+      const host = req.headers.host;
+      if (!host) {
         console.error("received request without Host header??");
         return;
-      } else if (req.headers.host.startsWith("staff.")) {
+      } else if (isHostnameStaff(host)) {
         staffFiles(req, res, next);
       } else {
         publicFiles(req, res, next);
@@ -118,12 +147,12 @@ async function createServer() {
     });
   }
 
-  app.listen({ port: 3000 }, () =>
+  app.listen({ port: config.port }, () => {
     console.log(
-      "fastify server in existence at http://localhost:3000 " +
-        "and http://staff.localhost:3000"
-    )
-  );
+      `express server in existence at ${config.publicSite} ` +
+        `and ${config.staffSite}`
+    );
+  });
 }
 
 createServer();

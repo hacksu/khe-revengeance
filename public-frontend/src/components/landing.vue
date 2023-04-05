@@ -19,6 +19,18 @@
 
     <div id="landing-content-container">
       <p id="date">Blasting off this October</p>
+      <div id="email-input-container">
+        <span id="email-input-label">Sign up to get registration information:</span>
+        <div id="email-input">
+          <span id="thank-you-message" v-if="updatesEmailSubmitted">Thank you 💖</span>
+          <input @keyup.enter="submitEmail" type="email" :disabled="updatesEmailSubmitted"
+            :placeholder="updatesEmailPlaceholder || 'sic-itur@astra.com'" v-model="updatesEmail" />
+          <button @click="submitEmail" :disabled="updatesEmailSubmitted">
+            <span :class="{ rocketing: updatesEmailSubmitted }">🚀</span>
+          </button>
+        </div>
+        <span v-if="updatesEmailError" style="font-size: small; color: red">{{ updatesEmailError }}</span>
+      </div>
       <!-- <span v-if="$parent.$parent.showRegister">
         <router-link tag="button" :to="{ name: 'register' }" id="apply-btn" class="register-now"
           v-if="$parent.$parent.user._id == ''">
@@ -54,14 +66,7 @@
         </div>
       </span> -->
       <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
-        <p title="Registration has not yet opened!" style="
-                            font-size: 3vh;
-                            max-width: 800px;
-                            width: 80vw;
-                            margin-left: auto;
-                            margin-right: auto;
-                            opacity: 0.5;
-                          ">
+        <p title="Registration has not yet opened!" class="registration-opens">
           Registration opens {{ $parent.$parent.registrationOpens }}
         </p>
       </span>
@@ -76,14 +81,48 @@
 </template>
 
 <script>
+import { remult } from 'remult';
+import { Email } from 'includes/email-address';
+
 export default {
-  name: "landing"
+  name: "landing",
+  data: () => ({
+    updatesEmail: "",
+    updatesEmailSubmitted: false,
+    updatesEmailError: "",
+    updatesEmailPlaceholder: ""
+  }),
+  mounted() {
+    const prevUpdatesEmail = localStorage.getItem("updatesEmail");
+    if (prevUpdatesEmail) {
+      this.updatesEmailPlaceholder = "Added: " + prevUpdatesEmail;
+    }
+  },
+  methods: {
+    async submitEmail() {
+      const emails = remult.repo(Email);
+      const email = { address: this.updatesEmail };
+      try {
+        await emails.insert(email);
+      } catch (e) {
+        console.log(e);
+        this.updatesEmailError = e.modelState?.address || "We already have that email!";
+        return;
+      }
+      localStorage.setItem("updatesEmail", this.updatesEmail);
+      this.updatesEmailError = "";
+      this.updatesEmailSubmitted = true;
+      this.updatesEmail = "";
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
 @import "@/styles/space.scss";
+
+$text-color: #bdbdbd;
 
 
 .hacksu-box {
@@ -102,11 +141,11 @@ export default {
 }
 
 #date {
-  font-size: 3.5vh;
-  max-width: 80vw;
+  font-size: 1.8em;
+  max-width: 90vw;
   margin-left: auto;
   margin-right: auto;
-  color: #bdbdbd;
+  color: $text-color;
 }
 
 #apply-btn {
@@ -136,9 +175,115 @@ export default {
   position: relative;
 }
 
+@keyframes rocket-away {
+  0% {
+    transform: translate(0px, 0px);
+  }
+
+  100% {
+    transform: translate(30px, -30px);
+  }
+}
+
+.rocketing {
+  animation-name: rocket-away;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  display: inline-block;
+}
+
+@keyframes fadingOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@mixin fadeOutInput {
+  animation-name: fadingOut;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
+#email-input-container {
+  & * {
+    box-sizing: border-box;
+  }
+
+  background-color: #000d;
+  box-shadow: 0 0 20px 15px #000d;
+  padding: 2px;
+  width: 450px;
+  max-width: 80vw;
+  margin: 1.5vh auto;
+  font-size: 1.25em;
+
+  #email-input-label {
+    display: block;
+    margin: 14px 8px;
+    color: $text-color;
+    font-size: 1.2em;
+  }
+
+  #email-input {
+    display: flex;
+    height: 40px;
+    border-radius: 5px;
+    overflow: clip;
+    position: relative;
+
+    #thank-you-message {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 20px;
+      padding: 5px;
+      color: $text-color;
+      height: 40px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+      font-size: 20px;
+      padding: 5px;
+      background-color: white;
+
+      &:disabled {
+        color: white;
+        @include fadeOutInput;
+      }
+    }
+
+    button {
+      width: 45px;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+      transition: background-color 0.25s;
+
+      &:disabled {
+        background-color: white;
+        @include fadeOutInput;
+      }
+    }
+  }
+}
+
 #logo-container {
   /*height: 130px;*/
-  margin-top: 150px;
+  margin-top: 22vh;
 
   img {
     height: 70%;
@@ -151,12 +296,9 @@ export default {
 
   #short-logo {
     margin-top: 20px;
-    width: 25vw;
+    width: 350px;
+    max-width: 70vw;
     height: auto;
-
-    @media only screen and (max-width: $md-bp) {
-      width: 50vw;
-    }
   }
 }
 
@@ -201,6 +343,15 @@ export default {
 
 .mlh-conduct {
   color: color('secondary')
+}
+
+.registration-opens {
+  font-size: 3vh;
+  max-width: 800px;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.5;
 }
 
 @keyframes fadein {

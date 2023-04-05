@@ -1,6 +1,8 @@
 import Home from "./views/Home.vue";
 import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
+import Login from "./views/Login.vue";
+import Profile from "./views/Profile.vue";
 
 export const routerConfig = {
   routes: [
@@ -14,11 +16,11 @@ export const routerConfig = {
     //   name: 'register',
     //   component: Register,
     // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: Login,
-    // },
+    {
+      path: "/login",
+      name: "login",
+      component: Login,
+    },
     // {
     //   path: '/apply',
     //   name: 'apply',
@@ -33,6 +35,11 @@ export const routerConfig = {
       path: "/contact",
       name: "contact",
       component: Contact,
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile,
     },
     // {
     //   path: '/schedule',
@@ -51,6 +58,7 @@ export const routerConfig = {
       return {
         top: 0,
         behavior: "smooth",
+        el: "#app", // 😬
       };
     }
   },

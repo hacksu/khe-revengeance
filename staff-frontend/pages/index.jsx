@@ -1,20 +1,35 @@
-import { Email } from '../../global-includes/email-address';
+import React, { useState, useEffect } from "react";
+import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
-import { useState, useEffect } from "react";
+import { Email } from "../../global-includes/email-address.ts";
+import { Card, Statistic } from "antd";
+import { User } from "../../global-includes/users.ts";
+import Link from "next/link.js";
+
+function DBCard({ children }) {
+    return <Card style={{ width: 200, margin: "10px 10px 10px 0" }}>{children}</Card>
+}
 
 function HomePage() {
-    const emailDB = remult.repo(Email);
-    const [emails, setEmails] = useState([]);
-    useEffect(async () => {
-        setEmails(await emailDB.find());
+
+    const [emailCount, setEmailCount] = useState(null);
+    const [userCount, setUserCount] = useState(null);
+
+    useEffect(() => {
+        remult.repo(Email).count().then(count => setEmailCount(count));
+        remult.repo(User).count().then(count => setUserCount(count));
     }, []);
-    return <>
-        <div>Hello staff</div>
-        <img src="/cat.jpg" />
-        <ul>
-            {emails.map(e => <li>{e.address}</li>)}
-        </ul>
-    </>;
-}
+
+    return <KHELayout>
+        <div style={{ padding: "10px 0", height: "100%" }}>
+            <DBCard>
+                <Statistic title={<Link href="/emailLists">Email Signups</Link>} value={emailCount ?? '...'} />
+            </DBCard>
+            <DBCard>
+                <Statistic title="User Accounts" value={userCount ?? '...'} />
+            </DBCard>
+        </div>
+    </KHELayout>;
+};
 
 export default HomePage;

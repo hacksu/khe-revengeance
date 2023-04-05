@@ -1,5 +1,5 @@
 # this configuration file will set up caddy to serve the public and staff sites,
-with automatic https
+# with automatic https
 
 # make sure the base html files aren't cached by visitor's browsers
 (file-server) {
@@ -60,7 +60,7 @@ khe.io {
         file_server
 }
 
-# add "dev-" at the beginning of the next line to set up that subdomain
+# change to staff.dev.khe.io to set up that subdomain
 staff.khe.io {
         import monitor
         import file-server

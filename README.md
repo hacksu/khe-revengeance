@@ -10,7 +10,19 @@ In /server, there is a server application that ties everything together. In dev 
 
 # How Do I Use It?
 
-[Install Node.js](https://nodejs.org/en), which will run our server-side code. Open the root directory of this repository in your terminal. Install [yarn](https://yarnpkg.com/), which will download the site's libraries, tools, and dependencies, by running `npm install -g yarn` in it. Install this project's specific dependencies by running `yarn install`. Then, run the project by inputting `yarn dev`.
+- [Install Node.js](https://nodejs.org/en), which will run our non-browser code.
+- Open the root directory of this repository in your terminal.
+- Install [yarn](https://yarnpkg.com/), which will manage the site's libraries, tools, and dependencies, by running `npm install -g yarn` in it.
+- Install those dependencies by running `yarn install`.
+
+If you just want to work on the appearance of the public frontend, you can stop there and run `yarn serve-public` to bring up a dev server for it and make changes and view them live by clicking the link that shows up in the terminal. If you want to work on stuff that involves the database or user accounts, you need to do a few more things:
+
+- This site uses MongoDB to store data, so please [download and install that.](https://www.mongodb.com/try/download/community) (The community edition is free and works perfectly.)
+- Then, set up the URL localhost.khe.io by running `yarn acquire-urls` in this directory **with root privileges**; you'll have to run PowerShell as an administrator on Windows or use sudo on Linux. This command will set up "localhost.khe.io" and "staff.localhost.khe.io" to refer to your running instance of the web server on your computer only.
+- To log into sites and check users' credentials through Github and Discord, you need to create an OAuth app through each of their developer portals; or, just ask Mitch for the passwords for the apps that already exist for this. Maybe I should put them on Google Drive or Discord or something.
+- Then, run the server with `yarn dev`, and access the site through the links that will show up in the terminal.
+
+To add code this project, create a branch and make changes in it; then, to deploy your changes to https://dev.khe.io, merge them into the "dev-main" branch. To deploy changes to the real website, open a pull request for the "production" branch.
 
 # Why?
 

@@ -29,7 +29,7 @@
       <div class="formField">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-                                              </textarea>
+                                                </textarea>
       </div>
 
       <div style="text-align: center;">
@@ -67,7 +67,6 @@ export default {
   watch: {
     content() {
       const $el = this.$el.querySelector('textarea');
-      console.log($el.scrollHeight, $el.offsetHeight);
       if ($el.scrollHeight > $el.offsetHeight) {
         $el.style.height = $el.scrollHeight + 30 + 'px';
       }
