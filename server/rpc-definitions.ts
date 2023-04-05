@@ -6,24 +6,27 @@ import { config } from "./config.ts";
 mailer.setApiKey(config.sendgridKey);
 
 export function defineRemoteProcedures() {
-  RemoteProcedures.sendAlert = async function (ticket) {
+  RemoteProcedures.sendAlert = async function (ticket, message) {
     const timeString =
       ticket.createdAt.toLocaleString("en-US", {
         timeZone: "America/New_York",
       }) + " US Eastern Time";
+
+    const intro =
+      `ticket id: ${ticket.id}\n` +
+      `ticket created at: ${timeString}\n` +
+      `sender name: ${ticket.theirName}\nsender email: ${ticket.theirEmail}\n` +
+      `subject: ${ticket.subject}\n`;
+
     const msg: MailDataRequired = {
       to: config.supportEmailRecipient,
       from: {
         name: "KHE Support Ticket Alert",
         email: "khe-support-ticket@em3798.khe.io",
       },
-      subject: "KHE SUPPORT TICKET: " + ticket.subject,
-      text:
-        `ticket id: ${ticket.id}\n` +
-        `ticket created at: ${timeString}\n` +
-        `sender name: ${ticket.theirName}\nsender email: ${ticket.theirEmail}\n` +
-        `subject: ${ticket.subject}\n` +
-        `body:\n\n${ticket.body}\n\n\n`,
+      subject: "New Message: " + ticket.subject,
+      text: intro + `body:\n\n${message.text}\n\n\n`,
+      html: intro + message.html,
       asm: {
         groupId: 21989, // ID for "KHE Support Ticket Alerts" on sendgrid
       },

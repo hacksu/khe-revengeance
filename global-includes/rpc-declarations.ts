@@ -1,4 +1,4 @@
-import { SupportTicket } from "./support-ticket.ts";
+import { SupportTicket, Message } from "./support-ticket.ts";
 
 /**
  * This class declares functions that can be called in remult BackendMethods to
@@ -6,5 +6,5 @@ import { SupportTicket } from "./support-ticket.ts";
  * only imported on the backend.
  */
 export class RemoteProcedures {
-  static sendAlert: (ticket: SupportTicket) => Promise<void>;
+  static sendAlert: (ticket: SupportTicket, message: Message) => Promise<void>;
 }

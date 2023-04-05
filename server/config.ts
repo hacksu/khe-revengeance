@@ -16,6 +16,7 @@ export interface ServerConfig {
   githubOrgPrivateKey: string;
   mongoURI: string;
   port: number;
+  incomingEmailHost: string;
 }
 
 const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
