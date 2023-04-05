@@ -33,7 +33,9 @@
     @notStatic {
         not {
             file {
-                try_files {path} {path}.html
+                # the last of these is used to try /index.html when the path is just /
+                # these is probably a better way to do this
+                try_files {path} {path}.html {path}index.html
             }
         }
     }
@@ -49,7 +51,7 @@ khe.io {
         root * /var/www/khe-revengeance/public-frontend/dist
 
         # outside the matcher we still have to rewrite the actual request
-        try_files {path} {path}.html
+        try_files {path} {path}.html {path}index.html
 
         reverse_proxy @notStatic localhost:3000 {
                 # add headers to tell the api server where this request came from
@@ -70,7 +72,7 @@ staff.khe.io {
         root * /var/www/khe-revengeance/staff-frontend/dist
 
         # outside the matcher we still have to rewrite the actual request
-        try_files {path} {path}.html
+        try_files {path} {path}.html {path}index.html
 
         reverse_proxy @notStatic localhost:3000 {
                 # add headers to tell the api server where this request came from
