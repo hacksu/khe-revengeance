@@ -16,6 +16,7 @@ import { remultConfig } from "./db.ts";
 import { registerAuthMiddleware } from "./auth.ts";
 import { config } from "./config.ts";
 import { UserRole } from "../global-includes/common.ts";
+import enableMail from "./mail.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -81,6 +82,7 @@ async function createServer() {
     }
   });
   defineRemoteProcedures();
+  enableMail(app, remultConfig);
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request

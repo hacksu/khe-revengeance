@@ -28,8 +28,7 @@
 
       <div class="formField">
         <span id="subjectTitle">Body:</span>
-        <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content">
-                                                </textarea>
+        <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content" />
       </div>
 
       <div style="text-align: center;">
@@ -74,11 +73,14 @@ export default {
   },
   methods: {
     async submitTicket() {
-      await SupportTicketController.addTicketAndSendAlert({
-        subject: this.subject,
-        body: this.content,
+      await SupportTicketController.createTicketAndSendAlert({
+        originalSubject: this.subject,
         theirEmail: this.email,
         theirName: this.name,
+        messages: [{
+          subject: this.subject,
+          text: this.body,
+        }]
       });
       this.submitted = true;
     },

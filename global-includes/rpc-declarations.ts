@@ -6,5 +6,12 @@ import { SupportTicket, Message } from "./support-ticket.ts";
  * only imported on the backend.
  */
 export class RemoteProcedures {
-  static sendAlert: (ticket: SupportTicket, message: Message) => Promise<void>;
+  static sendSupportAlert: (
+    ticket: SupportTicket,
+    message: Message
+  ) => Promise<void>;
+  static sendSupportReply: (
+    ticket: SupportTicket,
+    message: Message
+  ) => Promise<void>;
 }
