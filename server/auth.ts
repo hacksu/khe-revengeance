@@ -45,17 +45,21 @@ passport.use(
       let roleUserShouldHave = UserRole.Normal;
       let externalRole = "";
       if (profile.username) {
-        const team = await orgOctokit.rest.orgs.getMembershipForUser({
-          org: "hacksu",
-          username: profile.username,
-        });
-        if (team.data.state == "active") {
-          if (team.data.role == "admin") {
-            roleUserShouldHave = UserRole.Admin;
-            externalRole = `@${profile.username}, an admin of the HacKSU organization on GitHub`;
-          } else {
-            // set up a team for khe staff and check membership and assign UserRole.Staff?
+        try {
+          const team = await orgOctokit.rest.orgs.getMembershipForUser({
+            org: "hacksu",
+            username: profile.username,
+          });
+          if (team.data.state == "active") {
+            if (team.data.role == "admin") {
+              roleUserShouldHave = UserRole.Admin;
+              externalRole = `@${profile.username}, an admin of the HacKSU organization on GitHub`;
+            } else {
+              // set up a team for khe staff and check membership and assign UserRole.Staff?
+            }
           }
+        } catch {
+          // user is not in the hacksu org
         }
       }
       if (!profile.emails?.length) {
