@@ -12,7 +12,12 @@ export interface Message {
   attachments: string[];
 }
 
-@Entity("tickets", { allowApiCrud: UserRole.Admin })
+export enum TicketStatus {
+  open = "Open",
+  closed = "Closed",
+}
+
+@Entity("tickets", { allowApiCrud: [UserRole.Admin, UserRole.Staff] })
 export class SupportTicket {
   @Fields.uuid()
   id!: string;
@@ -22,6 +27,9 @@ export class SupportTicket {
 
   @Fields.createdAt()
   createdAt = new Date();
+
+  @Fields.updatedAt()
+  updatedAt = new Date();
 
   @Fields.string()
   originalSubject = "";
@@ -34,6 +42,20 @@ export class SupportTicket {
 
   @rawObj()
   messages: Message[] = [];
+
+  @Fields.boolean()
+  hasUnread = true;
+
+  @Fields.string()
+  status: TicketStatus = TicketStatus.open;
+
+  @Fields.string()
+  note = "";
+
+  // this could be like a user id but 🤷‍♂️ just put someone's name or maybe
+  // their email so they can receive the updates
+  @Fields.string()
+  assignedTo = "";
 }
 
 export class SupportTicketController {

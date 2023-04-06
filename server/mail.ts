@@ -2,7 +2,11 @@ import type { Express } from "express";
 import type { RemultServer } from "remult/server/expressBridge";
 import multer from "multer";
 
-import { Message, SupportTicket } from "../global-includes/support-ticket.ts";
+import {
+  Message,
+  SupportTicket,
+  TicketStatus,
+} from "../global-includes/support-ticket.ts";
 import { config } from "./config.ts";
 import { getDB } from "./db.ts";
 import { validateMessageFields } from "./rpc-definitions.ts";
@@ -59,6 +63,8 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
         let ticket = await tickets.findFirst({ plusCode });
         if (ticket) {
           ticket.messages.push(message);
+          ticket.hasUnread = true;
+          ticket.status = TicketStatus.open;
           ticket = await tickets.save(ticket);
           await RemoteProcedures.sendSupportAlert(ticket, message);
         } else {
