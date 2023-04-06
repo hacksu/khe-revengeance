@@ -2,6 +2,7 @@ import { BackendMethod, Entity, Fields, remult } from "remult";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 import { rawObj } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
+import { IdEntity } from "remult";
 
 export interface Message {
   date: Date;
@@ -97,4 +98,19 @@ export class SupportTicketController {
       );
     }
   }
+}
+
+@Entity("raw-emails", {
+  allowApiCrud: false,
+  allowApiRead: [UserRole.Admin, UserRole.Staff],
+})
+export class RawEmail extends IdEntity {
+  @rawObj()
+  body: any = {};
+
+  @rawObj()
+  files: any = [];
+
+  @Fields.boolean()
+  processed: boolean = true;
 }

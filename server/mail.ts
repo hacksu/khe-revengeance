@@ -1,19 +1,23 @@
+import path from "path";
+
 import type { Express } from "express";
 import type { RemultServer } from "remult/server/expressBridge";
 import multer from "multer";
 
 import {
   Message,
+  RawEmail,
   SupportTicket,
   TicketStatus,
 } from "../global-includes/support-ticket.ts";
-import { config } from "./config.ts";
-import { getDB } from "./db.ts";
+import { config, projectRoot } from "./config.ts";
 import { validateMessageFields } from "./rpc-definitions.ts";
 import { remult } from "remult";
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 
-const parseForm = multer({ dest: "./uploads/email-attachments/" });
+const parseForm = multer({
+  dest: path.resolve(projectRoot, "server/uploads/email-attachments/"),
+});
 
 export default function enableMail(app: Express, remultConfig: RemultServer) {
   app.post(
@@ -21,11 +25,9 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
     remultConfig.withRemult,
     parseForm.any(),
     async (req, res) => {
-      const rawID = (
-        await (await getDB())
-          .collection("raw_emails")
-          .insertOne({ body: req.body, file: req.file, files: req.files })
-      ).insertedId;
+      const savedRaw = await remult
+        .repo(RawEmail)
+        .insert({ body: req.body, files: req.files });
       try {
         const envelope = JSON.parse(req.body.envelope);
         const toUs = envelope.to.find((e: string) =>
@@ -36,7 +38,7 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
             "received email with envelope without our address:",
             envelope
           );
-          console.warn("email database id:", rawID);
+          console.warn("email database id:", savedRaw.id);
           return;
         }
         let plusCode: number;
@@ -47,7 +49,7 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
             "received email without valid plus code addressed to",
             toUs
           );
-          console.warn("email database id:", rawID);
+          console.warn("email database id:", savedRaw.id);
           return;
         }
         const message: Message = validateMessageFields({
@@ -74,10 +76,10 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
           );
         }
       } catch (e) {
-        console.warn("could not process email with db id", rawID);
+        console.warn("could not process email with db id", savedRaw.id);
         console.warn(e);
+        await remult.repo(RawEmail).save({ ...savedRaw, processed: false });
       }
-
       res.sendStatus(200);
     }
   );
