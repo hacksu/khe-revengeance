@@ -30,6 +30,10 @@ export async function getDB() {
 }
 
 export const remultConfig = remultExpress({
+  async initRequest(request, options) {
+    options.remult.context.incomingIP =
+      request.header("X-Real-IP") || request.ip;
+  },
   dataProvider: async () => {
     return new MongoDataProvider(await getDB(), await getDBClient());
   },

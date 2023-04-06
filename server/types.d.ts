@@ -7,3 +7,9 @@ declare global {
     export interface User extends CustomUser {}
   }
 }
+
+declare module "remult" {
+  export interface RemultContext {
+    incomingIP: string;
+  }
+}
