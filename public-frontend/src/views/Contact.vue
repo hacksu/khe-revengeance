@@ -79,7 +79,7 @@ export default {
         theirName: this.name,
         messages: [{
           subject: this.subject,
-          text: this.body,
+          text: this.content,
         }]
       });
       this.submitted = true;

@@ -13,7 +13,13 @@ import { Email } from "../global-includes/email-address.ts";
 function textToHTML(text: string) {
   return (
     `<p style="font-size: 1em; color: black; background-color: white; font-family: sans-serif">` +
-    text.split("\n").join("<br />") +
+    text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .split("\n")
+      .join("<br />") +
     "</p>"
   );
 }
@@ -25,13 +31,13 @@ function textToHTML(text: string) {
 export function validateMessageFields(message: Message) {
   let htmlResult = "";
   let textResult = "";
-  if (message.html.trim().length > 0) {
+  if (message.html && message.html.trim().length > 0) {
     htmlResult = message.html;
   } else {
     htmlResult = textToHTML(message.text);
   }
   htmlResult = xss(htmlResult);
-  if (message.text.trim().length > 0) {
+  if (message.text && message.text.trim().length > 0) {
     textResult = message.text;
   } else {
     textResult = cheerio.load(htmlResult).text();
