@@ -1,5 +1,14 @@
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { parse } from "yaml";
+
+// find the directory at the root of the repository; it is the parent of the
+// parent of this file
+const projectRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  ".."
+);
 
 export interface ServerConfig {
   publicSite: string;
@@ -19,10 +28,15 @@ export interface ServerConfig {
   supportEmailHost: string;
 }
 
-const secrets = parse(fs.readFileSync("./secrets.yaml", { encoding: "utf-8" }));
+const secrets = parse(
+  fs.readFileSync(path.resolve(projectRoot, "secrets.yaml"), {
+    encoding: "utf-8",
+  })
+);
 // TODO: check type?
 const config: ServerConfig = {
   ...secrets.configIndependent,
   ...secrets.configs[secrets.currentConfig],
 };
-export { config };
+
+export { config, projectRoot };

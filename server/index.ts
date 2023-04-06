@@ -1,6 +1,6 @@
 // built-in node.js modules
 import path from "path";
-import { fileURLToPath, parse as parseURL } from "url";
+import { parse as parseURL } from "url";
 import { IncomingMessage, ServerResponse } from "http";
 import { exec } from "child_process";
 
@@ -14,7 +14,7 @@ import next from "next";
 import { defineRemoteProcedures } from "./rpc-definitions.ts";
 import { remultConfig } from "./db.ts";
 import { registerAuthMiddleware } from "./auth.ts";
-import { config } from "./config.ts";
+import { config, projectRoot } from "./config.ts";
 import { UserRole } from "../global-includes/common.ts";
 import enableMail from "./mail.ts";
 
@@ -24,12 +24,6 @@ import enableMail from "./mail.ts";
 const dev = process.env.NODE_ENV !== "production";
 console.log("dev mode:", dev);
 
-// find the directory at the root of the repository; it is the parent of the
-// parent of this file
-const projectRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  ".."
-);
 console.log("project root directory:", projectRoot);
 
 function isHostnameStaff(host: string) {
