@@ -1,10 +1,14 @@
+import { promises as fs } from "fs";
+
 import mailer, { MailDataRequired } from "@sendgrid/mail";
 import * as cheerio from "cheerio";
 import xss from "xss";
+import { convert as convertToText } from "html-to-text";
 
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { Message } from "../global-includes/support-ticket.ts";
+import { Email } from "../global-includes/email-address.ts";
 
 function textToHTML(text: string) {
   return (
@@ -128,6 +132,34 @@ export function defineRemoteProcedures() {
     console.log(
       `sent email through sendgrid at ${new Date()} for support ticket ` +
         `${ticket.id}, received status code:`,
+      sendResult[0].statusCode
+    );
+  };
+
+  RemoteProcedures.sendWelcome = async function (email: Email) {
+    const emailBody = await fs.readFile("./server/emails/welcome.html", {
+      encoding: "utf-8",
+    });
+    const msg: MailDataRequired = {
+      to: {
+        email: email.address,
+      },
+      from: {
+        name: "KHE Updates",
+        email: `updates@khe.io`,
+      },
+      subject: "KHE Updates",
+      html: emailBody,
+      text: convertToText(emailBody),
+      asm: {
+        groupId: 22053, // KHE 2023 Updates
+        groupsToDisplay: [22053],
+      },
+    };
+    const sendResult = await mailer.send(msg);
+    console.log(
+      `sent email through sendgrid at ${new Date()} for signup ` +
+        `${email.address}, received status code:`,
       sendResult[0].statusCode
     );
   };

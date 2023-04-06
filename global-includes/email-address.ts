@@ -1,6 +1,7 @@
 import { BackendMethod, Entity, Fields, remult } from "remult";
 import { UserRole } from "./common.ts";
 import { User } from "./users.ts";
+import { RemoteProcedures } from "./rpc-declarations.ts";
 
 export enum EmailSource {
   // reserved for emails drawn directly from user accounts
@@ -10,7 +11,6 @@ export enum EmailSource {
 
 @Entity<Email>("emails", {
   allowApiCrud: UserRole.Admin,
-  allowApiInsert: true,
   id: (e) => e.address,
 })
 export class Email {
@@ -31,6 +31,11 @@ export class Email {
 
   @Fields.string()
   source: EmailSource = EmailSource.Early2023;
+
+  @BackendMethod({ allowed: true })
+  static async addEmailAndSendWelcome(email: Partial<Email>) {
+    RemoteProcedures.sendWelcome(await remult.repo(Email).insert(email));
+  }
 
   @BackendMethod({ allowed: UserRole.Admin })
   static async getAllEmails(source?: string) {

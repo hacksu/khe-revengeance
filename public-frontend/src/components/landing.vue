@@ -100,10 +100,9 @@ export default {
   },
   methods: {
     async submitEmail() {
-      const emails = remult.repo(Email);
       const email = { address: this.updatesEmail };
       try {
-        await emails.insert(email);
+        await Email.addEmailAndSendWelcome(email);
       } catch (e) {
         console.log(e);
         this.updatesEmailError = e.modelState?.address || "We already have that email!";

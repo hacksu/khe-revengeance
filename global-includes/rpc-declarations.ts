@@ -1,3 +1,4 @@
+import { Email } from "./email-address.ts";
 import { SupportTicket, Message } from "./support-ticket.ts";
 
 /**
@@ -14,4 +15,5 @@ export class RemoteProcedures {
     ticket: SupportTicket,
     message: Message
   ) => Promise<void>;
+  static sendWelcome: (email: Email) => Promise<void>;
 }
