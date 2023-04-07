@@ -66,7 +66,7 @@ export default {
           id: 3,
           question: "What should I bring?",
           answer:
-            "Bring a laptop/something to hack on, a change of clothes, deoderant, a blanket/pillow, toiletries, deoderant, anything else you think you might use to complete your project, and deoderant.<br><br>We'll have an MLH hardware lab, which means we'll also have cool hardware available to rent!"
+            "Bring a laptop/something to hack on, a change of clothes, deoderant, a blanket/pillow, toiletries, anything else you think you might use to complete your project.<br><br>We'll have an MLH hardware lab, which means we'll also have cool hardware available to rent!"
         },
         {
           id: 4,
