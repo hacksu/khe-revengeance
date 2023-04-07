@@ -12,7 +12,7 @@
 // @ is an alias to /src
 import Landing from '@/components/landing.vue';
 import About from '@/components/about.vue';
-import FAQ from '@/components/faq-virtual.vue';
+import FAQ from '@/components/faq.vue';
 import Map from '@/components/map.vue';
 import Footer from '@/components/footer.vue';
 
@@ -28,6 +28,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
