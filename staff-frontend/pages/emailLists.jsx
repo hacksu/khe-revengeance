@@ -107,6 +107,7 @@ export default function EmailLists() {
         setAllLists(lists => lists.filter(l => l.key != list));
         updateCurrentList();
     };
+    const [composing, setComposing] = useState(false);
     const cardStyle = {
         width: 200,
         margin: 6
@@ -116,12 +117,25 @@ export default function EmailLists() {
         whiteSpace: "nowrap",
         overflow: "hidden"
     }
+    const getMenu = () => {
+        return [
+            { key: "__compose", label: "Write a mail" },
+            { key: "__list", label: "Email Lists", children: allLists }
+        ];
+    }
+    const menuNavigation = (info) => {
+        if (info.keyPath[1] == "__list") {
+            setComposing(false);
+            setList(info.key);
+        } else if (info.key == "__compose") {
+            setComposing(true);
+        }
+    };
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
-                <Title style={{ paddingLeft: 20 }} level={5}>Email Lists</Title>
-                <Menu title="Email Lists" mode="vertical" onClick={e => setList(e.key)}
-                    items={allLists} selectedKeys={[list]}
+                <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
+                    items={getMenu()} selectedKeys={composing ? "__compose" : [list]} defaultOpenKeys={["__list"]}
                     className={layoutStyle.sidebarWidth} />
                 {addingList ? <Input
                     ref={newListInput} placeholder="Name of new list"
@@ -133,42 +147,44 @@ export default function EmailLists() {
                     </div>
                 }
             </Sider>
-            <Layout>
-                <Content>
-                    <div className={style.mainList}>
-                        <Card style={{ ...cardStyle, textAlign: "center" }} bodyStyle={cardBodyStyle}>
-                            {addingEmail ?
-                                <Input
-                                    ref={newEmailInput} placeholder="address@host.com"
-                                    onPressEnter={addEmail}
-                                    suffix={<PlusOutlined onClick={addEmail} />} /> :
-                                <PlusCircleOutlined onClick={() => setAddingEmail(true)} />}
-                        </Card>
-                        {emails.map((e, i) =>
-                            <div className={style.cardContainer} key={i}>
-                                <Card style={cardStyle} bodyStyle={cardBodyStyle}>
-                                    <span title={e.address}>{e.address}</span>
-                                </Card>
-                                <DeleteOutlined onClick={() => deleteEmail(e, i)} />
-                            </div>
-                        )}
-                    </div>
-                </Content>
-                <Footer style={{ height: 70, display: "flex" }}>
-                    <Upload showUploadList={false} beforeUpload={addArray} accept="application/json">
-                        <Button icon={<UploadOutlined />}>Add from JSON File</Button>
-                    </Upload>
-                    <Popconfirm
-                        title={"Deleting \"" + list + "\""}
-                        description="Are you 100% sure?"
-                        onConfirm={deleteCurrentList}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button style={{ marginLeft: 10 }} danger>Delete List</Button>
-                    </Popconfirm>
-                </Footer>
-            </Layout>
+            {composing ? <Layout>Write email.</Layout> :
+                <Layout>
+                    <Content>
+                        <div className={style.mainList}>
+                            <Card style={{ ...cardStyle, textAlign: "center" }} bodyStyle={cardBodyStyle}>
+                                {addingEmail ?
+                                    <Input
+                                        ref={newEmailInput} placeholder="address@host.com"
+                                        onPressEnter={addEmail}
+                                        suffix={<PlusOutlined onClick={addEmail} />} /> :
+                                    <PlusCircleOutlined onClick={() => setAddingEmail(true)} />}
+                            </Card>
+                            {emails.map((e, i) =>
+                                <div className={style.cardContainer} key={i}>
+                                    <Card style={cardStyle} bodyStyle={cardBodyStyle}>
+                                        <span title={e.address}>{e.address}</span>
+                                    </Card>
+                                    <DeleteOutlined onClick={() => deleteEmail(e, i)} />
+                                </div>
+                            )}
+                        </div>
+                    </Content>
+                    <Footer style={{ height: 70, display: "flex" }}>
+                        <Upload showUploadList={false} beforeUpload={addArray} accept="application/json">
+                            <Button icon={<UploadOutlined />}>Add from JSON File</Button>
+                        </Upload>
+                        <Popconfirm
+                            title={"Deleting \"" + list + "\""}
+                            description="Are you 100% sure?"
+                            onConfirm={deleteCurrentList}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button style={{ marginLeft: 10 }} danger>Delete List</Button>
+                        </Popconfirm>
+                    </Footer>
+                </Layout>
+            }
         </Layout>
     </KHELayout>
 }
