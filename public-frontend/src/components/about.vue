@@ -12,7 +12,7 @@
       <img style="max-width: 80vh;" src="@/assets/text_rocket.png">
       <div id="about-text-container">
         Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
-        space-fairing event as we work together to make outstanding projects!<br><br>
+        space-faring event as we work together to make outstanding projects!<br><br>
       </div>
     </div>
     <div id="colored-text-container">
