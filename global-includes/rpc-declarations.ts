@@ -16,4 +16,6 @@ export class RemoteProcedures {
     message: Message
   ) => Promise<void>;
   static sendWelcome: (email: Email) => Promise<void>;
+  static getDistinct: (collection: string, field: string) => Promise<string[]>;
+  static bulkDelete: (collection: string, filter: any) => Promise<void>;
 }

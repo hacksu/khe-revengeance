@@ -9,6 +9,7 @@ import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { Message } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
+import { MongoDataProvider } from "remult/remult-mongo";
 
 function textToHTML(text: string) {
   return (
@@ -168,5 +169,18 @@ export function defineRemoteProcedures() {
         `${email.address}, received status code:`,
       sendResult[0].statusCode
     );
+  };
+
+  RemoteProcedures.getDistinct = async function (collection, field) {
+    const mongo = MongoDataProvider.getDb();
+    const coll = mongo.collection(collection);
+    const distincts = await coll.distinct(field);
+    return distincts;
+  };
+
+  RemoteProcedures.bulkDelete = async function (collection, filter) {
+    const mongo = MongoDataProvider.getDb();
+    const coll = mongo.collection(collection);
+    await coll.deleteMany(filter);
   };
 }

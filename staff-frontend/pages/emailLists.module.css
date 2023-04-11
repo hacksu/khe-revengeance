@@ -1,0 +1,23 @@
+.mainList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 80vh;
+    align-content: flex-start;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.cardContainer {
+    display: flex;
+}
+
+.cardContainer :global .anticon {
+    visibility: hidden;
+}
+
+.cardContainer:hover :global .anticon {
+    visibility: visible;
+}
