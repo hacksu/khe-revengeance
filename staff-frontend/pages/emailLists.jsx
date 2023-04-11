@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import dynamic from 'next/dynamic';
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
+import 'react-quill/dist/quill.snow.css';
 import { Email, EmailSource, isEmailRegex } from "../../global-includes/email-address.ts";
-import { Card, Menu, Layout, Button, Input, Upload, Popconfirm } from "antd";
+import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select } from "antd";
 const { Sider, Footer, Content } = Layout;
-import { Typography } from 'antd';
-const { Title } = Typography;
 import { PlusCircleOutlined, PlusOutlined, UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
@@ -13,6 +13,11 @@ import style from "./emailLists.module.css";
 function strToMenuOption(str) {
     return { key: str, label: str };
 }
+
+const ReactQuill = dynamic(
+    () => import('react-quill'),
+    { ssr: false }
+);
 
 export default function EmailLists() {
     const [emails, setEmails] = useState([]);
@@ -107,7 +112,9 @@ export default function EmailLists() {
         setAllLists(lists => lists.filter(l => l.key != list));
         updateCurrentList();
     };
-    const [composing, setComposing] = useState(false);
+    const [composing, setComposing] = useState(true);
+    const [composition, setComposition] = useState("");
+    const [recipients, setRecipients] = useState([])
     const cardStyle = {
         width: 200,
         margin: 6
@@ -135,7 +142,8 @@ export default function EmailLists() {
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
-                    items={getMenu()} selectedKeys={composing ? "__compose" : [list]} defaultOpenKeys={["__list"]}
+                    items={getMenu()} selectedKeys={composing ? "__compose" : [list]}
+                    defaultOpenKeys={["__list"]} defaultSelectedKeys={["__compose"]}
                     className={layoutStyle.sidebarWidth} />
                 {addingList ? <Input
                     ref={newListInput} placeholder="Name of new list"
@@ -147,7 +155,21 @@ export default function EmailLists() {
                     </div>
                 }
             </Sider>
-            {composing ? <Layout>Write email.</Layout> :
+            {composing ?
+                <Layout style={{ padding: 20, maxWidth: 800 }}>
+                    <ReactQuill style={{ minHeight: 200 }} theme="snow" value={composition} onChange={setComposition} />
+                    <div style={{ marginTop: 10, display: "flex" }}>
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            style={{ width: '100%' }}
+                            placeholder="Select Recipients"
+                            onChange={setRecipients}
+                            options={allLists.map(l => ({ label: l.label, value: l.key }))}
+                        />
+                        <Button type="primary">Send</Button>
+                    </div>
+                </Layout> :
                 <Layout>
                     <Content>
                         <div className={style.mainList}>
