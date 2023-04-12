@@ -3,9 +3,10 @@ import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 import 'react-quill/dist/quill.snow.css';
 import { Email, EmailSource, isEmailRegex } from "../../global-includes/email-address.ts";
-import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select } from "antd";
+import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;
-import { PlusOutlined, UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+const { confirm, error } = Modal;
+import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
 import ComposeEmail from "../components/composeEmail.jsx";
@@ -52,7 +53,7 @@ export default function EmailLists() {
                 updateCurrentList();
                 newEmailInput.current.input.value = "";
                 setAddingEmail(false);
-            });
+            });  // TODO: catch errors, display Message. will fail silently for now
         }
     }
     const addArray = (file) => {
@@ -60,7 +61,7 @@ export default function EmailLists() {
         const reader = new FileReader();
         reader.addEventListener(
             "load",
-            () => {
+            async () => {
                 try {
                     let emails = JSON.parse(reader.result);
                     if (!Array.isArray(emails)) {
@@ -79,12 +80,21 @@ export default function EmailLists() {
                     emails = emails.filter(e => isEmailRegex.test(e));
                     let proceed = true;
                     if (badEmails.length > 0) {
-                        // TODO: ant design
-                        proceed = confirm(
-                            "The following emails failed validation:\n" +
-                            badEmails.join("\n") +
-                            "\n\nProceed?"
-                        );
+                        proceed = await new Promise(resolve => confirm({
+                            title: 'Adding items from JSON',
+                            icon: <FileAddFilled />,
+                            content: <><p>This will add {emails.length} items to "{list}".</p>
+                                <p>The following emails failed validation and will be skipped:</p>
+                                <pre>{badEmails.join("\n")}</pre>
+                                <p>Proceed?</p>
+                            </>,
+                            onOk() {
+                                resolve(true);
+                            },
+                            onCancel() {
+                                resolve(false);
+                            },
+                        }));
                     }
                     if (proceed) {
                         Email.bulkAdd(list, emails).then((newListContents) => {
@@ -92,8 +102,13 @@ export default function EmailLists() {
                         });
                     }
                 } catch (e) {
-                    // TODO: alert better
-                    alert("not good file :( expected array of email address strings.\n" + e.toString());
+                    error({
+                        title: "not good file :(",
+                        content: <>
+                            <p>Error message:</p>
+                            <pre style={{ whiteSpace: "normal" }}>{e.toString()}</pre>
+                        </>
+                    });
                 }
             },
             false
