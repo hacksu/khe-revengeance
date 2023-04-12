@@ -10,6 +10,7 @@ import { config } from "./config.ts";
 import { Message } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
 import { MongoDataProvider } from "remult/remult-mongo";
+import { remult } from "remult";
 
 function textToHTML(text: string) {
   return (
@@ -182,5 +183,33 @@ export function defineRemoteProcedures() {
     const mongo = MongoDataProvider.getDb();
     const coll = mongo.collection(collection);
     await coll.deleteMany(filter);
+  };
+
+  RemoteProcedures.sendTo = async function (
+    addresses: string[],
+    subject: string,
+    from: {
+      email: string;
+      name: string;
+    },
+    contentHTML: string
+  ) {
+    const MAX_PER_REQUEST = 1000;
+    const message: MailDataRequired = {
+      from,
+      subject,
+      html: contentHTML,
+      text: convertToText(contentHTML),
+      asm: {
+        groupId: 22053, // KHE 2023 Updates
+        groupsToDisplay: [22053],
+      },
+    };
+    for (let i = 0; i < Math.ceil(addresses.length / MAX_PER_REQUEST); ++i) {
+      await mailer.send({
+        ...message,
+        to: addresses.slice(i, i * MAX_PER_REQUEST),
+      });
+    }
   };
 }

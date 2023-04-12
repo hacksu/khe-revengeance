@@ -92,4 +92,23 @@ export class Email {
       console.error(e);
     }
   }
+
+  @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
+  static async sendToLists(
+    lists: string[],
+    subject: string,
+    from: {
+      email: string;
+      name: string;
+    },
+    contentHTML: string
+  ) {
+    let addresses: string[] = [];
+    for (const list of lists) {
+      addresses = addresses.concat(
+        (await Email.getEmailList(list)).map((e) => e.address)
+      );
+    }
+    await RemoteProcedures.sendTo(addresses, subject, from, contentHTML);
+  }
 }
