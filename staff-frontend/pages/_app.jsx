@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { User } from "../../global-includes/users.ts";
 import "./index.css";
+import "../components/quill.css";
+
 
 const UserContext = createContext();
 

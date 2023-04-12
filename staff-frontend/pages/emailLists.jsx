@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import dynamic from 'next/dynamic';
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 import 'react-quill/dist/quill.snow.css';
 import { Email, EmailSource, isEmailRegex } from "../../global-includes/email-address.ts";
 import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select } from "antd";
 const { Sider, Footer, Content } = Layout;
-import { PlusCircleOutlined, PlusOutlined, UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
+import ComposeEmail from "../components/composeEmail.jsx";
 
 function strToMenuOption(str) {
     return { key: str, label: str };
 }
-
-const ReactQuill = dynamic(
-    () => import('react-quill'),
-    { ssr: false }
-);
 
 export default function EmailLists() {
     const [emails, setEmails] = useState([]);
@@ -84,7 +79,12 @@ export default function EmailLists() {
                     emails = emails.filter(e => isEmailRegex.test(e));
                     let proceed = true;
                     if (badEmails.length > 0) {
-                        proceed = confirm("The following emails failed validation:\n" + badEmails.join("\n") + "\n\nProceed?");
+                        // TODO: ant design
+                        proceed = confirm(
+                            "The following emails failed validation:\n" +
+                            badEmails.join("\n") +
+                            "\n\nProceed?"
+                        );
                     }
                     if (proceed) {
                         Email.bulkAdd(list, emails).then((newListContents) => {
@@ -92,6 +92,7 @@ export default function EmailLists() {
                         });
                     }
                 } catch (e) {
+                    // TODO: alert better
                     alert("not good file :( expected array of email address strings.\n" + e.toString());
                 }
             },
@@ -124,17 +125,37 @@ export default function EmailLists() {
         whiteSpace: "nowrap",
         overflow: "hidden"
     }
+    // hopefully no-one creates a new email list with the name "__add". the
+    // other two are fine because they're used for higher-level menu items
+    const menuKeys = {
+        compose: "__compose",
+        list: "__list",
+        add: "__add"
+    }
     const getMenu = () => {
         return [
-            { key: "__compose", label: "Write a mail" },
-            { key: "__list", label: "Email Lists", children: allLists }
+            { key: menuKeys.compose, label: "Write a mail" },
+            {
+                key: menuKeys.list, label: "Email Lists", children: allLists.concat([{
+                    key: menuKeys.add, label: addingList ? <Input
+                        ref={newListInput} placeholder="Name of new list"
+                        onPressEnter={addList}
+                        suffix={<PlusOutlined onClick={addList} />}
+                    /> :
+                        <div style={{ width: "100%", textAlign: "left" }}>
+                            <div onClick={() => setAddingList(true)}>
+                                <PlusOutlined /> Add new...
+                            </div>
+                        </div>
+                }])
+            }
         ];
     }
     const menuNavigation = (info) => {
-        if (info.keyPath[1] == "__list") {
+        if (info.keyPath[1] == menuKeys.list && info.keyPath[0] != menuKeys.add) {
             setComposing(false);
             setList(info.key);
-        } else if (info.key == "__compose") {
+        } else if (info.key == menuKeys.compose) {
             setComposing(true);
         }
     };
@@ -142,27 +163,18 @@ export default function EmailLists() {
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
-                    items={getMenu()} selectedKeys={composing ? "__compose" : [list]}
-                    defaultOpenKeys={["__list"]} defaultSelectedKeys={["__compose"]}
+                    items={getMenu()} selectedKeys={composing ? menuKeys.compose : [list]}
+                    defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
                     className={layoutStyle.sidebarWidth} />
-                {addingList ? <Input
-                    ref={newListInput} placeholder="Name of new list"
-                    onPressEnter={addList}
-                    suffix={<PlusOutlined onClick={addList} />}
-                /> :
-                    <div style={{ width: "100%", textAlign: "center" }}>
-                        <Button onClick={() => setAddingList(true)}><PlusCircleOutlined /></Button>
-                    </div>
-                }
             </Sider>
             {composing ?
                 <Layout style={{ padding: 20, maxWidth: 800 }}>
-                    <ReactQuill style={{ minHeight: 200 }} theme="snow" value={composition} onChange={setComposition} />
+                    <ComposeEmail onChange={setComposition} />
                     <div style={{ marginTop: 10, display: "flex" }}>
                         <Select
                             mode="multiple"
                             allowClear
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', marginRight: 5 }}
                             placeholder="Select Recipients"
                             onChange={setRecipients}
                             options={allLists.map(l => ({ label: l.label, value: l.key }))}
@@ -179,14 +191,19 @@ export default function EmailLists() {
                                         ref={newEmailInput} placeholder="address@host.com"
                                         onPressEnter={addEmail}
                                         suffix={<PlusOutlined onClick={addEmail} />} /> :
-                                    <PlusCircleOutlined onClick={() => setAddingEmail(true)} />}
+                                    <Button size="small" type="text" icon={<PlusOutlined />}
+                                        onClick={() => setAddingEmail(true)}>
+                                        Add new...
+                                    </Button>}
                             </Card>
                             {emails.map((e, i) =>
                                 <div className={style.cardContainer} key={i}>
                                     <Card style={cardStyle} bodyStyle={cardBodyStyle}>
                                         <span title={e.address}>{e.address}</span>
                                     </Card>
-                                    <DeleteOutlined onClick={() => deleteEmail(e, i)} />
+                                    {// emails that come from site user accounts cannot be deleted
+                                        list != EmailSource.SiteUsers &&
+                                        <DeleteOutlined onClick={() => deleteEmail(e, i)} />}
                                 </div>
                             )}
                         </div>
