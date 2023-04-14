@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 import 'react-quill/dist/quill.snow.css';
-import { Email, EmailSource, SentListMail, isEmailRegex } from "../../global-includes/email-address.ts";
-import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
+import { Email, EmailListNotes, EmailSource, SentListMail, isEmailRegex } from "../../global-includes/email-address.ts";
+import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal, Space } from "antd";
 const { Sider, Footer, Content } = Layout;
 const { confirm, error } = Modal;
-import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled, SaveOutlined } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
 import ComposeEmail from "../components/composeEmail.jsx";
@@ -20,10 +20,20 @@ export default function EmailLists() {
     const [emails, setEmails] = useState([]);
     const [list, setList] = useState(EmailSource.Early2023);
     const [allLists, setAllLists] = useState(Object.values(EmailSource).sort().map(strToMenuOption));
+    const [listNote, setListNote] = useState("");
+    const noteInDB = useRef(false);
+    const [noteSaved, setNoteSaved] = useState(true);
+    const editNote = (value) => {
+        setNoteSaved(false);
+        setListNote(value);
+    }
     const updateCurrentList = () => {
-        Email.getEmailList(list).then(rows => {
-            setEmails(rows);
-        });
+        Email.getEmailList(list).then(setEmails);
+        remult.repo(EmailListNotes).findFirst({ listName: list })
+            .then(n => {
+                if (n) { setListNote(n.notes); noteInDB.current = true; }
+                else { setListNote(""); noteInDB.current = false; }
+            });
     };
     useEffect(updateCurrentList, [list]);
     useEffect(() => {
@@ -31,6 +41,15 @@ export default function EmailLists() {
             setAllLists(sources.sort().map(strToMenuOption));
         });
     }, []);
+    const saveNote = () => {
+        if (!noteInDB.current) {
+            remult.repo(EmailListNotes).insert({ listName: list, notes: listNote },)
+                .then(() => { setNoteSaved(true); noteInDB.current = true });
+        } else {
+            remult.repo(EmailListNotes).save({ listName: list, notes: listNote },)
+                .then(() => setNoteSaved(true));
+        }
+    };
     const [addingList, setAddingList] = useState(false);
     const newListInput = useRef();
     const [addingEmail, setAddingEmail] = useState(false);
@@ -249,9 +268,17 @@ export default function EmailLists() {
                                 )}
                             </div>
                         </Content>
-                        <Footer style={{ height: 70, display: "flex" }}>
-                            <Upload showUploadList={false} beforeUpload={addArray} accept="application/json">
-                                <Button icon={<UploadOutlined />}>Add from JSON File</Button>
+                        <Footer className={style.footer}>
+                            Notes: <Input value={listNote}
+                                onChange={e => editNote(e.target.value)}
+                                onPressEnter={saveNote} />
+                            <Button disabled={noteSaved}
+                                icon={<SaveOutlined />} onClick={saveNote}>
+                                Save Notes
+                            </Button>
+                            <Upload showUploadList={false} beforeUpload={addArray}
+                                accept="application/json">
+                                <Button icon={<UploadOutlined />}>Upload JSON File</Button>
                             </Upload>
                             <Popconfirm
                                 title={"Deleting \"" + list + "\""}
@@ -266,5 +293,5 @@ export default function EmailLists() {
                     </Layout>
             }
         </Layout>
-    </KHELayout>
+    </KHELayout >
 }

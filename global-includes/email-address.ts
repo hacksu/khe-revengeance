@@ -103,7 +103,10 @@ export class Email {
   }
 }
 
-@Entity("emailListNotes", { allowApiCrud: [UserRole.Admin, UserRole.Staff] })
+@Entity<EmailListNotes>("emailListNotes", {
+  allowApiCrud: [UserRole.Admin, UserRole.Staff],
+  id: (e) => e.listName,
+})
 export class EmailListNotes {
   @VFields.string()
   listName = "";
