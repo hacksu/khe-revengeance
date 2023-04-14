@@ -1,8 +1,16 @@
-import { BackendMethod, Entity, dbNamesOf, Fields, remult } from "remult";
+import {
+  BackendMethod,
+  Entity,
+  dbNamesOf,
+  Fields,
+  remult,
+  IdEntity,
+} from "remult";
 import { UserRole } from "./common.ts";
 import { User } from "./users.ts";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 import { VFields } from "./adaptations.ts";
+import { MailDataRequired } from "@sendgrid/mail";
 
 export enum EmailSource {
   // reserved for emails drawn directly from user accounts
@@ -93,6 +101,24 @@ export class Email {
       console.error(e);
     }
   }
+}
+
+@Entity("emailListNotes", { allowApiCrud: [UserRole.Admin, UserRole.Staff] })
+export class EmailListNotes {
+  @VFields.string()
+  listName = "";
+
+  @VFields.string()
+  notes = "";
+}
+
+@Entity("sentListMail", { allowApiCrud: [UserRole.Admin, UserRole.Staff] })
+export class SentListMail extends IdEntity {
+  @Fields.json()
+  mailData!: MailDataRequired;
+
+  @Fields.createdAt()
+  sentAt = new Date();
 
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
   static async sendToLists(
@@ -110,6 +136,13 @@ export class Email {
         (await Email.getEmailList(list)).map((e) => e.address)
       );
     }
-    await RemoteProcedures.sendTo(addresses, subject, from, contentHTML);
+
+    const sentData = await RemoteProcedures.sendTo(
+      addresses,
+      subject,
+      from,
+      contentHTML
+    );
+    await remult.repo(SentListMail).insert({ mailData: sentData });
   }
 }

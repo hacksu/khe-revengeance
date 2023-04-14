@@ -24,7 +24,7 @@ export class SupportTicket {
   id!: string;
 
   @Fields.autoIncrement()
-  plusCode!: number;
+  plusCode: number = 1;
 
   @Fields.createdAt()
   createdAt = new Date();

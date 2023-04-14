@@ -1,8 +1,13 @@
 import { Db, MongoClient } from "mongodb";
 import { MongoDataProvider } from "remult/remult-mongo";
 import { remultExpress } from "remult/remult-express";
-import { Email } from "../global-includes/email-address.ts";
 import {
+  Email,
+  EmailListNotes,
+  SentListMail,
+} from "../global-includes/email-address.ts";
+import {
+  RawEmail,
   SupportTicket,
   SupportTicketController,
 } from "../global-includes/support-ticket.ts";
@@ -37,6 +42,13 @@ export const remultConfig = remultExpress({
   dataProvider: async () => {
     return new MongoDataProvider(await getDB(), await getDBClient());
   },
-  entities: [Email, SupportTicket, User],
+  entities: [
+    Email,
+    SupportTicket,
+    User,
+    SentListMail,
+    EmailListNotes,
+    RawEmail,
+  ],
   controllers: [SupportTicketController],
 });

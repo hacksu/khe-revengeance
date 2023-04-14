@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 import 'react-quill/dist/quill.snow.css';
-import { Email, EmailSource, isEmailRegex } from "../../global-includes/email-address.ts";
+import { Email, EmailSource, SentListMail, isEmailRegex } from "../../global-includes/email-address.ts";
 import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;
 const { confirm, error } = Modal;
@@ -10,6 +10,7 @@ import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled } from "@an
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
 import ComposeEmail from "../components/composeEmail.jsx";
+import SentEmail from "../components/displayEmail.jsx";
 
 function strToMenuOption(str) {
     return { key: str, label: str };
@@ -157,7 +158,8 @@ export default function EmailLists() {
     const menuKeys = {
         compose: "__compose",
         list: "__list",
-        add: "__add"
+        add: "__add",
+        sent: "__sent"
     }
     const getMenu = () => {
         return [
@@ -175,26 +177,30 @@ export default function EmailLists() {
                             </div>
                         </div>
                 }])
-            }
+            },
+            { key: menuKeys.sent, label: "Mail what was sent" }
         ];
     }
+    const [page, setPage] = useState(menuKeys.compose);
     const menuNavigation = (info) => {
         if (info.keyPath[1] == menuKeys.list && info.keyPath[0] != menuKeys.add) {
-            setComposing(false);
+            setPage(menuKeys.list);
             setList(info.key);
         } else if (info.key == menuKeys.compose) {
-            setComposing(true);
+            setPage(menuKeys.compose)
+        } else if (info.key == menuKeys.sent) {
+            setPage(menuKeys.sent);
         }
     };
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
-                    items={getMenu()} selectedKeys={composing ? menuKeys.compose : [list]}
+                    items={getMenu()} selectedKeys={[list, page]}
                     defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
                     className={layoutStyle.sidebarWidth} />
             </Sider>
-            {composing ?
+            {page == menuKeys.compose ?
                 <Layout style={{ padding: 20, maxWidth: 800 }}>
                     <ComposeEmail setEmailForm={setEmailForm} />
                     <div style={{ marginTop: 10, display: "flex" }}>
@@ -206,50 +212,58 @@ export default function EmailLists() {
                             onChange={setRecipients}
                             options={allLists.map(l => ({ label: l.label, value: l.key }))}
                         />
-                        <Button type="primary">Send</Button>
+                        <Button onClick={sendAMail} type="primary">Send</Button>
                     </div>
-                </Layout> :
-                <Layout>
-                    <Content>
-                        <div className={style.mainList}>
-                            <Card style={{ ...cardStyle, textAlign: "center" }} bodyStyle={cardBodyStyle}>
-                                {addingEmail ?
-                                    <Input
-                                        ref={newEmailInput} placeholder="address@host.com"
-                                        onPressEnter={addEmail}
-                                        suffix={<PlusOutlined onClick={addEmail} />} /> :
-                                    <Button size="small" type="text" icon={<PlusOutlined />}
-                                        onClick={() => setAddingEmail(true)}>
-                                        Add new...
-                                    </Button>}
-                            </Card>
-                            {emails.map((e, i) =>
-                                <div className={style.cardContainer} key={i}>
-                                    <Card style={cardStyle} bodyStyle={cardBodyStyle}>
-                                        <span title={e.address}>{e.address}</span>
-                                    </Card>
-                                    {// emails that come from site user accounts cannot be deleted
-                                        list != EmailSource.SiteUsers &&
-                                        <DeleteOutlined onClick={() => deleteEmail(e, i)} />}
-                                </div>
-                            )}
-                        </div>
-                    </Content>
-                    <Footer style={{ height: 70, display: "flex" }}>
-                        <Upload showUploadList={false} beforeUpload={addArray} accept="application/json">
-                            <Button icon={<UploadOutlined />}>Add from JSON File</Button>
-                        </Upload>
-                        <Popconfirm
-                            title={"Deleting \"" + list + "\""}
-                            description="Are you 100% sure?"
-                            onConfirm={deleteCurrentList}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button style={{ marginLeft: 10 }} danger>Delete List</Button>
-                        </Popconfirm>
-                    </Footer>
                 </Layout>
+                :
+                page == menuKeys.sent ?
+                    <Layout>
+                        <Content>
+                            <SentEmail />
+                        </Content>
+                    </Layout>
+                    :
+                    <Layout>
+                        <Content>
+                            <div className={style.mainList}>
+                                <Card style={{ ...cardStyle, textAlign: "center" }} bodyStyle={cardBodyStyle}>
+                                    {addingEmail ?
+                                        <Input
+                                            ref={newEmailInput} placeholder="address@host.com"
+                                            onPressEnter={addEmail}
+                                            suffix={<PlusOutlined onClick={addEmail} />} /> :
+                                        <Button size="small" type="text" icon={<PlusOutlined />}
+                                            onClick={() => setAddingEmail(true)}>
+                                            Add new...
+                                        </Button>}
+                                </Card>
+                                {emails.map((e, i) =>
+                                    <div className={style.cardContainer} key={i}>
+                                        <Card style={cardStyle} bodyStyle={cardBodyStyle}>
+                                            <span title={e.address}>{e.address}</span>
+                                        </Card>
+                                        {// emails that come from site user accounts cannot be deleted
+                                            list != EmailSource.SiteUsers &&
+                                            <DeleteOutlined onClick={() => deleteEmail(e, i)} />}
+                                    </div>
+                                )}
+                            </div>
+                        </Content>
+                        <Footer style={{ height: 70, display: "flex" }}>
+                            <Upload showUploadList={false} beforeUpload={addArray} accept="application/json">
+                                <Button icon={<UploadOutlined />}>Add from JSON File</Button>
+                            </Upload>
+                            <Popconfirm
+                                title={"Deleting \"" + list + "\""}
+                                description="Are you 100% sure?"
+                                onConfirm={deleteCurrentList}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button style={{ marginLeft: 10 }} danger>Delete List</Button>
+                            </Popconfirm>
+                        </Footer>
+                    </Layout>
             }
         </Layout>
     </KHELayout>
