@@ -26,6 +26,7 @@ export interface ServerConfig {
   mongoURI: string;
   port: number;
   supportEmailHost: string;
+  outgoingEmailWhitelist?: string[];
 }
 
 const secrets = parse(

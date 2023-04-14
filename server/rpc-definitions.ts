@@ -10,7 +10,24 @@ import { config } from "./config.ts";
 import { Message } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
 import { MongoDataProvider } from "remult/remult-mongo";
-import { remult } from "remult";
+
+mailer.send = async function safeSend(message: MailDataRequired) {
+  console.log("sending mail thru filter"); // TODO: make sure this works
+  // note: this will only filter messages with multiple recipients
+  if (config.outgoingEmailWhitelist && Array.isArray(message.to)) {
+    const filteredMessage = {
+      ...message,
+      to: message.to.filter((e) =>
+        typeof e === "string"
+          ? config.outgoingEmailWhitelist?.includes(e)
+          : config.outgoingEmailWhitelist?.includes(e.email)
+      ),
+    };
+    return await mailer.send(filteredMessage);
+  } else {
+    return await mailer.send(message);
+  }
+};
 
 function textToHTML(text: string) {
   return (
