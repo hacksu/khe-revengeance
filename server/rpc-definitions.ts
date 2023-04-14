@@ -11,8 +11,9 @@ import { Message } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
 import { MongoDataProvider } from "remult/remult-mongo";
 
+const basicSend = mailer.send;
+
 mailer.send = async function safeSend(message: MailDataRequired) {
-  console.log("sending mail thru filter"); // TODO: make sure this works
   // note: this will only filter messages with multiple recipients
   if (config.outgoingEmailWhitelist && Array.isArray(message.to)) {
     const filteredMessage = {
@@ -23,9 +24,9 @@ mailer.send = async function safeSend(message: MailDataRequired) {
           : config.outgoingEmailWhitelist?.includes(e.email)
       ),
     };
-    return await mailer.send(filteredMessage);
+    return await basicSend.call(mailer, filteredMessage);
   } else {
-    return await mailer.send(message);
+    return await basicSend.call(mailer, message);
   }
 };
 
@@ -211,6 +212,8 @@ export function defineRemoteProcedures() {
     },
     contentHTML: string
   ) {
+    // make unique
+    addresses = Array.from(new Set(addresses));
     const MAX_PER_REQUEST = 1000;
     const message: MailDataRequired = {
       from,
