@@ -128,9 +128,21 @@ export default function EmailLists() {
         setAllLists(lists => lists.filter(l => l.key != list));
         updateCurrentList();
     };
-    const [composing, setComposing] = useState(true);
-    const [composition, setComposition] = useState("");
-    const [recipients, setRecipients] = useState([])
+    const [emailForm, setEmailForm] = useState({
+        from: {
+            email: "",
+            name: ""
+        },
+        subject: "",
+        html: ""
+    });
+    const [recipients, setRecipients] = useState([]);
+    const sendAMail = async () => {
+        await SentListMail.sendToLists(
+            recipients, emailForm.subject, emailForm.from, emailForm.html
+        );
+        setPage(menuKeys.sent);
+    };
     const cardStyle = {
         width: 200,
         margin: 6
@@ -184,7 +196,7 @@ export default function EmailLists() {
             </Sider>
             {composing ?
                 <Layout style={{ padding: 20, maxWidth: 800 }}>
-                    <ComposeEmail onChange={setComposition} />
+                    <ComposeEmail setEmailForm={setEmailForm} />
                     <div style={{ marginTop: 10, display: "flex" }}>
                         <Select
                             mode="multiple"

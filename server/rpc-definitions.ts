@@ -126,7 +126,8 @@ export function defineRemoteProcedures() {
     };
     const sendResult = await mailer.send(msg);
     console.log(
-      `sent email through sendgrid at ${new Date()} for support ticket ` +
+      `sent email to ${config.supportEmailRecipient} through sendgrid ` +
+        `at ${new Date()} for support ticket ` +
         `${ticket.id}, received status code:`,
       sendResult[0].statusCode
     );
@@ -218,7 +219,8 @@ export function defineRemoteProcedures() {
     const message: MailDataRequired = {
       from,
       subject,
-      html: contentHTML,
+      // using cheerio to convert fragments into documents
+      html: cheerio.load(contentHTML).html(),
       text: convertToText(contentHTML),
       asm: {
         groupId: 22053, // KHE 2023 Updates
@@ -226,10 +228,22 @@ export function defineRemoteProcedures() {
       },
     };
     for (let i = 0; i < Math.ceil(addresses.length / MAX_PER_REQUEST); ++i) {
-      await mailer.send({
+      const recipientBatch = addresses.slice(
+        i * MAX_PER_REQUEST,
+        (i + 1) * MAX_PER_REQUEST
+      );
+      console.log("recipientBatch", recipientBatch);
+      const sendResult = await mailer.send({
         ...message,
-        to: addresses.slice(i, i * MAX_PER_REQUEST),
+        to: recipientBatch,
+        isMultiple: true,
       });
+      console.log(
+        `sent bulk email through sendgrid at ${new Date()} from staff site, ` +
+          `received status code:`,
+        sendResult[0].statusCode
+      );
     }
+    return { ...message, to: addresses };
   };
 }

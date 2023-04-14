@@ -1,3 +1,4 @@
+import { MailDataRequired } from "@sendgrid/mail";
 import { Email } from "./email-address.ts";
 import { SupportTicket, Message } from "./support-ticket.ts";
 
@@ -26,5 +27,5 @@ export class RemoteProcedures {
       name: string;
     },
     contentHTML: string
-  ) => Promise<void>;
+  ) => Promise<MailDataRequired>;
 }

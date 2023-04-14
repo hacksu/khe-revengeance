@@ -12,16 +12,31 @@ const InputLabel = ({ text }) => (
         {text}
     </span>);
 
-export default function ComposeEmail({ onChange }) {
+export default function ComposeEmail({ setEmailForm }) {
     return <div style={{ display: "flex", flexDirection: "column" }}>
         <Space direction="vertical">
-            <Input addonBefore={<InputLabel text="From (name):" />} />
-            <Input addonBefore={<InputLabel text="From (address):" />}
+            <Input onChange={e => setEmailForm(f => ({
+                ...f,
+                from: { ...f.from, name: e.target.value }
+            }))
+            } addonBefore={<InputLabel text="From (name):" />} />
+            <Input onChange={e => setEmailForm(f => ({
+                ...f,
+                from: { ...f.from, email: e.target.value + "@khe.io" }
+            }))
+            } addonBefore={<InputLabel text="From (address):" />}
                 addonAfter="@khe.io" />
-            <Input addonBefore={<InputLabel text="Subject:" />} />
+            <Input onChange={e => setEmailForm(f => ({
+                ...f,
+                subject: e.target.value
+            }))
+            } addonBefore={<InputLabel text="Subject:" />} />
 
             <ReactQuill theme="snow"
-                onChange={onChange} placeholder="Write email here." />
+                onChange={html => setEmailForm(f => ({
+                    ...f,
+                    html
+                }))} placeholder="Write email here." />
         </Space>
     </div>
 }
