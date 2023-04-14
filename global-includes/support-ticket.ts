@@ -1,6 +1,6 @@
 import { BackendMethod, Entity, Fields, remult } from "remult";
 import { RemoteProcedures } from "./rpc-declarations.ts";
-import { rawObj } from "./adaptations.ts";
+import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 import { IdEntity } from "remult";
 
@@ -32,30 +32,30 @@ export class SupportTicket {
   @Fields.updatedAt()
   updatedAt = new Date();
 
-  @Fields.string()
+  @VFields.string()
   originalSubject = "";
 
-  @Fields.string()
+  @VFields.string()
   theirEmail = "";
 
-  @Fields.string()
+  @VFields.string()
   theirName = "";
 
-  @rawObj()
+  @Fields.json()
   messages: Message[] = [];
 
   @Fields.boolean()
   hasUnread = true;
 
-  @Fields.string()
+  @VFields.string()
   status: TicketStatus = TicketStatus.open;
 
-  @Fields.string()
+  @VFields.string()
   note = "";
 
   // this could be like a user id but 🤷‍♂️ just put someone's name or maybe
   // their email so they can receive the updates
-  @Fields.string()
+  @VFields.string()
   assignedTo = "";
 }
 
@@ -105,10 +105,10 @@ export class SupportTicketController {
   allowApiRead: [UserRole.Admin, UserRole.Staff],
 })
 export class RawEmail extends IdEntity {
-  @rawObj()
+  @Fields.json()
   body: any = {};
 
-  @rawObj()
+  @Fields.json()
   files: any = [];
 
   @Fields.boolean()

@@ -2,6 +2,7 @@ import { BackendMethod, Entity, dbNamesOf, Fields, remult } from "remult";
 import { UserRole } from "./common.ts";
 import { User } from "./users.ts";
 import { RemoteProcedures } from "./rpc-declarations.ts";
+import { VFields } from "./adaptations.ts";
 
 export enum EmailSource {
   // reserved for emails drawn directly from user accounts
@@ -19,7 +20,7 @@ export class Email {
   @Fields.createdAt()
   subscribedAt = new Date();
 
-  @Fields.string({
+  @VFields.string({
     validate: (email: Email) => {
       if (email.address.trim().length < 3) {
         throw "Email too short";
@@ -31,7 +32,7 @@ export class Email {
   })
   address = "";
 
-  @Fields.string()
+  @VFields.string()
   source: EmailSource | string = EmailSource.Early2023;
 
   @BackendMethod({ allowed: true })

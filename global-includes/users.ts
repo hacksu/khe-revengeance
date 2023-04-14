@@ -1,5 +1,5 @@
 import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
-import { rawObj } from "./adaptations.ts";
+import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 
 export enum AuthMethod {
@@ -26,25 +26,25 @@ export class User extends EntityBase {
   @Fields.createdAt()
   createdAt = new Date();
 
-  @Fields.string()
+  @VFields.string()
   method!: AuthMethod;
 
   /** User's ID in Github or Discord */
-  @Fields.string()
+  @VFields.string()
   externalID?: string;
 
-  @Fields.string()
+  @VFields.string()
   email!: string;
 
   // we only really need one role but having roles[] complies with remult's
   // UserInfo interface for quick allowApiX checks
-  @rawObj()
+  @Fields.json()
   roles: UserRole[] = [UserRole.Normal];
 
-  @Fields.string()
+  @VFields.string()
   externalRole = "";
 
-  @rawObj()
+  @Fields.json()
   registration: HackathonRegistration = { submitted: false };
 
   @Fields.boolean()

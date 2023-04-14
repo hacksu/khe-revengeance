@@ -3286,10 +3286,10 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==
 
-remult@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/remult/-/remult-0.19.0.tgz#a005dba3d3486bbb9c67f19c2ae6a2abcc957613"
-  integrity sha512-mYHGJJGvUftjmBLs9dQToLOSxsFzlgpcLhKUOhQswL2M5KIS+WLaHKoTBpLDWGT+tMuuOL31BfJmvMc/s7WZ+w==
+remult@0.19.2:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/remult/-/remult-0.19.2.tgz#279e4c6e57a638404ef6c25821b5c00ca4016448"
+  integrity sha512-Zys5zDobKePPgI2aVE12AbywiyfvQZ1ABk6SxNR605LFwSbCZ8gzi0O9miSXIEBh7LkWjUTHoDJkDccAaooMTQ==
   dependencies:
     cuid "^2.1.8"
     reflect-metadata "^0.1.13"
