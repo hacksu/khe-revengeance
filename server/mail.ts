@@ -41,15 +41,19 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
           console.warn("email database id:", savedRaw.id);
           return;
         }
-        let plusCode: number;
+        let plusCode: string;
         try {
-          plusCode = parseInt(toUs.split("@")[0].split("+")[1]);
-        } catch {
+          plusCode = toUs.split("@")[0].split("+")[1];
+          if (!plusCode?.trim()) {
+            throw "plus code empty/missing";
+          }
+        } catch (e) {
           console.warn(
             "received email without valid plus code addressed to",
             toUs
           );
           console.warn("email database id:", savedRaw.id);
+          console.warn(e);
           return;
         }
         const message: Message = validateMessageFields({
@@ -62,7 +66,7 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
         });
 
         const tickets = remult.repo(SupportTicket);
-        let ticket = await tickets.findFirst({ plusCode });
+        let ticket = await tickets.findFirst({ id: plusCode });
         if (ticket) {
           ticket.messages.push(message);
           ticket.hasUnread = true;

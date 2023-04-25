@@ -144,7 +144,7 @@ export function defineRemoteProcedures() {
         email: `tickets@khe.io`,
       },
       replyTo: {
-        email: `ticket+${ticket.plusCode}@${config.supportEmailHost}`,
+        email: `ticket+${ticket.id}@${config.supportEmailHost}`,
       },
       subject: message.subject,
       text: message.text,

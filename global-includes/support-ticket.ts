@@ -18,13 +18,12 @@ export enum TicketStatus {
   closed = "Closed",
 }
 
-@Entity("tickets", { allowApiCrud: [UserRole.Admin, UserRole.Staff] })
+@Entity<SupportTicket>("tickets", {
+  allowApiCrud: [UserRole.Admin, UserRole.Staff],
+})
 export class SupportTicket {
-  @Fields.uuid()
+  @Fields.cuid()
   id!: string;
-
-  @Fields.autoIncrement()
-  plusCode: number = 1;
 
   @Fields.createdAt()
   createdAt = new Date();
@@ -84,9 +83,9 @@ export class SupportTicketController {
   }
 
   @BackendMethod({ allowed: [UserRole.Staff, UserRole.Admin] })
-  static async addMessageAndSend(message: Message, plusCode: number) {
+  static async addMessageAndSend(message: Message, plusCode: string) {
     const tickets = remult.repo(SupportTicket);
-    let ticket = await tickets.findFirst({ plusCode });
+    let ticket = await tickets.findFirst({ id: plusCode });
     if (ticket) {
       ticket.messages.push(message);
       ticket = await tickets.save(ticket);
