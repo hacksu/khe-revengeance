@@ -10,7 +10,6 @@ import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
 import { MongoDataProvider } from "remult/remult-mongo";
-import { OmitEB } from "remult";
 
 const basicSend = mailer.send;
 
@@ -49,7 +48,7 @@ function textToHTML(text: string) {
  * Returns a message with both text and html fields and sanitized HTML. all
  * received messages should be sent here immediately
  */
-export function validateMessageFields(message: OmitEB<TicketMessage>) {
+export function validateMessageFields(message: TicketMessage) {
   let htmlResult = "";
   let textResult = "";
   if (message.html && message.html.trim().length > 0) {
@@ -95,6 +94,9 @@ function addEmailIntro(intro: string, message: TicketMessage) {
 mailer.setApiKey(config.sendgridKey);
 
 export function defineRemoteProcedures() {
+  RemoteProcedures.sanitizeMessage = function (message) {
+    return validateMessageFields(message);
+  };
   RemoteProcedures.sendSupportAlert = async function (
     ticket,
     message,

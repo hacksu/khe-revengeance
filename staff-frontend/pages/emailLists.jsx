@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
-import 'react-quill/dist/quill.snow.css';
+
 import { Email, EmailListNotes, EmailSource, SentListMail, isEmailRegex } from "../../global-includes/email-address.ts";
 import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;

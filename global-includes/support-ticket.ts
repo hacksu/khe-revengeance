@@ -102,11 +102,11 @@ export class SupportTicketController {
       originalSubject: message.subject,
     };
 
-    const emailRepo = remult.repo(SupportTicket);
-    const ticketRepo = remult.repo(TicketMessage);
-    const savedTicket = await emailRepo.insert(ticket);
-    const savedMessage = await ticketRepo.insert({
-      ...message,
+    const ticketRepo = remult.repo(SupportTicket);
+    const messageRepo = remult.repo(TicketMessage);
+    const savedTicket = await ticketRepo.insert(ticket);
+    const savedMessage = await messageRepo.insert({
+      ...RemoteProcedures.sanitizeMessage(message),
       forTicketID: savedTicket.id,
     });
     await RemoteProcedures.sendSupportAlert(savedTicket, savedMessage, true);

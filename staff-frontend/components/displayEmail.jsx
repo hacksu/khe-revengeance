@@ -2,32 +2,42 @@ import { useEffect, useState } from "react"
 import { SentListMail } from "../../global-includes/email-address"
 import { remult } from "remult";
 
-export function DisplayEmail({ mailData, sentAt }) {
+function addressAsString(stringOrObj) {
+    if (stringOrObj.email || stringOrObj.name) {
+        return `"${stringOrObj.name}" <${stringOrObj.email}>`;
+    }
+}
+
+function DisplayAddresses({ addresses }) {
     const showByDefault = 5;
     const [showingAll, setShowingAll] = useState(
-        !Array.isArray(mailData.to) || mailData.to.length < showByDefault
+        !Array.isArray(addresses) || addresses.length < showByDefault
     );
+    if (Array.isArray(addresses)) {
+        return <>
+            {(addresses.slice(0, showingAll ? addresses.length : showByDefault)
+                .map((t, i) => <>
+                    <span key={i}>{addressAsString(t)}</span>
+                    {!showingAll || i != addresses.length - 1 ? ", " : ""}
+                </>))}
+            {!showingAll &&
+                <span style={{ textDecoration: "underline", cursor: "pointer" }}
+                    onClick={() => setShowingAll(true)}>
+                    show all
+                </span>}
+        </>;
+    } else if (!addresses) {
+        return "<empty>";
+    } else {
+        return addressAsString(addresses);
+    }
+}
+
+export function DisplayEmail({ mailData, sentAt }) {
     return <div>
         <p><strong>Sent at:</strong> {sentAt?.toLocaleString()}</p>
-        {mailData.from?.name && mailData.from?.email ?
-            <><p><strong>From (name):</strong> {mailData.from.name}</p>
-                <p><strong>From (email):</strong> {mailData.from.email}</p></>
-            : <p><strong>From: </strong>{JSON.stringify(mailData.from)}</p>
-        }
-        <p><strong>To:</strong> {Array.isArray(mailData.to) ?
-            <>{(mailData.to.slice(0, showingAll ? mailData.to.length : showByDefault)
-                .map((t, i) => <>
-                    <span key={i}>{JSON.stringify(t)}</span>
-                    {!showingAll || i != mailData.to.length - 1 ? ", " : ""}
-                </>))}
-                {!showingAll &&
-                    <span style={{ textDecoration: "underline", cursor: "pointer" }}
-                        onClick={() => setShowingAll(true)}>
-                        show all
-                    </span>}
-            </> :
-            <span>{JSON.stringify(mailData.to)}</span>
-        }</p>
+        <p><strong>From: </strong><DisplayAddresses addresses={mailData.from} /></p>
+        <p><strong>To: </strong><DisplayAddresses addresses={mailData.to} /></p>
         <p><strong>Subject:</strong> {mailData.subject}</p>
         <p><strong>Contents:</strong></p>
         <iframe style={{ width: "100%", height: 200 }} srcDoc={mailData.html} />

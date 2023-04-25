@@ -29,4 +29,5 @@ export class RemoteProcedures {
     },
     contentHTML: string
   ) => Promise<MailDataRequired>;
+  static sanitizeMessage: (message: TicketMessage) => TicketMessage;
 }

@@ -7,12 +7,15 @@ const { Sider } = Layout;
 
 import KHELayout from "../layouts/layout";
 import layoutStyle from "../layouts/layout.module.css";
+import { DisplayEmail } from "../components/displayEmail";
+import ComposeEmail from "../components/composeEmail";
 
 
 export default function Tickets() {
     const [tickets, setTickets] = useState([]);
     const [openTicket, setOpenTicket] = useQueryState("ticket");
     const [messages, setMessages] = useState([]);
+    const [composition, setComposition] = useState({});
     useEffect(() => {
         return remult.repo(SupportTicket)
             .liveQuery({ orderBy: { lastUpdated: "desc" } })
@@ -47,10 +50,20 @@ export default function Tickets() {
                     defaultSelectedKeys={[openTicket]}
                     className={layoutStyle.sidebarWidth} />
             </Sider>
-            <Layout>
-                {(messages && openTicket) ?
-                    messages.map(m => <pre>{JSON.stringify(m)}</pre>) :
-                    null}
+            <Layout style={{ padding: 20, height: "100%", overflowY: "auto" }}>
+                <div style={{ maxWidth: 600 }}>
+                    {(messages && openTicket) ?
+                        messages.map(m => {
+                            const them = { email: m.theirEmail, name: m.theirName };
+                            const us = { email: m.ourEmail, name: m.ourName };
+                            const from = m.incoming ? them : us;
+                            const to = m.incoming ? us : them;
+                            return <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}>
+                                <DisplayEmail sentAt={m.date} mailData={{ ...m, from, to }} />
+                            </div>;
+                        }) : null}
+                    <ComposeEmail setEmailForm={setComposition} />
+                </div>
             </Layout>
         </Layout>
     </KHELayout>;

@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Input, Space } from 'antd';
+import 'react-quill/dist/quill.snow.css';
+
 
 
 const ReactQuill = dynamic(
