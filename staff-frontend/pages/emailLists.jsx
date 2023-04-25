@@ -3,7 +3,7 @@ import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 import 'react-quill/dist/quill.snow.css';
 import { Email, EmailListNotes, EmailSource, SentListMail, isEmailRegex } from "../../global-includes/email-address.ts";
-import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal, Space } from "antd";
+import { Card, Menu, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;
 const { confirm, error } = Modal;
 import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled, SaveOutlined } from "@ant-design/icons";
