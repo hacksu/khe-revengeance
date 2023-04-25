@@ -5,6 +5,10 @@ import { remult } from "remult";
 function addressAsString(stringOrObj) {
     if (stringOrObj.email || stringOrObj.name) {
         return `"${stringOrObj.name}" <${stringOrObj.email}>`;
+    } else if (typeof stringOrObj == "string") {
+        return stringOrObj;
+    } else {
+        return "<nope. this probably came from a form or something>";
     }
 }
 
@@ -39,7 +43,6 @@ export function DisplayEmail({ mailData, sentAt }) {
         <p><strong>From: </strong><DisplayAddresses addresses={mailData.from} /></p>
         <p><strong>To: </strong><DisplayAddresses addresses={mailData.to} /></p>
         <p><strong>Subject:</strong> {mailData.subject}</p>
-        <p><strong>Contents:</strong></p>
         <iframe style={{ width: "100%", height: 200 }} srcDoc={mailData.html} />
     </div>
 }
