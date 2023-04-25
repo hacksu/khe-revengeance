@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SupportTicket, TicketStatus } from "../../global-includes/support-ticket";
+import { SupportTicket, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
 import { useQueryState } from "next-usequerystate";
 import { Layout, Menu } from "antd";
@@ -12,11 +12,18 @@ import layoutStyle from "../layouts/layout.module.css";
 export default function Tickets() {
     const [tickets, setTickets] = useState([]);
     const [openTicket, setOpenTicket] = useQueryState("ticket");
+    const [messages, setMessages] = useState([]);
     useEffect(() => {
         return remult.repo(SupportTicket)
             .liveQuery({ orderBy: { lastUpdated: "desc" } })
             .subscribe(info => setTickets(info.applyChanges));
     }, []);
+    useEffect(() => {
+        const unsubscribe = remult.repo(TicketMessage)
+            .liveQuery({ where: { forTicketID: openTicket }, orderBy: { date: "asc" } })
+            .subscribe(info => setMessages(info.applyChanges));
+        return () => { console.log("unsubscribing from", openTicket); unsubscribe() }
+    }, [openTicket])
     const getMenuItems = () => {
         return Object.values(TicketStatus).map(s => ({
             key: s,
@@ -30,12 +37,11 @@ export default function Tickets() {
     const menuNavigation = (info) => {
         setOpenTicket(info.key);
     }
-    const messages = tickets.find(t => t.id == openTicket)?.messages || [];
-    console.log(tickets);
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Menu title="Support Tickets" mode="inline" onClick={menuNavigation}
+                    style={{ overflowY: "auto", height: "100%" }}
                     items={getMenuItems()}
                     defaultOpenKeys={[TicketStatus.open]}
                     defaultSelectedKeys={[openTicket]}
