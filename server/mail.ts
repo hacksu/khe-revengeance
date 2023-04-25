@@ -3,9 +3,10 @@ import path from "path";
 import type { Express } from "express";
 import type { RemultServer } from "remult/server/expressBridge";
 import multer from "multer";
+import parseAddress, { ParsedMailbox } from "email-addresses";
 
 import {
-  Message,
+  TicketMessage,
   RawEmail,
   SupportTicket,
   TicketStatus,
@@ -24,26 +25,33 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
     "/obtainMail",
     remultConfig.withRemult,
     parseForm.any(),
+    /**
+     * Receives emails from the SendGrid inbound parse webhook. Email parsing is hell.
+     */
     async (req, res) => {
       const savedRaw = await remult
         .repo(RawEmail)
         .insert({ body: req.body, files: req.files });
       try {
-        const envelope = JSON.parse(req.body.envelope);
-        const toUs = envelope.to.find((e: string) =>
-          e.endsWith(config.supportEmailHost)
+        const parsedFrom = parseAddress(req.body.from)!
+          .addresses[0] as ParsedMailbox;
+        const parsedTo = parseAddress(req.body.to)!
+          .addresses as ParsedMailbox[];
+
+        const toUs = parsedTo.find((e) =>
+          e.address.endsWith(config.supportEmailHost)
         );
         if (!toUs) {
           console.warn(
             "received email with envelope without our address:",
-            envelope
+            parsedTo
           );
           console.warn("email database id:", savedRaw.id);
           return;
         }
         let plusCode: string;
         try {
-          plusCode = toUs.split("@")[0].split("+")[1];
+          plusCode = toUs.address.split("@")[0].split("+")[1];
           if (!plusCode?.trim()) {
             throw "plus code empty/missing";
           }
@@ -56,23 +64,31 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
           console.warn(e);
           return;
         }
-        const message: Message = validateMessageFields({
+
+        const tickets = remult.repo(SupportTicket);
+        const messages = remult.repo(TicketMessage);
+
+        let message = validateMessageFields({
+          ...new TicketMessage(),
           subject: req.body.subject,
           html: req.body.html,
           text: req.body.text,
           date: new Date(),
           attachments: [],
           incoming: true,
+          forTicketID: plusCode,
+          theirEmail: parsedFrom.address,
+          theirName: parsedFrom.name || "",
+          ourEmail: toUs.address,
+          ourName: toUs.name || "",
         });
-
-        const tickets = remult.repo(SupportTicket);
         let ticket = await tickets.findFirst({ id: plusCode });
         if (ticket) {
-          ticket.messages.push(message);
-          ticket.hasUnread = true;
+          ticket.unreadCount += 1;
           ticket.status = TicketStatus.open;
           ticket = await tickets.save(ticket);
-          await RemoteProcedures.sendSupportAlert(ticket, message);
+          message = await messages.save(message);
+          await RemoteProcedures.sendSupportAlert(ticket, message, false);
         } else {
           console.warn(
             "could not find ticket for incoming email w/ plus code",

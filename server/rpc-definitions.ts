@@ -7,9 +7,10 @@ import { convert as convertToText } from "html-to-text";
 
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
-import { Message } from "../global-includes/support-ticket.ts";
+import { TicketMessage } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
 import { MongoDataProvider } from "remult/remult-mongo";
+import { OmitEB } from "remult";
 
 const basicSend = mailer.send;
 
@@ -48,7 +49,7 @@ function textToHTML(text: string) {
  * Returns a message with both text and html fields and sanitized HTML. all
  * received messages should be sent here immediately
  */
-export function validateMessageFields(message: Message) {
+export function validateMessageFields(message: OmitEB<TicketMessage>) {
   let htmlResult = "";
   let textResult = "";
   if (message.html && message.html.trim().length > 0) {
@@ -74,7 +75,7 @@ export function validateMessageFields(message: Message) {
  * fields of the returned message. this assumes that both of those fields exist
  * in the first place; use `validateMessageFields` to guarantee this
  */
-function addEmailIntro(intro: string, message: Message) {
+function addEmailIntro(intro: string, message: TicketMessage) {
   let htmlResult = "";
   let textResult = "";
   const htmlIntro = textToHTML(intro);
@@ -94,7 +95,11 @@ function addEmailIntro(intro: string, message: Message) {
 mailer.setApiKey(config.sendgridKey);
 
 export function defineRemoteProcedures() {
-  RemoteProcedures.sendSupportAlert = async function (ticket, message) {
+  RemoteProcedures.sendSupportAlert = async function (
+    ticket,
+    message,
+    newTicket
+  ) {
     const timeString =
       ticket.createdAt.toLocaleString("en-US", {
         timeZone: "America/New_York",
@@ -103,7 +108,7 @@ export function defineRemoteProcedures() {
     const intro =
       `ticket id: ${ticket.id}\n` +
       `ticket created at: ${timeString}\n` +
-      `sender name: ${ticket.theirName}\nsender email: ${ticket.theirEmail}\n` +
+      `sender name: ${message.theirName}\nsender email: ${message.theirEmail}\n` +
       `original ticket subject: ${ticket.originalSubject}\n` +
       `this message's subject: ${message.subject}`;
 
@@ -116,8 +121,7 @@ export function defineRemoteProcedures() {
         email: "noreply@khe.io",
       },
       subject:
-        (ticket.messages.length == 1 ? "New Ticket: " : "New Message: ") +
-        ticket.originalSubject,
+        (newTicket ? "New Ticket: " : "New Message: ") + ticket.originalSubject,
       text: alertMessage.text,
       html: alertMessage.html,
       asm: {
@@ -136,8 +140,8 @@ export function defineRemoteProcedures() {
   RemoteProcedures.sendSupportReply = async function (ticket, message) {
     const msg: MailDataRequired = {
       to: {
-        name: ticket.theirName,
-        email: ticket.theirEmail,
+        name: message.theirName,
+        email: message.theirEmail,
       },
       from: {
         name: "KHE Support",

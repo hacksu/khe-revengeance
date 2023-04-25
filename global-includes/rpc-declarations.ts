@@ -1,6 +1,6 @@
 import { MailDataRequired } from "@sendgrid/mail";
 import { Email } from "./email-address.ts";
-import { SupportTicket, Message } from "./support-ticket.ts";
+import { SupportTicket, TicketMessage } from "./support-ticket.ts";
 
 /**
  * This class declares functions that can be called in remult BackendMethods to
@@ -10,11 +10,12 @@ import { SupportTicket, Message } from "./support-ticket.ts";
 export class RemoteProcedures {
   static sendSupportAlert: (
     ticket: SupportTicket,
-    message: Message
+    message: TicketMessage,
+    newTicket: boolean
   ) => Promise<void>;
   static sendSupportReply: (
     ticket: SupportTicket,
-    message: Message
+    message: TicketMessage
   ) => Promise<void>;
   static sendWelcome: (email: Email) => Promise<void>;
   static getDistinct: (collection: string, field: string) => Promise<string[]>;

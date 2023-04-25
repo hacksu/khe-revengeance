@@ -74,13 +74,10 @@ export default {
   methods: {
     async submitTicket() {
       await SupportTicketController.createTicketAndSendAlert({
-        originalSubject: this.subject,
-        theirEmail: this.email,
+        subject: this.subject,
+        text: this.content,
         theirName: this.name,
-        messages: [{
-          subject: this.subject,
-          text: this.content,
-        }]
+        theirEmail: this.email
       });
       this.submitted = true;
     },
