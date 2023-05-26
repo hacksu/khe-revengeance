@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 
-import mailer, { MailDataRequired } from "@sendgrid/mail";
+import mailer, { ClientResponse, MailDataRequired, ResponseError } from "@sendgrid/mail";
 import * as cheerio from "cheerio";
 import xss from "xss";
 import { convert as convertToText } from "html-to-text";
@@ -14,6 +14,21 @@ import { MongoDataProvider } from "remult/remult-mongo";
 const basicSend = mailer.send;
 
 mailer.send = async function safeSend(message: MailDataRequired) {
+  const cb = (err: Error | ResponseError, result: [ClientResponse, {}]) => {
+    if (err){
+      console.error("could not send email!");
+      console.error("attempted to send:");
+      console.error(message);
+      console.error("got error:");
+      console.log(err);
+      console.error("response:")
+      console.error(result);
+      if ((err as any).response?.body){
+        console.error("body:");
+        console.error(JSON.stringify((err as any).response.body, null, 4));
+      }
+    }
+  }
   // note: this will only filter messages with multiple recipients
   if (config.outgoingEmailWhitelist && Array.isArray(message.to)) {
     const filteredMessage = {
@@ -24,9 +39,9 @@ mailer.send = async function safeSend(message: MailDataRequired) {
           : config.outgoingEmailWhitelist?.includes(e.email)
       ),
     };
-    return await basicSend.call(mailer, filteredMessage);
+    return await basicSend.call(mailer, filteredMessage, undefined, cb);
   } else {
-    return await basicSend.call(mailer, message);
+    return await basicSend.call(mailer, message, undefined, cb);
   }
 };
 
@@ -94,6 +109,7 @@ function addEmailIntro(intro: string, message: TicketMessage) {
 mailer.setApiKey(config.sendgridKey);
 
 export function defineRemoteProcedures() {
+  // TODO: why is validateMessageFields a free function at all?
   RemoteProcedures.sanitizeMessage = function (message) {
     return validateMessageFields(message);
   };
@@ -146,10 +162,11 @@ export function defineRemoteProcedures() {
         email: message.theirEmail,
       },
       from: {
-        name: "KHE Support",
-        email: `tickets@khe.io`,
+        name: message.ourName,
+        email: message.ourEmail,
       },
       replyTo: {
+        name: message.ourName,
         email: `ticket+${ticket.id}@${config.supportEmailHost}`,
       },
       subject: message.subject,
@@ -162,11 +179,13 @@ export function defineRemoteProcedures() {
       },
     };
     const sendResult = await mailer.send(msg);
-    console.log(
-      `sent email through sendgrid at ${new Date()} for support ticket ` +
-        `${ticket.id}, received status code:`,
-      sendResult[0].statusCode
-    );
+    if (sendResult?.length){
+      console.log(
+        `sent email through sendgrid at ${new Date()} for support ticket ` +
+          `${ticket.id}, received status code:`,
+        sendResult[0].statusCode
+      );
+    }
   };
 
   RemoteProcedures.sendWelcome = async function (email: Email) {

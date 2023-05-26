@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { SupportTicket, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
+import { SupportTicket, SupportTicketController, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
 import { useQueryState } from "next-usequerystate";
-import { Layout, Menu, Button, Space } from "antd";
+import { Layout, Menu, Button, Popconfirm } from "antd";
 const { Sider } = Layout;
 
 import KHELayout from "../layouts/layout";
@@ -49,6 +49,24 @@ export default function Tickets() {
 
     const lastMessage = messages[messages.length - 1];
 
+    const sendTicketReply = () => {
+        // TODO: add loading spinner between the last email and the "send" form
+        // until the sent email comes back from the database
+        SupportTicketController.sendReplyForTicket(
+            remult.repo(TicketMessage).create({
+                subject: composition.subject,
+                html: composition.html,
+                forTicketID: openTicket,
+                theirName: lastMessage.theirName,
+                theirEmail: lastMessage.theirEmail,
+                ourName: composition.from.name,
+                ourEmail: composition.from.email
+            })
+        ).then(() => {
+            setComposition({ ...composition, html: "" });
+        });
+    }
+
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
@@ -74,9 +92,21 @@ export default function Tickets() {
                             })}
                             <ComposeEmail setEmailForm={setComposition} defaultFromEmail="support"
                                 defaultFromName="KHE Support"
-                                defaultSubject={"RE: " + lastMessage.subject} />
+                                defaultSubject={
+                                    (lastMessage.subject.toLowerCase().startsWith("re") ? "" : "RE: ") +
+                                    lastMessage.subject
+                                }
+                            />
                             <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "10px auto" }}>
-                                Sending to: {`"${lastMessage.theirName}" <${lastMessage.theirEmail}>`}<Button type="primary">Send</Button>
+                                Sending to: {`"${lastMessage.theirName}" <${lastMessage.theirEmail}>`}
+                                <Popconfirm
+                                    title="Send email?"
+                                    onConfirm={sendTicketReply}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button type="primary">Send</Button>
+                                </Popconfirm>
                             </div>
                         </>
                         : null}

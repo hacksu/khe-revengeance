@@ -112,10 +112,11 @@ export class SupportTicketController {
     await RemoteProcedures.sendSupportAlert(savedTicket, savedMessage, true);
   }
 
+  /* this is for when staff reply to a support ticket with an email */
   @BackendMethod({ allowed: [UserRole.Staff, UserRole.Admin] })
-  static async addMessageAndSend(message: TicketMessage) {
+  static async sendReplyForTicket(message: TicketMessage) {
     const messages = remult.repo(TicketMessage);
-    await messages.insert(message);
+    message = await messages.insert(RemoteProcedures.sanitizeMessage(message));
     const tickets = remult.repo(SupportTicket);
     let ticket = await tickets.findFirst({ id: message.forTicketID });
     if (ticket) {

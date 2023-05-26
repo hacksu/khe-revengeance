@@ -10,11 +10,11 @@ import {
   RawEmail,
   SupportTicket,
   TicketStatus,
-} from "../global-includes/support-ticket.ts";
-import { config, projectRoot } from "./config.ts";
-import { validateMessageFields } from "./rpc-definitions.ts";
+} from "../global-includes/support-ticket.js";
+import { config, projectRoot } from "./config.js";
+import { validateMessageFields } from "./rpc-definitions.js";
 import { remult } from "remult";
-import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
+import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
 
 const parseForm = multer({
   dest: path.resolve(projectRoot, "server/uploads/email-attachments/"),

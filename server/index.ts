@@ -16,7 +16,7 @@ import { remultConfig } from "./db.ts";
 import { registerAuthMiddleware } from "./auth.ts";
 import { config, projectRoot } from "./config.ts";
 import { UserRole } from "../global-includes/common.ts";
-import enableMail from "./mail.ts";
+import enableMail from "./receive-mail.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
