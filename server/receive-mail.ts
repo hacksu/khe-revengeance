@@ -23,8 +23,8 @@ const parseForm = multer({
 export default function enableMail(app: Express, remultConfig: RemultServer) {
   app.post(
     "/obtainMail",
-    remultConfig.withRemult,
     parseForm.any(),
+    remultConfig.withRemult,
     /**
      * Receives emails from the SendGrid inbound parse webhook. Email parsing is hell.
      */
