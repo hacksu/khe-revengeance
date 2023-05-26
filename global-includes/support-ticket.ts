@@ -100,6 +100,7 @@ export class SupportTicketController {
 
     const ticket = {
       originalSubject: message.subject,
+      unreadCount: 1
     };
 
     const ticketRepo = remult.repo(SupportTicket);
@@ -115,6 +116,9 @@ export class SupportTicketController {
   /* this is for when staff reply to a support ticket with an email */
   @BackendMethod({ allowed: [UserRole.Staff, UserRole.Admin] })
   static async sendReplyForTicket(message: TicketMessage) {
+    message.date = new Date();
+    message.incoming = false;
+    message.attachments = [];
     const messages = remult.repo(TicketMessage);
     message = await messages.insert(RemoteProcedures.sanitizeMessage(message));
     const tickets = remult.repo(SupportTicket);
@@ -122,7 +126,7 @@ export class SupportTicketController {
     if (ticket) {
       await RemoteProcedures.sendSupportReply(ticket, message);
     } else {
-      console.warn(
+      console.error(
         "could not find ticket for outgoing email w/ plus code",
         message.forTicketID
       );
