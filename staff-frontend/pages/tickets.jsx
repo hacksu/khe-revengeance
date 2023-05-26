@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { SupportTicket, SupportTicketController, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
 import { useQueryState } from "next-usequerystate";
-import { Layout, Menu, Button, Popconfirm } from "antd";
+import { Layout, Menu, Button, Popconfirm, Badge } from "antd";
 const { Sider } = Layout;
 
 import KHELayout from "../layouts/layout";
@@ -17,6 +17,8 @@ export default function Tickets() {
     const [messages, setMessages] = useState([]);
     const [composition, setComposition] = useState({});
 
+    const openTicketData = useMemo(() => tickets.find(t => t.id == openTicket), [openTicket]);
+
     useEffect(() => {
         return remult.repo(SupportTicket)
             .liveQuery({ orderBy: { lastUpdated: "desc" } })
@@ -24,11 +26,24 @@ export default function Tickets() {
     }, []);
 
     useEffect(() => {
-        const unsubscribe = remult.repo(TicketMessage)
-            .liveQuery({ where: { forTicketID: openTicket }, orderBy: { date: "asc" } })
-            .subscribe(info => setMessages(info.applyChanges));
-        return () => { console.log("unsubscribing from", openTicket); unsubscribe() }
+        if (openTicket) {
+            const unsubscribe = remult.repo(TicketMessage)
+                .liveQuery({ where: { forTicketID: openTicket }, orderBy: { date: "asc" } })
+                .subscribe(info => setMessages(info.applyChanges));
+            return () => { console.log("unsubscribing from", openTicket); unsubscribe() }
+        } else {
+            // TODO: does useEffect need to be consistent about returning a callback?
+            return () => { ; }
+        }
     }, [openTicket]);
+
+    useEffect(() => {
+        if (openTicket && openTicketData.id == openTicket) {
+            remult.repo(SupportTicket).update(
+                openTicket, { ...openTicketData, unreadCount: 0 }
+            );
+        }
+    }, [openTicket, openTicketData])
 
     const getMenuItems = () => {
         return Object.values(TicketStatus).map(s => ({
@@ -36,14 +51,19 @@ export default function Tickets() {
             label: s,
             children: tickets.filter(t => t.status == s).map(t => ({
                 key: t.id,
-                label: t.originalSubject
+                label: <>
+                    <Badge count={t.unreadCount} />
+                    <span style={{ display: "inline-block", marginLeft: 10 }}>
+                        {t.originalSubject}
+                    </span>
+                </>
             }))
         }))
     };
 
     const menuNavigation = (info) => {
         if (info.keyPath.length > 1) {
-            setOpenTicket(info.key);
+            setOpenTicket(info.key, { history: "push" });
         }
     }
 
@@ -69,9 +89,9 @@ export default function Tickets() {
 
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
-            <Sider width={200} theme="light">
+            <Sider width={300} theme="light">
                 <Menu title="Support Tickets" mode="inline" onClick={menuNavigation}
-                    style={{ overflowY: "auto", height: "100%" }}
+                    style={{ overflowY: "auto", height: "100%", width: "100%" }}
                     items={getMenuItems()}
                     defaultOpenKeys={[TicketStatus.open]}
                     defaultSelectedKeys={[openTicket]}
@@ -86,7 +106,7 @@ export default function Tickets() {
                                 const us = { email: m.ourEmail, name: m.ourName };
                                 const from = m.incoming ? them : us;
                                 const to = m.incoming ? us : them;
-                                return <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}>
+                                return <div key={m.id} style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}>
                                     <DisplayEmail sentAt={m.date} mailData={{ ...m, from, to }} />
                                 </div>;
                             })}
