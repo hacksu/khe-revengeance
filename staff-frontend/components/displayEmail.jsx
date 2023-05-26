@@ -8,7 +8,7 @@ function addressAsString(stringOrObj) {
     } else if (typeof stringOrObj == "string") {
         return stringOrObj;
     } else {
-        return "<nope. this probably came from a form or something>";
+        return "<not sent as an email>";
     }
 }
 

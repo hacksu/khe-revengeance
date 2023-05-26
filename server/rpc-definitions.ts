@@ -14,24 +14,9 @@ import { MongoDataProvider } from "remult/remult-mongo";
 const basicSend = mailer.send;
 
 mailer.send = async function safeSend(message: MailDataRequired) {
-  const cb = (err: Error | ResponseError, result: [ClientResponse, {}]) => {
-    if (err){
-      console.error("could not send email!");
-      console.error("attempted to send:");
-      console.error(message);
-      console.error("got error:");
-      console.log(err);
-      console.error("response:")
-      console.error(result);
-      if ((err as any).response?.body){
-        console.error("body:");
-        console.error(JSON.stringify((err as any).response.body, null, 4));
-      }
-    }
-  }
   // note: this will only filter messages with multiple recipients
   if (config.outgoingEmailWhitelist && Array.isArray(message.to)) {
-    const filteredMessage = {
+    message = {
       ...message,
       to: message.to.filter((e) =>
         typeof e === "string"
@@ -39,10 +24,24 @@ mailer.send = async function safeSend(message: MailDataRequired) {
           : config.outgoingEmailWhitelist?.includes(e.email)
       ),
     };
-    return await basicSend.call(mailer, filteredMessage, undefined, cb);
-  } else {
-    return await basicSend.call(mailer, message, undefined, cb);
   }
+    return new Promise(resolve => basicSend.call(mailer, message, undefined,
+      (err: Error | ResponseError, result: [ClientResponse, {}]) => {
+        if (err){
+          console.error("could not send email!");
+          console.error("attempted to send:");
+          console.error(message);
+          console.error("got error:");
+          console.log(err);
+          console.error("result:")
+          console.error(result);
+          if ((err as any).response?.body){
+            console.error("body:");
+            console.error(JSON.stringify((err as any).response.body, null, 4));
+          }
+        }
+        resolve(result);
+    }));
 };
 
 function textToHTML(text: string) {
@@ -124,11 +123,13 @@ export function defineRemoteProcedures() {
       }) + " US Eastern Time";
 
     const intro =
-      `ticket id: ${ticket.id}\n` +
-      `ticket created at: ${timeString}\n` +
-      `sender name: ${message.theirName}\nsender email: ${message.theirEmail}\n` +
-      `original ticket subject: ${ticket.originalSubject}\n` +
-      `this message's subject: ${message.subject}`;
+      (newTicket ? "A new support ticket was just created." : 
+        "A new email was received regarding a support ticket.") + "\n\n" +
+      `Ticket ID: ${ticket.id}\n` +
+      `Ticket created at: ${timeString}\n` +
+      `Their name: ${message.theirName}\nTheir email: ${message.theirEmail}\n` +
+      (newTicket ? "" : `Original ticket subject: ${ticket.originalSubject}\n`) +
+      `New message's subject: ${message.subject}\n\nMessage body: \n\n`;
 
     const alertMessage = addEmailIntro(intro, validateMessageFields(message));
 

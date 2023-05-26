@@ -31,7 +31,7 @@ function HomePage() {
             </DBCard>
             <DBCard>
                 <Statistic title={
-                    <Link href="/emailLists">Email Addresses In DB</Link>
+                    <Link href="/emailLists">Total Email Addresses In DB</Link>
                 } value={emailCount ?? '...'} />
             </DBCard>
             <DBCard>
