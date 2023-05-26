@@ -215,7 +215,7 @@ export default function EmailLists() {
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">
                 <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
-                    items={getMenu()} selectedKeys={[list, page]}
+                    items={getMenu()} selectedKeys={[page == menuKeys.list ? list : page]}
                     defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
                     className={layoutStyle.sidebarWidth} />
             </Sider>
@@ -237,8 +237,11 @@ export default function EmailLists() {
                 :
                 page == menuKeys.sent ?
                     <Layout>
-                        <Content>
-                            <SentEmail />
+                        <h2 style={{ marginTop: 20, marginLeft: 10 }}>Mail what was sent</h2>
+                        <Content style={{ maxHeight: "100%", overflowY: "auto" }}>
+                            <div style={{ width: 800, maxWidth: "100%" }}>
+                                <SentEmail />
+                            </div>
                         </Content>
                     </Layout>
                     :
