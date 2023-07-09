@@ -34,6 +34,7 @@
     "next": "^13.2.4",
     "next-usequerystate": "^1.7.2",
     "octokit": "^2.0.14",
+    "parse-headers": "^2.0.5",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4",
     "passport-github2": "^0.1.12",
@@ -48,7 +49,6 @@
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vue-scrollto": "^2.20.0",
-    "xss": "^1.0.14",
     "yaml": "^2.2.1"
   },
   "devDependencies": {

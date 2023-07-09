@@ -4,6 +4,7 @@ import type { Express } from "express";
 import type { RemultServer } from "remult/server/expressBridge";
 import multer from "multer";
 import parseAddress, { ParsedMailbox } from "email-addresses";
+import parseHeaders from "parse-headers";
 
 import {
   TicketMessage,
@@ -18,6 +19,7 @@ import { RemoteProcedures } from "../global-includes/rpc-declarations.js";
 
 const parseForm = multer({
   dest: path.resolve(projectRoot, "server/uploads/email-attachments/"),
+  // TODO: set limits on e.g. attachment size
 });
 
 export default function enableMail(app: Express, remultConfig: RemultServer) {
@@ -33,6 +35,8 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
         .repo(RawEmail)
         .insert({ body: req.body, files: req.files });
       try {
+        const headers = parseHeaders(req.body.headers);
+        const externalID = headers["message-id"]; 
         const parsedFrom = parseAddress(req.body.from)!
           .addresses[0] as ParsedMailbox;
         const parsedTo = parseAddress(req.body.to)!
@@ -70,6 +74,7 @@ export default function enableMail(app: Express, remultConfig: RemultServer) {
 
         let message = validateMessageFields({
           ...new TicketMessage(),
+          externalID: Array.isArray(externalID) ? externalID[0] : externalID,
           subject: req.body.subject,
           html: req.body.html,
           text: req.body.text,

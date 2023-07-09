@@ -9,6 +9,9 @@ export class TicketMessage {
   @Fields.cuid()
   id!: string;
 
+  @VFields.string()
+  externalID: string = "";
+
   @Fields.createdAt()
   date: Date = new Date();
 
@@ -27,7 +30,7 @@ export class TicketMessage {
   @Fields.json()
   attachments: string[] = [];
 
-  @VFields.string()
+  @VFields.string({ validate: Validators.required })
   forTicketID!: string;
 
   @VFields.string()
@@ -120,11 +123,17 @@ export class SupportTicketController {
     message.incoming = false;
     message.attachments = [];
     const messages = remult.repo(TicketMessage);
+    const previousMessage = await messages.findFirst(
+        {forTicketID: message.forTicketID},
+        {orderBy: {date: "desc"}},
+    );
     message = await messages.insert(RemoteProcedures.sanitizeMessage(message));
     const tickets = remult.repo(SupportTicket);
-    let ticket = await tickets.findFirst({ id: message.forTicketID });
+    const ticket = await tickets.findFirst({ id: message.forTicketID });
     if (ticket) {
-      await RemoteProcedures.sendSupportReply(ticket, message);
+      await RemoteProcedures.sendSupportReply(
+        ticket, message, previousMessage?.externalID || undefined
+      );
     } else {
       console.error(
         "could not find ticket for outgoing email w/ plus code",

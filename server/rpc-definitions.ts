@@ -24,6 +24,10 @@ mailer.send = async function safeSend(message: MailDataRequired) {
       ),
     };
   }
+
+  // no mail.
+  return [{statusCode: 0, body: {}, headers: {}}, {}];
+
     return new Promise(resolve => basicSend.call(mailer, message, undefined,
       (err: Error | ResponseError, result: [ClientResponse, {}]) => {
         if (err){
@@ -88,7 +92,7 @@ export function validateMessageFields(message: TicketMessage) {
   if (message.text && message.text.trim().length > 0) {
     textResult = message.text;
   } else {
-    textResult = htmlResult.text();
+    textResult = htmlResult.root().prop("innerText") || "";
   }
   return {
     ...message,
@@ -110,7 +114,7 @@ function addEmailIntro(introHTML: string, message: TicketMessage) {
   return {
     ...message,
     html: html.html(),
-    text: html.text(),
+    text: html.root().prop("innerText") || "",
   };
 }
 
@@ -166,7 +170,7 @@ export function defineRemoteProcedures() {
     );
   };
 
-  RemoteProcedures.sendSupportReply = async function (ticket, message) {
+  RemoteProcedures.sendSupportReply = async function (ticket, message, prevMessageID) {
     const msg: MailDataRequired = {
       to: {
         name: message.theirName,
@@ -180,6 +184,10 @@ export function defineRemoteProcedures() {
         name: message.ourName,
         email: `ticket+${ticket.id}@${config.supportEmailHost}`,
       },
+      headers: prevMessageID ? {
+        "In-Reply-To": `<${prevMessageID}>`,
+        References: `<${prevMessageID}>`
+      } : {},
       subject: message.subject,
       text: message.text,
       html: message.html,

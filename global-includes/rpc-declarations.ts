@@ -15,7 +15,8 @@ export class RemoteProcedures {
   ) => Promise<void>;
   static sendSupportReply: (
     ticket: SupportTicket,
-    message: TicketMessage
+    message: TicketMessage,
+    prevMessageID: string | undefined
   ) => Promise<void>;
   static sendWelcome: (email: Email) => Promise<void>;
   static getDistinct: (collection: string, field: string) => Promise<string[]>;
