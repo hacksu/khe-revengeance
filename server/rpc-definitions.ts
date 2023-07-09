@@ -2,7 +2,6 @@ import { promises as fs } from "fs";
 
 import mailer, { ClientResponse, MailDataRequired, ResponseError } from "@sendgrid/mail";
 import * as cheerio from "cheerio";
-import xss from "xss";
 import { convert as convertToText } from "html-to-text";
 
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
@@ -58,27 +57,44 @@ function textToHTML(text: string) {
   );
 }
 
+
+// based on https://making.close.com/posts/rendering-untrusted-html-email-safely
+function addSafeHead(document: cheerio.CheerioAPI) {
+  // assuming cheerio is not in fragment mode, it will always add a <head> when
+  // it loads a document
+  document("head *").remove();
+  document("head").prepend(
+    `
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+    <base target="_blank">
+    <style> * { font-family: sans-serif; } </style>`
+  );
+  return document;
+}
+
 /**
  * Returns a message with both text and html fields and sanitized HTML. all
  * received messages should be sent here immediately
  */
 export function validateMessageFields(message: TicketMessage) {
-  let htmlResult = "";
+  let untrustedHTML = "";
   let textResult = "";
   if (message.html && message.html.trim().length > 0) {
-    htmlResult = message.html;
+    untrustedHTML = message.html;
+    console.log("got html from message:", untrustedHTML);
   } else {
-    htmlResult = textToHTML(message.text);
+    untrustedHTML = textToHTML(message.text);
   }
-  htmlResult = xss(htmlResult);
+  const htmlResult = addSafeHead(cheerio.load(untrustedHTML));
+  console.log("ended up with html after sanitization:", htmlResult.html());
   if (message.text && message.text.trim().length > 0) {
     textResult = message.text;
   } else {
-    textResult = cheerio.load(htmlResult).text();
+    textResult = htmlResult.text();
   }
   return {
     ...message,
-    html: htmlResult,
+    html: htmlResult.html(),
     text: textResult,
   };
 }
