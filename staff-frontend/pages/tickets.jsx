@@ -37,9 +37,9 @@ export default function Tickets() {
         }
     }, [openTicket]);
 
-    const lastMessageNode = useRef(null);
+    const unreadMessageNode = useRef(null);
     useEffect(() => {
-        lastMessageNode.current?.scrollIntoView({ behavior: "smooth" });
+        unreadMessageNode.current?.scrollIntoView({ behavior: "smooth", block: "center" });
         if (openTicket && openTicketData && openTicketData.id == openTicket) {
             remult.repo(SupportTicket).update(
                 openTicket, { ...openTicketData, unreadCount: 0 }
@@ -111,7 +111,14 @@ export default function Tickets() {
                                 return <div
                                     key={m.id}
                                     style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}
-                                    ref={node => { if (i == messages.length - 1) lastMessageNode.current = node; }}
+                                    ref={node => {
+                                        // if openTicketData.unreadCount === 0, scroll to the last message.
+                                        // if it's 1, also scroll to the last message. if it's 2, scroll to
+                                        // the second-last message. and so on.
+                                        if (i == messages.length - (openTicketData?.unreadCount || 1)) {
+                                            unreadMessageNode.current = node;
+                                        }
+                                    }}
                                 >
                                     <DisplayEmail sentAt={m.date} mailData={{ ...m, from, to }} />
                                 </div>;
