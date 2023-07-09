@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { SupportTicket, SupportTicketController, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
 import { useQueryState } from "next-usequerystate";
@@ -43,7 +43,12 @@ export default function Tickets() {
                 openTicket, { ...openTicketData, unreadCount: 0 }
             );
         }
-    }, [openTicket, openTicketData])
+    }, [openTicket, openTicketData]);
+
+    const lastMessageNode = useRef(null);
+    useEffect(() => {
+        lastMessageNode.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages.length]);
 
     const getMenuItems = () => {
         return Object.values(TicketStatus).map(s => ({
@@ -101,12 +106,16 @@ export default function Tickets() {
                 <div style={{ maxWidth: 600 }}>
                     {(messages?.length && openTicket) ?
                         <>
-                            {messages.map(m => {
+                            {messages.map((m, i) => {
                                 const them = { email: m.theirEmail, name: m.theirName };
                                 const us = { email: m.ourEmail, name: m.ourName };
                                 const from = m.incoming ? them : us;
                                 const to = m.incoming ? us : them;
-                                return <div key={m.id} style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}>
+                                return <div
+                                    key={m.id}
+                                    style={{ paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid black" }}
+                                    ref={node => { if (i == messages.length - 1) lastMessageNode.current = node; }}
+                                >
                                     <DisplayEmail sentAt={m.date} mailData={{ ...m, from, to }} />
                                 </div>;
                             })}
