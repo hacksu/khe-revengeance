@@ -22,7 +22,7 @@ export default function KHEStaffLayout({ children }) {
     const user = useUser()[0];
 
     return (
-        <Layout style={{ height: "100vh", padding: 10 }}>
+        <Layout style={{ height: "99vh", padding: 10 }}>
             <Header style={{ padding: 0 }}>
                 <Menu
                     theme="dark" mode="horizontal" items={pages} className={style.topMenu}
