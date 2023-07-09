@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import { User } from "../../global-includes/users.ts";
 import "./index.css";
 import "../components/quill.css";
+import { remult } from "remult";
 
 
 const UserContext = createContext();
@@ -17,6 +18,7 @@ function UserProvider({ children }) {
                 );
             } else {
                 setUser(u);
+                remult.user = u;
             }
         })
     }, []);
