@@ -116,12 +116,14 @@ export default function Tickets() {
                                     <DisplayEmail sentAt={m.date} mailData={{ ...m, from, to }} />
                                 </div>;
                             })}
+                            {/* TODO: take the default "from" email/name from the most recent message also? */}
                             <ComposeEmail setEmailForm={setComposition} defaultFromEmail="support"
                                 defaultFromName="KHE Support"
                                 defaultSubject={
                                     (lastMessage.subject.toLowerCase().startsWith("re") ? "" : "RE: ") +
                                     lastMessage.subject
                                 }
+                                key={lastMessage.subject}
                             />
                             <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "10px auto" }}>
                                 Sending to: {`"${lastMessage.theirName}" <${lastMessage.theirEmail}>`}
