@@ -17,7 +17,7 @@ export default function Tickets() {
     const [messages, setMessages] = useState([]);
     const [composition, setComposition] = useState({});
 
-    const openTicketData = useMemo(() => tickets.find(t => t.id == openTicket), [openTicket]);
+    const openTicketData = useMemo(() => tickets.find(t => t.id == openTicket), [tickets, openTicket]);
 
     useEffect(() => {
         return remult.repo(SupportTicket)
@@ -38,7 +38,7 @@ export default function Tickets() {
     }, [openTicket]);
 
     useEffect(() => {
-        if (openTicket && openTicketData.id == openTicket) {
+        if (openTicket && openTicketData && openTicketData.id == openTicket) {
             remult.repo(SupportTicket).update(
                 openTicket, { ...openTicketData, unreadCount: 0 }
             );
