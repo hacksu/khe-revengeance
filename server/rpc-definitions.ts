@@ -81,12 +81,10 @@ export function validateMessageFields(message: TicketMessage) {
   let textResult = "";
   if (message.html && message.html.trim().length > 0) {
     untrustedHTML = message.html;
-    console.log("got html from message:", untrustedHTML);
   } else {
     untrustedHTML = textToHTML(message.text);
   }
   const htmlResult = addSafeHead(cheerio.load(untrustedHTML));
-  console.log("ended up with html after sanitization:", htmlResult.html());
   if (message.text && message.text.trim().length > 0) {
     textResult = message.text;
   } else {
@@ -100,24 +98,19 @@ export function validateMessageFields(message: TicketMessage) {
 }
 
 /**
- * Takes a text string "intro" and puts it at the beginning of the html and text
+ * Takes an HTML string "intro" and puts it at the beginning of the html and text
  * fields of the returned message. this assumes that both of those fields exist
  * in the first place; use `validateMessageFields` to guarantee this
  */
-function addEmailIntro(intro: string, message: TicketMessage) {
-  let htmlResult = "";
-  let textResult = "";
-  const htmlIntro = textToHTML(intro);
+function addEmailIntro(introHTML: string, message: TicketMessage) {
   const html = cheerio.load(message.html);
   // cheerio's load should ensure a body element
   const body = html("body");
-  body.prepend(htmlIntro);
-  htmlResult = html.html();
-  textResult = intro + "\n" + message.text;
+  body.prepend(introHTML);
   return {
     ...message,
-    html: htmlResult,
-    text: textResult,
+    html: html.html(),
+    text: html.text(),
   };
 }
 
@@ -133,19 +126,20 @@ export function defineRemoteProcedures() {
     message,
     newTicket
   ) {
-    const timeString =
-      ticket.createdAt.toLocaleString("en-US", {
-        timeZone: "America/New_York",
-      }) + " US Eastern Time";
-
     const intro =
-      (newTicket ? "A new support ticket was just created." : 
-        "A new email was received regarding a support ticket.") + "\n\n" +
-      `Ticket ID: ${ticket.id}\n` +
-      `Ticket created at: ${timeString}\n` +
-      `Their name: ${message.theirName}\nTheir email: ${message.theirEmail}\n` +
-      (newTicket ? "" : `Original ticket subject: ${ticket.originalSubject}\n`) +
-      `New message's subject: ${message.subject}\n\nMessage body: \n\n`;
+      (newTicket ? "<p>A new support ticket was just created.</p>" : 
+        "<p>A new email was received regarding a support ticket.</p>") +
+        `<p>
+          <strong>
+            <a href="${config.staffSite}/tickets?ticket=${ticket.id}">
+              View thread and reply
+            </a>
+          </strong>
+        </p>`+
+      `<p><strong>From:</strong> "${message.theirName}" &lt;${message.theirEmail}&gt;</p>` +
+      (newTicket ? "" : `<p><strong>Original ticket subject:</strong> ${ticket.originalSubject}</p>`) +
+      `<p><strong>New message's subject:</strong> ${message.subject}</p>
+      <p><strong>Message body:</strong><br />`;
 
     const alertMessage = addEmailIntro(intro, validateMessageFields(message));
 
