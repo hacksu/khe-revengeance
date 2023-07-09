@@ -37,17 +37,14 @@ export default function Tickets() {
         }
     }, [openTicket]);
 
+    const lastMessageNode = useRef(null);
     useEffect(() => {
+        lastMessageNode.current?.scrollIntoView({ behavior: "smooth" });
         if (openTicket && openTicketData && openTicketData.id == openTicket) {
             remult.repo(SupportTicket).update(
                 openTicket, { ...openTicketData, unreadCount: 0 }
             );
         }
-    }, [openTicket, openTicketData]);
-
-    const lastMessageNode = useRef(null);
-    useEffect(() => {
-        lastMessageNode.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages.length]);
 
     const getMenuItems = () => {

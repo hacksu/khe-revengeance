@@ -1,22 +1,26 @@
 import React from "react";
 
-import { Layout, Menu, ConfigProvider, theme } from "antd";
+import { Badge, Layout, Menu, ConfigProvider, theme } from "antd";
 import { ContactsOutlined, LockOutlined, MessageOutlined, UnlockOutlined } from "@ant-design/icons";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import style from "./layout.module.css";
-import { useUser } from "../pages/_app.jsx";
+import { useUnreadMailCount, useUser } from "../pages/_app.jsx";
 
 const { Header, Content, Footer } = Layout;
 
 
 export default function KHEStaffLayout({ children }) {
+    const unreadMail = useUnreadMailCount();
     const pages = [
         { key: "/", label: "KHE 2023 Dashboard" },
         { icon: <ContactsOutlined />, key: "/emailLists", label: "Email Lists" },
-        { icon: <MessageOutlined />, key: "/tickets", label: "Support Tickets" }
+        {
+            icon: <MessageOutlined />, key: "/tickets",
+            label: <span>Support Tickets <Badge count={unreadMail} /></span>
+        }
     ].map(page => ({ ...page, label: (<Link href={page.key}>{page.label}</Link>) }));
 
     const user = useUser()[0];
