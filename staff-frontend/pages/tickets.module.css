@@ -1,0 +1,10 @@
+.metadataForm {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.metadataForm h2 {
+    margin: 15px 0;
+}

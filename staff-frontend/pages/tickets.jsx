@@ -2,11 +2,13 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { SupportTicket, SupportTicketController, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
 import { useQueryState } from "next-usequerystate";
-import { Layout, Menu, Button, Popconfirm, Badge } from "antd";
+import { Layout, Menu, Button, Popconfirm, Badge, Form, Switch, Input } from "antd";
 const { Sider } = Layout;
+const { TextArea } = Input;
 
 import KHELayout from "../layouts/layout";
 import layoutStyle from "../layouts/layout.module.css";
+import style from "./tickets.module.css";
 import { DisplayEmail } from "../components/displayEmail";
 import ComposeEmail from "../components/composeEmail";
 
@@ -56,7 +58,7 @@ export default function Tickets() {
                 label: <>
                     <Badge count={t.unreadCount} />
                     <span style={{ display: "inline-block", marginLeft: 10 }}>
-                        {t.originalSubject}
+                        {t.originalSubject?.length ? t.originalSubject : "<no subject>"}
                     </span>
                 </>
             }))
@@ -88,6 +90,21 @@ export default function Tickets() {
             setComposition({ ...composition, html: "" });
         });
     }
+
+    const saveMetadata = (dataFormValues) => {
+        if (openTicketData) {
+            console.log(dataFormValues)
+            remult.repo(SupportTicket).update(
+                openTicketData.id,
+                {
+                    ...openTicketData,
+                    status: dataFormValues.isOpen ? TicketStatus.open : TicketStatus.closed,
+                    assignedTo: dataFormValues.assignedTo,
+                    note: dataFormValues.note
+                }
+            );
+        }
+    };
 
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
@@ -124,27 +141,57 @@ export default function Tickets() {
                                 </div>;
                             })}
                             {/* TODO: take the default "from" email/name from the most recent message also? */}
-                            <ComposeEmail setEmailForm={setComposition} defaultFromEmail="support"
-                                defaultFromName="KHE Support"
-                                defaultSubject={
-                                    (lastMessage.subject.toLowerCase().startsWith("re") ? "" : "RE: ") +
-                                    lastMessage.subject
-                                }
-                                key={lastMessage.subject}
-                            />
-                            <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "10px auto" }}>
-                                Sending to: {`"${lastMessage.theirName}" <${lastMessage.theirEmail}>`}
-                                <Popconfirm
-                                    title="Send email?"
-                                    onConfirm={sendTicketReply}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button type="primary">Send</Button>
-                                </Popconfirm>
+                            <div class={style.metadataForm}>
+                                <h2>Send a reply</h2>
+                                <ComposeEmail setEmailForm={setComposition} defaultFromEmail="support"
+                                    defaultFromName="KHE Support"
+                                    defaultSubject={
+                                        (lastMessage.subject.toLowerCase().startsWith("re") ? "" : "RE: ") +
+                                        lastMessage.subject
+                                    }
+                                    key={lastMessage.subject}
+                                />
+                                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "10px auto" }}>
+                                    Sending to: {`"${lastMessage.theirName}" <${lastMessage.theirEmail}>`}
+                                    <Popconfirm
+                                        title="Send email?"
+                                        onConfirm={sendTicketReply}
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        <Button type="primary">Send</Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                         </>
                         : null}
+                    {openTicketData ? <div class={style.metadataForm}>
+                        <h2>Ticket Data</h2>
+                        <Form onFinish={saveMetadata}
+                            initialValues={{
+                                isOpen: openTicketData.status == TicketStatus.open,
+                                assignedTo: openTicketData.assignedTo,
+                                note: openTicketData.note
+                            }}>
+                            <div style={{ display: "flex", gap: 20, justifyContent: "space-between" }}>
+                                <Form.Item label="Ticket Status" name="isOpen">
+                                    <Switch checkedChildren="Open" unCheckedChildren="Closed" />
+                                </Form.Item>
+                                <Form.Item label="Assigned To" name="assignedTo">
+                                    <Input />
+                                </Form.Item>
+                            </div>
+                            <Form.Item label="Notes" name="note">
+                                <TextArea rows={4} />
+                            </Form.Item>
+                            <Form.Item style={{ textAlign: "right" }}>
+                                <Button type="primary" htmlType="submit">
+                                    Save
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div> : null
+                    }
 
                 </div>
             </Layout>

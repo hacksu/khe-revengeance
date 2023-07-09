@@ -38,6 +38,7 @@ export function useUser() {
 const UnreadMailContext = createContext();
 
 function UnreadMailProvider({ children }) {
+    // TODO: remove this dependency once live queries don't require remult.user to be set
     const [user, _] = useUser();
     const [unread, setUnread] = useState([]);
     useEffect(() => {
