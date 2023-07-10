@@ -17,6 +17,8 @@ import { registerAuthMiddleware } from "./auth.ts";
 import { config, projectRoot } from "./config.ts";
 import { UserRole } from "../global-includes/common.ts";
 import enableMail from "./receive-mail.ts";
+import { remult } from "remult";
+import { Redirect } from "../global-includes/redirect-link.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -77,6 +79,15 @@ async function createServer() {
   });
   defineRemoteProcedures();
   enableMail(app, remultConfig);
+  app.get("*", remultConfig.withRemult, async (req, res, next) => {
+    const redirect = await remult.repo(Redirect)
+      .findFirst({href: req.originalUrl.slice(1)});  // remove leading slash
+    if (redirect){
+      res.redirect(redirect.destURL);
+    } else {
+      next();
+    }
+  });
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request

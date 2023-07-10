@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Badge, Layout, Menu, ConfigProvider, theme } from "antd";
-import { ContactsOutlined, LockOutlined, MessageOutlined, UnlockOutlined } from "@ant-design/icons";
+import { ContactsOutlined, LockOutlined, MessageOutlined, UnlockOutlined, LinkOutlined } from "@ant-design/icons";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,6 +20,10 @@ export default function KHEStaffLayout({ children }) {
         {
             icon: <MessageOutlined />, key: "/tickets",
             label: <span>Support Tickets <Badge count={unreadMail} /></span>
+        },
+        {
+            icon: <LinkOutlined />, key: "/redirects",
+            label: "Redirect Links"
         }
     ].map(page => ({ ...page, label: (<Link href={page.key}>{page.label}</Link>) }));
 

@@ -14,6 +14,7 @@ import {
 } from "../global-includes/support-ticket.ts";
 import { User } from "../global-includes/users.ts";
 import { config } from "../server/config.ts";
+import { Redirect } from "../global-includes/redirect-link.ts";
 
 let client: MongoClient | undefined;
 let db: Db | undefined;
@@ -50,6 +51,7 @@ export const remultConfig = remultExpress({
     EmailListNotes,
     RawEmail,
     TicketMessage,
+    Redirect
   ],
   controllers: [SupportTicketController],
 });
