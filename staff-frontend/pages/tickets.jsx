@@ -165,16 +165,17 @@ export default function Tickets() {
                             </div>
                         </>
                         : null}
-                    {openTicketData ? <div class={style.metadataForm}>
+                    {openTicketData ? <div className={style.metadataForm}>
                         <h2>Ticket Data</h2>
                         <Form onFinish={saveMetadata}
+                            key={openTicket}
                             initialValues={{
                                 isOpen: openTicketData.status == TicketStatus.open,
                                 assignedTo: openTicketData.assignedTo,
                                 note: openTicketData.note
                             }}>
                             <div style={{ display: "flex", gap: 20, justifyContent: "space-between" }}>
-                                <Form.Item label="Ticket Status" name="isOpen">
+                                <Form.Item valuePropName="checked" label="Ticket Status" name="isOpen">
                                     <Switch checkedChildren="Open" unCheckedChildren="Closed" />
                                 </Form.Item>
                                 <Form.Item label="Assigned To" name="assignedTo">
