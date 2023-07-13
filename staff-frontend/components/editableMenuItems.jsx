@@ -47,7 +47,7 @@ export default function EditableMenu({ labels, onEdit, onAdd, enclose, menuTitle
         </>
     })).concat({
         key: keyForAddButton || "__add", label: addingItem ? <Input
-            ref={newItemInput} placeholder="Name of new list"
+            ref={newItemInput} placeholder="Name of new thing"
             onPressEnter={addItem}
             suffix={<PlusOutlined onClick={addItem} />}
         /> :
