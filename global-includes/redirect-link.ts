@@ -1,4 +1,5 @@
 import {Entity, Fields, Validators} from "remult";
+import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 
 @Entity<Redirect>(
@@ -9,9 +10,9 @@ export class Redirect {
     @Fields.cuid()
     id="";
 
-    @Fields.string({validate: [Validators.required, Validators.uniqueOnBackend]})
+    @VFields.string({validate: [Validators.uniqueOnBackend]})
     href="";
 
-    @Fields.string({validate: Validators.required})
+    @VFields.string()
     destURL="";
 }

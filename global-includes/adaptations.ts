@@ -25,6 +25,8 @@ export class VFields {
     return validators;
   }
 
+  // TODO: add and use "nonEmptyString"
+
   static string(options: FieldOptions = {}) {
     return Fields.string({
       ...options,
