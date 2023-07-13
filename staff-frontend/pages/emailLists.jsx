@@ -11,15 +11,12 @@ import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
 import ComposeEmail from "../components/composeEmail.jsx";
 import SentEmail from "../components/displayEmail.jsx";
-
-function strToMenuOption(str) {
-    return { key: str, label: str };
-}
+import EditableMenu from "../components/editableMenuItems.jsx";
 
 export default function EmailLists() {
     const [emails, setEmails] = useState([]);
     const [list, setList] = useState(EmailSource.Early2023);
-    const [allLists, setAllLists] = useState(Object.values(EmailSource).sort().map(strToMenuOption));
+    const [allLists, setAllLists] = useState(Object.values(EmailSource).sort());
     const [listNote, setListNote] = useState("");
     const noteInDB = useRef(false);
     const [noteSaved, setNoteSaved] = useState(true);
@@ -38,7 +35,7 @@ export default function EmailLists() {
     useEffect(updateCurrentList, [list]);
     useEffect(() => {
         Email.getEmailSources().then(sources => {
-            setAllLists(sources.sort().map(strToMenuOption));
+            setAllLists(sources.sort());
         });
     }, []);
     const saveNote = () => {
@@ -48,19 +45,6 @@ export default function EmailLists() {
         } else {
             remult.repo(EmailListNotes).save({ listName: list, notes: listNote },)
                 .then(() => setNoteSaved(true));
-        }
-    };
-    const [addingList, setAddingList] = useState(false);
-    const newListInput = useRef();
-    const [addingEmail, setAddingEmail] = useState(false);
-    const newEmailInput = useRef();
-    const addList = () => {
-        const name = newListInput?.current?.input?.value;
-        if (name?.trim()) {
-            setAllLists(al => al.concat([strToMenuOption(name)]));
-            newListInput.current.input.value = "";
-            setAddingList(false);
-            setList(name);
         }
     };
     const addEmail = () => {
@@ -138,13 +122,15 @@ export default function EmailLists() {
         }
         return false;
     };
-    const deleteEmail = async (email, index) => {
-        await remult.repo(Email).delete(email);
+    const [addingEmail, setAddingEmail] = useState(false);
+    const newEmailInput = useRef();
+    const deleteEmail = async (index) => {
+        await remult.repo(Email).delete(emails[index]);
         setEmails(e => e.filter((_, i) => i != index));
     }
     const deleteCurrentList = async () => {
         await Email.bulkDelete(list);
-        setList(allLists[0]?.key);
+        setList(allLists[0]);
         setAllLists(lists => lists.filter(l => l.key != list));
         updateCurrentList();
     };
@@ -180,26 +166,6 @@ export default function EmailLists() {
         add: "__add",
         sent: "__sent"
     }
-    const getMenu = () => {
-        return [
-            { key: menuKeys.compose, label: "Write a mail" },
-            {
-                key: menuKeys.list, label: "Email Lists", children: allLists.concat([{
-                    key: menuKeys.add, label: addingList ? <Input
-                        ref={newListInput} placeholder="Name of new list"
-                        onPressEnter={addList}
-                        suffix={<PlusOutlined onClick={addList} />}
-                    /> :
-                        <div style={{ width: "100%", textAlign: "left" }}>
-                            <div onClick={() => setAddingList(true)}>
-                                <PlusOutlined /> Add new...
-                            </div>
-                        </div>
-                }])
-            },
-            { key: menuKeys.sent, label: "Mail what was sent" }
-        ];
-    }
     const [page, setPage] = useState(menuKeys.compose);
     const menuNavigation = (info) => {
         if (info.keyPath[1] == menuKeys.list && info.keyPath[0] != menuKeys.add) {
@@ -211,14 +177,37 @@ export default function EmailLists() {
             setPage(menuKeys.sent);
         }
     };
+    // TODO: could memoize this?
+    const menu = <EditableMenu
+        selectedKeys={[page == menuKeys.list ? list : page]}
+        defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
+        className={layoutStyle.sidebarWidth}
+        title="Email Lists" mode="inline" inlineIndent={10}
+        labels={allLists}
+        onClick={menuNavigation}
+        onEdit={(index, newListName) => {
+            Email.bulkRename(allLists[index], newListName);
+            setAllLists(l => l.slice(0, index)
+                .concat([newListName])
+                .concat(l.slice(index + 1)));
+        }}
+        onAdd={(newListName) => {
+            setAllLists(l => l.concat(newListName));
+            setList(newListName);
+        }}
+        keyForAddButton={menuKeys.add}
+        enclose={editableSection => [
+            { key: menuKeys.compose, label: "Write a mail" },
+            {
+                key: menuKeys.list, label: "Email Lists",
+                children: editableSection
+            },
+            { key: menuKeys.sent, label: "Mail what was sent" }
+        ]}
+    />
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
-            <Sider width={200} theme="light">
-                <Menu title="Email Lists" mode="inline" onClick={menuNavigation}
-                    items={getMenu()} selectedKeys={[page == menuKeys.list ? list : page]}
-                    defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
-                    className={layoutStyle.sidebarWidth} />
-            </Sider>
+            <Sider width={200} theme="light">{menu}</Sider>
             {page == menuKeys.compose ?
                 <Layout style={{ padding: 20, maxWidth: 800 }}>
                     <ComposeEmail setEmailForm={setEmailForm} />
@@ -229,7 +218,7 @@ export default function EmailLists() {
                             style={{ width: '100%', marginRight: 5 }}
                             placeholder="Select Recipients"
                             onChange={setRecipients}
-                            options={allLists.map(l => ({ label: l.label, value: l.key }))}
+                            options={allLists.map(l => ({ label: l, value: l }))}
                         />
                         <Button onClick={sendAMail} type="primary">Send</Button>
                     </div>
@@ -266,7 +255,7 @@ export default function EmailLists() {
                                         </Card>
                                         {// emails that come from site user accounts cannot be deleted
                                             list != EmailSource.SiteUsers &&
-                                            <DeleteOutlined onClick={() => deleteEmail(e, i)} />}
+                                            <DeleteOutlined onClick={() => deleteEmail(i)} />}
                                     </div>
                                 )}
                             </div>

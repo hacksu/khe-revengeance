@@ -1,0 +1,14 @@
+.menuItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.menuText {
+    overflow: hidden;
+    padding: 5px;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

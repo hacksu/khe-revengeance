@@ -22,9 +22,11 @@ export const isEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Entity<Email>("emails", {
   allowApiCrud: UserRole.Admin,
-  id: (e) => [e.address, e.source],
 })
 export class Email {
+  @Fields.cuid()
+  id="";
+
   @Fields.createdAt()
   subscribedAt = new Date();
 
@@ -71,7 +73,8 @@ export class Email {
         .repo(User)
         .find({ where: { receivingEmails: true } });
       fromList = fromList.concat(
-        fromUsers.map((u) => ({
+        fromUsers.map((u, i) => ({
+          id: "user"+i,
           address: u.email,
           subscribedAt: u.createdAt,
           source: EmailSource.SiteUsers,
@@ -99,6 +102,18 @@ export class Email {
       await RemoteProcedures.bulkDelete(coll, { source });
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
+  static async bulkRename(oldList: string, newList: string){
+    // could replace this with a more efficient mongodb updateMany RPC
+    const repo = remult.repo(Email);
+    for await (const email of repo.query({where: {source: oldList}})){
+      await repo.update(
+        repo.metadata.idMetadata.getId(email),
+        {...email, source: newList}
+      );
     }
   }
 }
