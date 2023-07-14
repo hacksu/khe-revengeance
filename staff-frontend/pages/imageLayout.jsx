@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { remult } from "remult";
-import { Layout, Upload } from "antd";
+import { Layout } from "antd";
 const { Sider } = Layout;
-const { Dragger } = Upload;
+import { DragOutlined } from "@ant-design/icons";
+import { useDropzone } from "react-dropzone";
+import { Resizable } from "re-resizable";
 
 import KHEStaffLayout from "../layouts/layout";
 import { GridImage } from "../../global-includes/image-grid";
@@ -11,44 +13,57 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 
 import style from "./imageLayout.module.css";
 
-function ImageRow({ images, justifyContent, height, addBlobURL }) {
-    const props = {
-        name: 'file',
-        multiple: true,
-        accept: "image/jpeg,image/png,.png,.jpg",
-        beforeUpload: (file) => {
-            const isImage = file.type === 'image/png' || file.type === "image/jpeg";
-            if (!isImage) {
-                alert(`${file.name} is not a png or jpg file :(`);
-            } else {
-                addBlobURL(URL.createObjectURL(file));
-            }
-            console.log(file);
-            return false;
+function ImageRow({ images, justifyContent, addBlobURL }) {
+
+    const { getRootProps, getInputProps, open } = useDropzone({
+        accept: {
+            "image/png": [".png"],
+            "image/jpeg": [".jpg", ".jpeg"]
         },
-        showUploadList: false,
-    };
-    return <div style={{
-        height,
-        display: "flex",
-        justifyContent: justifyContent || "space-evenly",
-        alignItems: "center",
-        width: 600,
-        height: 100,
-        borderTop: "1px solid black",
-        borderBottom: "1px solid black"
-    }}>
-        {
-            <Dragger {...props} className={style.emptyRowDragArea}>
-                {images?.length ?
+        onDropAccepted: (files) => {
+            console.log(files);
+            for (const file of files) {
+                const isImage = file.type === 'image/png' || file.type === "image/jpeg";
+                if (!isImage) {
+                    alert(`${file.name} is not a png or jpg file :(`);
+                } else {
+                    addBlobURL(URL.createObjectURL(file));
+                }
+            }
+        },
+        noClick: true,
+        multiple: true
+    });
+    return <div style={{ display: "flex", alignItems: "center" }}>
+        <div {...getRootProps()} style={{
+            display: "flex",
+            justifyContent: justifyContent || "space-evenly",
+            alignItems: "center",
+            width: 600,
+            backgroundColor: "lightgray",
+            borderRadius: 5,
+            minHeight: 50,
+            marginBottom: 5
+        }}>
+            <input {...getInputProps()} />
+            {
+                images?.length ?
                     images.map(i => (
-                        <img src={i.tempURL || i.filename} key={i.tempURL || i.id}
-                            className={style.imageInRow} />
-                    )) :
-                    <PlusCircleOutlined />}
-            </Dragger>
-        }
-    </div>;
+                        <Resizable lockAspectRatio={true} key={i.tempURL || i.id}
+                            maxWidth="100%" handleComponent={{
+                                bottomRight: <div className={style.resizeHandle}><span>⤡</span></div>
+                            }} handleStyles={{ bottomRight: { zIndex: 100 } }} >
+                            <img src={i.tempURL || i.filename} className={style.imageInRow} />
+                        </Resizable>
+                    )) : <span>Drag and drop images here or click the plus icon</span>
+
+            }
+
+        </div>
+        <div style={{ padding: 20 }}>
+            <PlusCircleOutlined onClick={open} />
+        </div>
+    </div >;
 }
 
 export default function LayoutImages() {
@@ -74,6 +89,9 @@ export default function LayoutImages() {
             }
             rows[rows.length - 1].push(sorted[i]);
         }
+        if (rows.length && rows[rows.length - 1].length != 0) {
+            rows.push([]);
+        }
         return rows;
     }, [images])
     const menuNavigation = (click) => {
@@ -91,7 +109,7 @@ export default function LayoutImages() {
         ));
     }
     return <KHEStaffLayout>
-        <Layout style={{ height: "100%" }}>
+        <Layout style={{ height: "100%", overflowY: "auto" }}>
             <Sider width={300} theme="light">
                 <EditableMenu title="Image Layouts" mode="inline" onClick={menuNavigation}
                     labels={grids} selectedKeys={[openGrid || grids[0]]}
@@ -108,7 +126,6 @@ export default function LayoutImages() {
                 {sortedImages.map((row, i) =>
                     <ImageRow key={i} images={row} addBlobURL={(url) => addImage(i, url)} />
                 )}
-                {/* <ImageRow images={[]} addBlobURL={(url) => addImage(sortedImages.length, url)} /> */}
             </div> : null}
         </Layout>
     </KHEStaffLayout>
