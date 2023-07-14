@@ -2,9 +2,22 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import { remult } from "remult";
 import { Layout } from "antd";
 const { Sider } = Layout;
-import { DragOutlined } from "@ant-design/icons";
 import { useDropzone } from "react-dropzone";
 import { Resizable } from "re-resizable";
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    horizontalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import KHEStaffLayout from "../layouts/layout";
 import { GridImage } from "../../global-includes/image-grid";
@@ -13,8 +26,45 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 
 import style from "./imageLayout.module.css";
 
-function ImageRow({ images, justifyContent, addBlobURL }) {
+function Image({ image }) {
+    const [dragDisabled, setDragDisabled] = useState(false);
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isSorting
+    } = useSortable({ id: image.id, disabled: dragDisabled });
+    const sortableStyle = {
+        transform: CSS.Transform.toString(
+            transform && { ...transform, scaleY: 1, scaleX: 1 }
+        ),
+        transition,
+    };
+    const disableDrag = () => {
+        console.log("drag stop");
+        setDragDisabled(true);
+    }
+    const i = image;
+    return <Resizable lockAspectRatio={true} maxWidth="100%"
+        handleComponent={{
+            bottomRight: (
+                <div style={{ visibility: isSorting ? "hidden" : "" }}
+                    className={style.resizeHandle}>
+                    <span>⤡</span>
+                </div>)
+        }}
+        handleStyles={{ bottomRight: { zIndex: 100 } }}
+        onResizeStart={disableDrag}
+        onResizeStop={() => setDragDisabled(false)} >
+        <div ref={setNodeRef} style={sortableStyle} {...attributes} {...listeners}>
+            <img src={i.tempURL || i.filename} className={style.imageInRow} />
+        </div>
+    </Resizable>
+}
 
+function ImageRow({ images, justifyContent, addBlobURL }) {
     const { getRootProps, getInputProps, open } = useDropzone({
         accept: {
             "image/png": [".png"],
@@ -48,17 +98,14 @@ function ImageRow({ images, justifyContent, addBlobURL }) {
             <input {...getInputProps()} />
             {
                 images?.length ?
-                    images.map(i => (
-                        <Resizable lockAspectRatio={true} key={i.tempURL || i.id}
-                            maxWidth="100%" handleComponent={{
-                                bottomRight: <div className={style.resizeHandle}><span>⤡</span></div>
-                            }} handleStyles={{ bottomRight: { zIndex: 100 } }} >
-                            <img src={i.tempURL || i.filename} className={style.imageInRow} />
-                        </Resizable>
-                    )) : <span>Drag and drop images here or click the plus icon</span>
-
+                    <SortableContext
+                        items={images.map(image => image.id)}
+                        strategy={horizontalListSortingStrategy}
+                    >
+                        {images.map(i => <Image image={i} key={i.id} />)}
+                    </SortableContext> :
+                    <span>Drag and drop images here or click the plus icon</span>
             }
-
         </div>
         <div style={{ padding: 20 }}>
             <PlusCircleOutlined onClick={open} />
@@ -93,20 +140,51 @@ export default function LayoutImages() {
             rows.push([]);
         }
         return rows;
-    }, [images])
+    }, [images]);
+    const imageIndex = useMemo(() => {
+        const index = {};
+        for (const image of images) {
+            index[image.id] = image;
+        }
+        return index;
+    }, [images]);
     const menuNavigation = (click) => {
         setOpenGrid(click.key);
     };
     const addImage = (row, url) => {
-        let col;
-        if (row < sortedImages.length) {
-            col = sortedImages[row].length;
-        } else {
-            col = 0;
+        setImages(i => {
+            let col = 0;
+            for (const image of i) {
+                if (image.row == row && image.col >= col) {
+                    col = image.col + 1;
+                }
+            }
+            return i.concat(
+                [{ ...new GridImage(), gridName: openGrid, row, col, tempURL: url, id: url }]
+            )
+        });
+    };
+    const sensors = useSensors(useSensor(PointerSensor));
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+        console.log(event);
+        if (active.id !== over.id) {
+            console.log("moved?");
+            const moved = imageIndex[active.id];
+            const pushed = imageIndex[over.id];
+            setImages(i => {
+                const newImages = [];
+                for (const image of i) {
+                    if (image.id == moved.id) {
+                        newImages.push({ ...image, row: pushed.row, col: pushed.col });
+                    } else {
+                        let deltaCol = 0;
+                        newImages.push({ ...image, col: image.col + deltaCol });
+                    }
+                }
+                return newImages;
+            });
         }
-        setImages(i => i.concat(
-            [{ ...new GridImage(), gridName: openGrid, row, col, tempURL: url }]
-        ));
     }
     return <KHEStaffLayout>
         <Layout style={{ height: "100%", overflowY: "auto" }}>
@@ -122,11 +200,17 @@ export default function LayoutImages() {
                     }}
                 />
             </Sider>
-            {(grids.length || true) ? <div>
-                {sortedImages.map((row, i) =>
-                    <ImageRow key={i} images={row} addBlobURL={(url) => addImage(i, url)} />
-                )}
-            </div> : null}
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+            >
+                {(grids.length || true) ? <div>
+                    {sortedImages.map((row, i) =>
+                        <ImageRow key={i} images={row} addBlobURL={(url) => addImage(i, url)} />
+                    )}
+                </div> : null}
+            </DndContext>
         </Layout>
     </KHEStaffLayout>
 }
