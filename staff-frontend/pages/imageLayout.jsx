@@ -172,15 +172,18 @@ export default function LayoutImages() {
             console.log("moved?");
             const moved = imageIndex[active.id];
             const pushed = imageIndex[over.id];
-            setImages(i => {
+            setImages(() => {
                 const newImages = [];
-                for (const image of i) {
-                    if (image.id == moved.id) {
-                        newImages.push({ ...image, row: pushed.row, col: pushed.col });
-                    } else {
-                        let deltaCol = 0;
-                        newImages.push({ ...image, col: image.col + deltaCol });
+                sortedImages[moved.row].splice(moved.col, 1);
+                sortedImages[pushed.row].splice(pushed.col, 0, moved);
+                let r = 0;
+                for (const row of sortedImages) {
+                    let col = 0;
+                    for (const image of row) {
+                        newImages.push({ ...image, row: r, col });
+                        col += 1;
                     }
+                    r += 1;
                 }
                 return newImages;
             });
