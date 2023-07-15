@@ -1,4 +1,4 @@
-import { BackendMethod, Entity, Fields, Validators, dbNamesOf } from "remult";
+import { BackendMethod, Entity, Fields, dbNamesOf } from "remult";
 import { UserRole } from "./common.ts";
 import { VFields } from "./adaptations.ts";
 import { RemoteProcedures } from "./rpc-declarations.ts";
@@ -21,7 +21,7 @@ export class GridImage {
     @VFields.string()
     note="";
 
-    @VFields.string({validate: Validators.uniqueOnBackend})
+    @VFields.string()
     gridName="";
 
     @VFields.int()
@@ -41,4 +41,32 @@ export class GridImage {
       const coll = (await dbNamesOf(GridImage)).$entityName;
       return await RemoteProcedures.getDistinct(coll, "gridName");
     }
+
+    @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
+    static async clearGrid(name: string){
+      const imageColl = (await dbNamesOf(GridImage)).$entityName;
+      const rowColl = (await dbNamesOf(GridRow)).$entityName;
+      await Promise.all([
+        RemoteProcedures.bulkDelete(imageColl, {gridName: name}),
+        RemoteProcedures.bulkDelete(rowColl, {gridName: name})
+      ]);
+    }
+}
+
+@Entity("grid-row", {allowApiCrud: [UserRole.Staff, UserRole.Admin], allowApiRead: true})
+export class GridRow{
+  @Fields.cuid()
+  id="";
+
+  @VFields.string()
+  gridName="";
+
+  @VFields.string()
+  justifyContent="";
+  
+  @VFields.string()
+  alignItems="";
+
+  @VFields.number()
+  gap=0;
 }

@@ -20,3 +20,42 @@
     height: 22px;
     font-size: 1.3em;
 }
+
+.editInfo {
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    height: 22px;
+    width: 22px;
+    font-size: 1.3em;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.deleteImage {
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    height: 22px;
+    width: 22px;
+    font-size: 1.3em;
+    position: absolute;
+    left: 35px;
+    top: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.editInfo svg,
+.deleteImage svg {
+    transform: scale(0.8);
+}

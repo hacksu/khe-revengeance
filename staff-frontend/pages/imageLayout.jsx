@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { remult } from "remult";
-import { Layout } from "antd";
+import { Form, Layout, Modal, Input, Button } from "antd";
 const { Sider } = Layout;
 import { useDropzone } from "react-dropzone";
 import { Resizable } from "re-resizable";
@@ -23,7 +23,7 @@ import { CSS } from '@dnd-kit/utilities';
 import KHEStaffLayout from "../layouts/layout";
 import { GridImage } from "../../global-includes/image-grid";
 import EditableMenu from "../components/editableMenuItems";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 import style from "./imageLayout.module.css";
 
@@ -68,7 +68,7 @@ function Image({ image: i, css }) {
     return <img src={i.tempURL || i.filename} className={style.imageInRow} style={css} />;
 }
 
-function ImageTile({ image, onResize }) {
+function ImageTile({ image, onResize, onEdit, onDelete }) {
     const [dragDisabled, setDragDisabled] = useState(false);
     const {
         attributes,
@@ -87,29 +87,87 @@ function ImageTile({ image, onResize }) {
     const disableDrag = () => {
         setDragDisabled(true);
     }
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const editInfo = (event) => {
+        // doesn't work :/ you can still see it start to drag for a second
+        event.nativeEvent.stopImmediatePropagation();
+        event.nativeEvent.stopPropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+        setEditModalOpen(true);
+    }
+    const updateInfo = (values) => {
+        setEditModalOpen(false);
+        onEdit({ ...i, ...values });
+    };
     const i = image;
-    return <Resizable maxWidth="100%" lockAspectRatio
-        size={{ height: i.height, width: i.width }}
-        handleComponent={{
-            bottomRight: (
+    return <>
+        <Resizable maxWidth="100%" lockAspectRatio
+            size={{ height: i.height, width: i.width }}
+            handleComponent={{
+                bottomRight: (
+                    <div style={{ visibility: isSorting ? "hidden" : "" }}
+                        className={style.resizeHandle}>
+                        <span>⤡</span>
+                    </div>)
+            }}
+            handleStyles={{ bottomRight: { zIndex: 100 } }}
+            onResizeStart={disableDrag}
+            onResizeStop={(event, direction, ref, d) => {
+                setDragDisabled(false);
+                onResize({ id: i.id, width: i.width + d.width, height: i.height + d.height });
+            }}>
+            <div ref={setNodeRef} style={sortableStyle} {...attributes} {...listeners}>
+                <Image image={image} />
                 <div style={{ visibility: isSorting ? "hidden" : "" }}
-                    className={style.resizeHandle}>
-                    <span>⤡</span>
-                </div>)
-        }}
-        handleStyles={{ bottomRight: { zIndex: 100 } }}
-        onResizeStart={disableDrag}
-        onResizeStop={(event, direction, ref, d) => {
-            setDragDisabled(false);
-            onResize({ id: i.id, width: i.width + d.width, height: i.height + d.height });
-        }}>
-        <div ref={setNodeRef} style={sortableStyle} {...attributes} {...listeners}>
-            <Image image={image} />
-        </div>
-    </Resizable>
+                    onMouseDown={editInfo} onTouchStart={editInfo}
+                    className={style.editInfo}>
+                    <EditOutlined />
+                </div>
+                <div style={{ visibility: isSorting ? "hidden" : "" }}
+                    onMouseDown={() => onDelete(i.id)} onTouchStart={() => onDelete(i.id)}
+                    className={style.deleteImage}>
+                    <DeleteOutlined />
+                </div>
+            </div>
+        </Resizable>
+        <Modal
+            title="Edit Image Info"
+            open={editModalOpen}
+            footer={null}
+            onCancel={() => setEditModalOpen(false)}
+        >
+            <Form onFinish={updateInfo} layout="vertical"
+                initialValues={{
+                    description: i.description || "",
+                    linksTo: i.linksTo || "",
+                    notes: i.notes || ""
+                }}>
+                <Form.Item name="description"
+                    label="Image description (for hover text):">
+                    <Input />
+                </Form.Item>
+                <Form.Item name="linksTo"
+                    label="URL to link to:">
+                    <Input />
+                </Form.Item>
+                <Form.Item name="notes"
+                    label="Extra notes:">
+                    <Input />
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Submit
+                </Button>
+                <Button onClick={() => setEditModalOpen(false)}>
+                    Cancel
+                </Button>
+            </Form>
+        </Modal>
+    </>
 }
 
-function ImageRow({ index, images, justifyContent, onResize, addBlobURL }) {
+function ImageRow({ index, images, justifyContent, onResize, onEdit, onDelete, addBlobURL }) {
     const { getRootProps, getInputProps, open } = useDropzone({
         accept: {
             "image/png": [".png"],
@@ -146,7 +204,10 @@ function ImageRow({ index, images, justifyContent, onResize, addBlobURL }) {
                 items={images.map(image => image.id)}
                 strategy={horizontalListSortingStrategy}
             >
-                {images.map((i) => <ImageTile image={i} key={i.id} onResize={onResize} />)}
+                {images.map((i) => (
+                    <ImageTile image={i} key={i.id} onResize={onResize}
+                        onEdit={onEdit} onDelete={onDelete} />
+                ))}
             </SortableContext>
 
         </div>
@@ -207,7 +268,8 @@ export default function LayoutImages() {
                     gridName: openGrid,
                     row, col: currentHighestCol == -Infinity ? 0 : currentHighestCol + 1,
                     ...dimensions,
-                    tempURL: url, id: url
+                    tempURL: url, id: url,
+                    needsUploading: true
                 }]
             );
             return debugDuplicates(result);
@@ -223,9 +285,15 @@ export default function LayoutImages() {
             setActiveID(null);
         }
         const { active, over, collisions } = event;
+        if (!over) {
+            return;
+        }
         if (active.id !== over.id) {
+            // figure out what row the image has been dragged over and then
+            // place it in the position of the closest image in that row
+            const moved = imageIndex[active.id];
             const overRowID = collisions.find(c => c.id.startsWith("row"))?.id;
-            if (!overRowID) {
+            if (!overRowID || !moved) {
                 // give up
                 return;
             }
@@ -238,18 +306,13 @@ export default function LayoutImages() {
                 dest = imageIndex[replacing.id];
             }
             console.log("dest", dest);
-            const moved = imageIndex[active.id];
-
-            // let dest;
-            // if (over.id.startsWith("row")) {
-            //     const overRow = Number(over.id.slice(3));
-            //     dest = { row: overRow, col: sortedImages[overRow].length };
-            // } else {
-            //     dest = imageIndex[over.id];
-            // }
 
             setImages((i) => {
                 const newImages = [];
+                // instead of trying to update the row and col fields in the
+                // objects in the images array directly, this just creates a new
+                // 2-dimensional array with the images in the right spots and
+                // derives the row and col values from there
                 const rows = sortedImages.map(r => [...r]);
                 rows[moved.row] = rows[moved.row].filter(i => i.id != moved.id);
                 rows[dest.row] = rows[dest.row].slice(0, dest.col)
@@ -280,16 +343,29 @@ export default function LayoutImages() {
         } else {
             console.log("image drug over other image");
             console.log(event);
-            if (imageIndex[event.active.id].row != imageIndex[event.over.id].row) {
+            if (imageIndex[event.active.id] &&
+                imageIndex[event.active.id].row != imageIndex[event.over.id].row) {
                 handleImageMove(event, true);
             }
         }
     }
-    const onResize = (newDimensions) => {
+    // TODO: this could be done through handleEdit
+    const handleResize = (newDimensions) => {
         setImages(images => [{ ...imageIndex[newDimensions.id], ...newDimensions }]
             .concat(images.filter(i => i.id != newDimensions.id))
         );
     };
+    const handleDelete = (id) => {
+        setImages(images => images.filter(i => i.id != id));
+        if (id.startsWith("blob:")) {
+            URL.revokeObjectURL(id);
+        }
+    }
+    const handleEdit = (newVersion) => {
+        const updated = images.map(i => i.id == newVersion.id ? newVersion : i);
+        setImages(updated);
+        console.log("images after edit", updated);
+    }
     const [activeID, setActiveID] = useState(null);
     return <KHEStaffLayout>
         <Layout style={{ height: "100%", overflowY: "auto" }}>
@@ -314,12 +390,13 @@ export default function LayoutImages() {
             >
                 {(grids.length || true) ? <div>
                     {sortedImages.map((row, i) =>
-                        <ImageRow key={i} index={i} images={row} onResize={onResize}
+                        <ImageRow key={i} index={i} images={row}
+                            onResize={handleResize} onDelete={handleDelete} onEdit={handleEdit}
                             addBlobURL={(url) => addImage(i, url)} />
                     )}
                 </div> : null}
                 <DragOverlay>
-                    {activeID != null ?
+                    {activeID != null && imageIndex[activeID] ?
                         <Image image={imageIndex[activeID]} css={{ opacity: 0.3 }} />
                         : null}
                 </DragOverlay>
