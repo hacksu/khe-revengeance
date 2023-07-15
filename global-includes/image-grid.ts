@@ -21,9 +21,6 @@ export class GridImage {
     @VFields.string()
     note="";
 
-    @VFields.number()
-    scale=1.0;
-
     @VFields.string({validate: Validators.uniqueOnBackend})
     gridName="";
 
@@ -32,6 +29,12 @@ export class GridImage {
 
     @VFields.int()
     col=0;
+
+    @VFields.number()
+    height=0;
+
+    @VFields.number()
+    width=0;
 
     @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
     static async getGrids() {
