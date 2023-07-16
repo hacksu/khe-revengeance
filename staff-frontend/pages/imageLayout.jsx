@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { remult } from "remult";
-import { Form, Layout, Modal, Input, Button } from "antd";
+import { Form, Layout, Modal, Input, Button, Space } from "antd";
 const { Sider } = Layout;
 import { useDropzone } from "react-dropzone";
 import { Resizable } from "re-resizable";
@@ -21,11 +21,12 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import KHEStaffLayout from "../layouts/layout";
-import { GridImage } from "../../global-includes/image-grid";
+import { GridImage, accessImagePath } from "../../global-includes/image-grid";
 import EditableMenu from "../components/editableMenuItems";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 import style from "./imageLayout.module.css";
+
 
 function debugDuplicates(images) {
     const ids = new Set();
@@ -65,7 +66,8 @@ const getImageSize = url => new Promise(resolve => {
 });
 
 function Image({ image: i, css }) {
-    return <img src={i.tempURL || i.filename} className={style.imageInRow} style={css} />;
+    return <img src={i.tempURL || accessImagePath + i.filename}
+        className={style.imageInRow} style={css} />;
 }
 
 function ImageTile({ image, onResize, onEdit, onDelete }) {
@@ -156,18 +158,20 @@ function ImageTile({ image, onResize, onEdit, onDelete }) {
                     label="Extra notes:">
                     <Input />
                 </Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-                <Button onClick={() => setEditModalOpen(false)}>
-                    Cancel
-                </Button>
+                <Space >
+                    <Button type="primary" htmlType="submit">
+                        Set
+                    </Button>
+                    <Button onClick={() => setEditModalOpen(false)}>
+                        Cancel
+                    </Button>
+                </Space>
             </Form>
         </Modal>
     </>
 }
 
-function ImageRow({ index, images, justifyContent, onResize, onEdit, onDelete, addBlobURL }) {
+function ImageRow({ index, images, justifyContent, onResize, onEdit, onDelete, addImageFile }) {
     const { getRootProps, getInputProps, open } = useDropzone({
         accept: {
             "image/png": [".png"],
@@ -179,7 +183,7 @@ function ImageRow({ index, images, justifyContent, onResize, onEdit, onDelete, a
                 if (!isImage) {
                     alert(`${file.name} is not a png or jpg file :(`);
                 } else {
-                    addBlobURL(URL.createObjectURL(file));
+                    addImageFile(file);
                 }
             }
         },
@@ -255,7 +259,10 @@ export default function LayoutImages() {
     const menuNavigation = (click) => {
         setOpenGrid(click.key);
     };
-    const addImage = async (row, url) => {
+    const files = useRef({});
+    const addImage = async (row, file) => {
+        const url = URL.createObjectURL(file);
+        files.current[url] = file;
         const dimensions = await getImageSize(url);
         setImages(i => {
             // Math.max returns -Infinity when i is empty (when there are no images yet)
@@ -366,12 +373,46 @@ export default function LayoutImages() {
         setImages(updated);
         console.log("images after edit", updated);
     }
+    const [uploadQueue, setUploadQueue] = useState([]);
+    const [justSaved, setJustSaved] = useState(false);
+    const uploadAll = async () => {
+        const uploadPromises = [];
+        let localImages = images;
+        for (const image of images) {
+            if (image.needsUploading) {
+                setUploadQueue(q => q.concat(image.tempURL));
+                const upload = new FormData();
+                upload.set("image", files.current[image.tempURL]);
+                uploadPromises.push(fetch("/newimage", {
+                    method: 'POST',
+                    body: upload
+                }).then(async (resp) => {
+                    setUploadQueue(q => q.filter(i => i != image.tempURL));
+                    URL.revokeObjectURL(image.tempURL);
+                    delete files.current[image.tempURL];
+                    const newFilename = await resp.text();
+                    localImages = localImages.map(j => j.id == image.id ? {
+                        ...j, needsUploading: false, tempURL: undefined,
+                        filename: newFilename
+                    } : j);
+                    console.log("new filename", newFilename);
+                    console.log(localImages);
+                    setImages(localImages);
+                }));
+            }
+        }
+        await Promise.all(uploadPromises);
+        console.log("local images at set grid time", localImages);
+        await GridImage.setGrid(openGrid, localImages);
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 5000);
+    }
     const [activeID, setActiveID] = useState(null);
     return <KHEStaffLayout>
         <Layout style={{ height: "100%", overflowY: "auto" }}>
             <Sider width={300} theme="light">
                 <EditableMenu title="Image Layouts" mode="inline" onClick={menuNavigation}
-                    labels={grids} selectedKeys={[openGrid || grids[0]]}
+                    labels={grids} selectedKeys={[openGrid || grids[0] || null]}
                     onAdd={(name) => { setGrids(g => g.concat(name)); setOpenGrid(name) }}
                     onEdit={(index, newGridName) => {
                         setGrids(g => g.slice(0, index)
@@ -381,26 +422,36 @@ export default function LayoutImages() {
                     }}
                 />
             </Sider>
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragStart={e => setActiveID(e.active.id)}
-                onDragEnd={handleImageMove}
-                onDragOver={handleDragOver}
-            >
-                {(grids.length || true) ? <div>
-                    {sortedImages.map((row, i) =>
-                        <ImageRow key={i} index={i} images={row}
-                            onResize={handleResize} onDelete={handleDelete} onEdit={handleEdit}
-                            addBlobURL={(url) => addImage(i, url)} />
-                    )}
+            {(openGrid.length) ? <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={e => setActiveID(e.active.id)}
+                    onDragEnd={handleImageMove}
+                    onDragOver={handleDragOver}
+                >
+                    <div>
+                        {sortedImages.map((row, i) =>
+                            <ImageRow key={i} index={i} images={row}
+                                onResize={handleResize} onDelete={handleDelete} onEdit={handleEdit}
+                                addImageFile={(file) => addImage(i, file)} />
+                        )}
+                    </div>
+                    <DragOverlay>
+                        {activeID != null && imageIndex[activeID] ?
+                            <Image image={imageIndex[activeID]} css={{ opacity: 0.3 }} />
+                            : null}
+                    </DragOverlay>
+                </DndContext>
+                {uploadQueue.length ? <div
+                    style={{ display: "flex", height: 50, alignItems: "center", gap: 10 }}>
+                    <span>Upload queue:</span>
+                    {uploadQueue.map(url => <img style={{ height: "100%" }} src={url} />)}
                 </div> : null}
-                <DragOverlay>
-                    {activeID != null && imageIndex[activeID] ?
-                        <Image image={imageIndex[activeID]} css={{ opacity: 0.3 }} />
-                        : null}
-                </DragOverlay>
-            </DndContext>
+                <Button type="primary" disabled={images.length < 1}
+                    onClick={uploadAll}>Save</Button>
+                {justSaved ? <p>Saved!</p> : null}</div>
+                : <p>Create or select an image grid using the menu on the left.</p>}
         </Layout>
     </KHEStaffLayout>
 }

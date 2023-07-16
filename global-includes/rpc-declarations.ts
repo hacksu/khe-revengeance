@@ -31,4 +31,5 @@ export class RemoteProcedures {
     contentHTML: string
   ) => Promise<MailDataRequired>;
   static sanitizeMessage: (message: TicketMessage) => TicketMessage;
+  static deleteGridImages: (paths: string[]) => Promise<void>;
 }

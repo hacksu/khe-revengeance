@@ -19,6 +19,7 @@ import { UserRole } from "../global-includes/common.ts";
 import enableMail from "./receive-mail.ts";
 import { remult } from "remult";
 import { Redirect } from "../global-includes/redirect-link.ts";
+import addUploads from "./file-upload.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -79,6 +80,7 @@ async function createServer() {
   });
   defineRemoteProcedures();
   enableMail(app, remultConfig);
+  addUploads(app);
   app.get("*", remultConfig.withRemult, async (req, res, next) => {
     const redirect = await remult.repo(Redirect)
       .findFirst({href: req.originalUrl.slice(1)});  // remove leading slash

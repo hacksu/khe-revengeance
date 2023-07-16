@@ -3,12 +3,14 @@ import { promises as fs } from "fs";
 import mailer, { ClientResponse, MailDataRequired, ResponseError } from "@sendgrid/mail";
 import * as cheerio from "cheerio";
 import { convert as convertToText } from "html-to-text";
+import { MongoDataProvider } from "remult/remult-mongo";
 
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
 import { Email } from "../global-includes/email-address.ts";
-import { MongoDataProvider } from "remult/remult-mongo";
+import { gridImagePath } from "../server/file-upload.ts";
+import path from "path";
 
 const basicSend = mailer.send;
 
@@ -290,4 +292,8 @@ export function defineRemoteProcedures() {
     }
     return { ...message, to: addresses };
   };
+
+  RemoteProcedures.deleteGridImages = async (files) => {
+    await Promise.all(files.map(f=>fs.unlink(path.resolve(gridImagePath, f))));
+  }
 }
