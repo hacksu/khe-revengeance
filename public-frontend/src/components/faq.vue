@@ -123,7 +123,7 @@ export default {
 }
 
 .info-container {
-  padding: 50px 100px;
+  padding: 50px 50px;
   border-radius: 50px;
   width: 600px;
   max-width: 90vw;

@@ -216,6 +216,7 @@ $text-color: #bdbdbd;
       border-radius: 0;
       border: none;
       transition: background-color 0.25s;
+      background-color: lightgray;
 
       &:disabled {
         background-color: white;
