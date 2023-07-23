@@ -1,7 +1,5 @@
 <template>
-    <div class="stars">
-        <div class="star" v-for="(c, i) in circles" :key="i" :style="{ ...c, ...getStyle(c) }" />
-    </div>
+    <div class="stars" />
 </template>
     
 <script>
@@ -10,18 +8,36 @@ export default {
     data() {
         return {
             scrollFactor: 0,
-            circles: [],
         };
     },
     mounted() {
         window.addEventListener('scroll', this.updateScroll);
         this.updateScroll();
-        this.circles = this.getRandomCircles();
+        const applyStyles = (styles, el) => {
+            for (const prop in styles) {
+                el.style[prop] = styles[prop];
+            }
+        };
+        const circles = this.getRandomCircles();
+        const els = [];
+        for (let i = 0; i < circles.length; ++i) {
+            const d = document.createElement("div");
+            d.classList.add("star");
+            applyStyles(circles[i], d);
+            applyStyles(this.getStyle(circles[i]), d);
+            els.push(d);
+            this.$el.appendChild(d);
+        }
+        const draw = () => {
+            for (let i = 0; i < circles.length; ++i) {
+                applyStyles(this.getStyle(circles[i]), els[i]);
+            }
+            requestAnimationFrame(draw);
+        };
+        requestAnimationFrame(draw);
     },
     unmounted() {
         window.removeEventListener('scroll', this.updateScroll);
-    },
-    computed: {
     },
     methods: {
         updateScroll() {
@@ -72,8 +88,7 @@ export default {
 };
 </script>
     
-    <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 .stars {
     perspective: 200px;
     transform-origin: 50% 50%;
