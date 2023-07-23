@@ -7,11 +7,15 @@
             <h1 style="font-size: 6.5vh !important">Where to Go</h1>
             <p>
               Kent Hack Enough is graciously hosted in the Kent State Design
-              Innovation Hub, at:
+              Innovation Hub:
             </p>
-            <p>Design Innovation Hub, Art Bldg, Kent, OH 44243</p>
+            <p id="address">
+              <a target="_blank" href="https://goo.gl/maps/gNiw3U7YgymbPA1k6">
+                Design Innovation Hub, Art Bldg, Kent, OH 44243
+              </a>
+            </p>
             <h3>Parking</h3>
-            <p>
+            <p id="parking-info">
               The easiest parking space to use will be the Student Center Visitor Lot.
               After parking, walk towards the visitor center, and head left between the buildings.
               The DI Hub is located near the Honors College.
@@ -75,6 +79,7 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
+@import "@/styles/space.scss";
 
 #directions {
   text-align: left;
@@ -82,9 +87,10 @@ export default {
   padding-right: 2rem;
 }
 
-// #map {
-//   color: white;
-// }
+#address {
+  margin: 10px 0;
+  text-decoration: underline;
+}
 
 #mapframe {
   background: linear-gradient(to bottom, #0000 0%, #000b 50px, #000b 100%);
@@ -96,11 +102,16 @@ export default {
   align-content: center;
   justify-content: space-between;
   margin: 0 auto;
+  @include dark-bg;
 }
 
 #mapIframe {
   flex: 1 1 500px;
   border-radius: 2%;
+}
+
+#parking-info {
+  margin-bottom: 30px;
 }
 
 .widget {
@@ -111,8 +122,18 @@ p {
   font-size: 20px;
 }
 
+h1 {
+  margin: 20px 0;
+}
+
+a,
+a:visited {
+  color: white;
+}
+
 h3 {
-  font-size: 22px;
+  font-size: 24px;
+  margin: 20px 0 10px;
 }
 
 .widget {

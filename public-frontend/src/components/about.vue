@@ -9,15 +9,17 @@
 
     </div> -->
     <div id="about-content-container">
-      <img style="max-width: 80vh;" src="@/assets/text_rocket.png">
-      <div id="about-text-container">
-        Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
-        space-faring event as we work together to make outstanding projects!
+      <img id="ascii-rocket" style="max-width: 80vh;" src="@/assets/text_rocket.png">
+      <div class="text-container">
+        <div id="about-text-container">
+          Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
+          space-faring event as we work together to make outstanding projects!
+        </div>
+        <div id="smaller-text-container">
+          This is our 12th KHE! Whether you're <b>totally new</b> to tech & design or a <b>seasoned pro</b>, come spend a
+          weekend making something great with us!
+        </div>
       </div>
-    </div>
-    <div id="colored-text-container">
-      This is our 12th KHE! Whether you're <b>totally new</b> to tech & design or a <b>seasoned pro</b>, come spend a
-      weekend making something great with us!
     </div>
   </div>
 </template>
@@ -59,9 +61,22 @@ export default {
   padding-left: 5vw;
   text-align: left;
 
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+
   img {
     height: 8vw;
     margin-right: 1vw;
+  }
+}
+
+#ascii-rocket {
+  @media only screen and (max-width: $lg-bp2) {
+    margin-top: -125px;
+    margin-left: 100px;
   }
 }
 
@@ -90,8 +105,9 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
 
-  @media only screen and (max-width: $lg-bp2) {
+  @media only screen and (max-width: $md-bp) {
     flex-flow: column;
+    margin: 60px 5vw;
   }
 
   // height: 100%;
@@ -101,6 +117,14 @@ export default {
   }
 
   z-index: 1;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  text-align: right;
 }
 
 #about-text-container {
@@ -116,30 +140,24 @@ export default {
     color: #FF0000;
   }
 
-  @media only screen and (max-width: $lg-bp) {
+  @media only screen and (max-width: $md-bp) {
     margin-left: 0vw;
     font-size: 20px;
     line-height: 30px;
   }
 
-  background-color: #000;
-  box-shadow: 0 0 5px 10px #000;
+  @include dark-bg;
 }
 
-#colored-text-container {
-  // background: $gold;
-  // box-shadow: 10px 10px 0px $blue;
+#smaller-text-container {
   font-size: 24px;
-  text-align: left;
-  // color: $dark-blue;
-  padding: 20px 5vw;
-  margin: 0px 15vw 100px;
+  margin-top: 100px;
 
-  @media only screen and (max-width: $lg-bp) {
+  @media only screen and (max-width: $md-bp) {
     font-size: 18px;
+    margin-top: 20px;
   }
 
-  background-color: #000;
-  box-shadow: 0 0 5px 10px #000;
+  @include dark-bg;
 }
 </style>

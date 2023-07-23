@@ -90,6 +90,9 @@ $text-color: #bdbdbd;
   margin-left: auto;
   margin-right: auto;
   color: $text-color;
+  display: inline;
+  padding: 10px;
+  @include dark-bg;
 }
 
 #apply-btn {
@@ -159,8 +162,8 @@ $text-color: #bdbdbd;
     box-sizing: border-box;
   }
 
-  background-color: #000d;
-  box-shadow: 0 0 20px 15px #000d;
+  @include dark-bg;
+
   padding: 2px;
   width: 450px;
   max-width: 80vw;

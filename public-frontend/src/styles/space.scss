@@ -30,3 +30,8 @@
     background-color: rgb(46, 75, 75);
   }
 }
+
+@mixin dark-bg {
+  background-color: #000d;
+  box-shadow: 0 0 20px 15px #000d;
+}
