@@ -18,8 +18,9 @@ export default {
             const circles = [];
             const width = window.innerWidth;
             const height = document.body.scrollHeight;
-            const baseRows = Math.round(height / 200);
-            const baseCols = Math.round(width / 200);
+            const starDensity = width > 700 ? 225 : 125;
+            const baseRows = Math.round(height / starDensity);
+            const baseCols = Math.round(width / starDensity);
             const jitter = 0.5;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             for (let x = 0; x < baseCols; x++) {
@@ -47,10 +48,16 @@ export default {
 };
 </script>
     
-<style scoped>
+<style scoped lang="scss">
 .star {
     width: 60px;
     height: 60px;
+
+    @media only screen and (max-width: 700px) {
+        width: 45px;
+        height: 45px;
+    }
+
     position: absolute;
     transform-origin: 50% 50%;
     perspective-origin: 50% 50%;
