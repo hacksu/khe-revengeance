@@ -3,20 +3,20 @@
         <div class="back"></div>
         <p>Hello! Registration is not open yet, so there is not much to do on this page. Congratulations on even finding it.
         </p>
-        <p v-if="isStaff">You are authenticated as: {{ user.externalRole }}.
+        <p v-if="isStaff">You are authenticated as: {{ user?.externalRole }}.
             Feel free to visit the <a :href="staffSite">staff site.</a>
         </p>
         <div id="options" v-if="user?.email">
             <h4>Options</h4>
             <label>
                 <input type="checkbox" v-model="receivingEmails" />
-                Send KHE 2023 updates to {{ user.email }}
+                Send KHE 2023 updates to {{ user?.email }}
             </label>
             <div class="largeButton" @click="updateOptions" style="width: 100px; margin-left: auto">
                 {{ justSaved ? 'Saved' : 'Save' }}
             </div>
         </div>
-        <a v-if="user.id" class="largeButton" style="width: 200px" href="/logout">Log Out</a>
+        <a v-if="user?.id" class="largeButton" style="width: 200px" href="/logout">Log Out</a>
     </div>
 </template>
 
@@ -26,17 +26,17 @@ import { User } from "includes/users.ts";
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted, watch } from "vue";
 import { remult } from "remult";
-const user = ref({});
+import { user, onUserLoaded } from "../state/user.js";
+
 const receivingEmails = ref(true);
 onMounted(() => {
-    User.getOwnUserInfo().then(u => {
-        if (u) {
-            user.value = u;
-            receivingEmails.value = u.receivingEmails;
-            localStorage.setItem("lastIDProvider", u.method);
+    onUserLoaded.then(() => {
+        if (user.value) {
+            receivingEmails.value = user.value.receivingEmails;
+            localStorage.setItem("lastIDProvider", user.value.method);
             // TODO: globally store login status/account to be used on other pages
         }
-    })
+    });
 });
 const justSaved = ref(false);
 const updateOptions = async () => {

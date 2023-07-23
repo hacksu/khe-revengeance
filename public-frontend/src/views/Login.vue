@@ -15,9 +15,17 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import { onUserLoaded, user } from "../state/user.js";
+
+const router = useRouter()
+onUserLoaded.then(() => {
+    if (user.value) {
+        console.log(user.value);
+        router.push("/profile");
+    }
+})
 // TODO:
-// redirect to "Profile" if user is already logged in. maybe make this a
-// navigation guard that checks a globally stored user account
 // use "lastIDProvider" from localStorage (which is set after a successful login
 // in profile.vue) to display a "you used this one last" message on the relevant
 // button
