@@ -12,7 +12,7 @@
       <img style="max-width: 80vh;" src="@/assets/text_rocket.png">
       <div id="about-text-container">
         Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
-        space-faring event as we work together to make outstanding projects!<br><br>
+        space-faring event as we work together to make outstanding projects!
       </div>
     </div>
     <div id="colored-text-container">
@@ -73,8 +73,6 @@ export default {
   padding-bottom: 20px;
   position: relative;
 
-  // color: $black-overwrite;
-  // font-family: Commando;
   #title {
     font-size: 7vmin;
     font-weight: bold;
@@ -89,6 +87,8 @@ export default {
   margin: 60px 10vw;
   margin-top: 15px;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 
   @media only screen and (max-width: $lg-bp2) {
     flex-flow: column;
@@ -101,15 +101,12 @@ export default {
   }
 
   z-index: 1;
-  justify-content: space-between;
 }
 
 #about-text-container {
-  min-height: 200px;
   font-size: 30px;
   // text-align: justify;
   text-align: right;
-  padding: 2.5vw;
   line-height: 50px;
   margin-left: 5vw;
 
@@ -124,6 +121,9 @@ export default {
     font-size: 20px;
     line-height: 30px;
   }
+
+  background-color: #000;
+  box-shadow: 0 0 5px 10px #000;
 }
 
 #colored-text-container {
@@ -138,5 +138,8 @@ export default {
   @media only screen and (max-width: $lg-bp) {
     font-size: 18px;
   }
+
+  background-color: #000;
+  box-shadow: 0 0 5px 10px #000;
 }
 </style>

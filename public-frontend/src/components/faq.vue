@@ -139,6 +139,11 @@ export default {
   max-width: 90vw;
   border: 1px solid gray;
   background-color: rgb(238, 238, 238);
+
+  @media only screen and (max-width: $md-bp) {
+    padding: 20px 10px;
+    border-radius: 20px;
+  }
 }
 
 #faq-container {
@@ -152,32 +157,8 @@ export default {
 
 }
 
-#faqTitle2 {
-  text-align: center;
-
-  /*font-size: 50px;*/
-  /*height: calc(8vw + 5vh);*/
-  img {
-    height: 100%;
-  }
-
-  @media only screen and (max-width: $md-bp) {
-    height: calc(13vw + 3vh);
-    font-size: 7.5vmin !important;
-  }
-
-  color: black;
-  background: linear-gradient(90deg, rgba(215, 93, 222, 1) 0%, rgba(245, 119, 49, 1) 100%);
-  display: inline-block;
-  font-family: Lazer84;
-  font-size: 6vmin;
-  transform: rotate(-2.5deg);
-  /* translate(0%, -20%); */
-  line-height: 7.5vmin;
-  letter-spacing: 1vmin;
-  /*filter: drop-shadow(4px 4px $blue) drop-shadow(-1.5px -1.5px $blue)*/
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+#faqTitle {
+  margin-top: 0;
 }
 
 #faq {
@@ -207,12 +188,8 @@ export default {
 }
 
 .answer {
-  margin-top: 10px;
-  border-top: 1px solid gray;
-  padding-top: 10px;
   overflow: hidden;
-  max-height: 300px;
-  padding-bottom: 50px;
+  max-height: 600px;
 }
 
 #contactLink {
@@ -233,7 +210,10 @@ export default {
   transition: max-height 0.5s;
 }
 
-.wipe-enter,
+.wipe-enter-to {
+  max-height: 600px;
+}
+
 .wipe-leave-to {
   max-height: 0px;
 }

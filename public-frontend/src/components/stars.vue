@@ -45,8 +45,8 @@ export default {
         getRandomCircles() {
             const circles = [];
             // adjust rows and cols to aspect ratio of window?
-            const baseRows = 8;
-            const baseCols = 12;
+            const baseRows = Math.round(window.innerHeight / 100);
+            const baseCols = Math.round(window.innerWidth / 100);
             const jitter = 0.5;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             for (let x = 0; x < baseCols; x++) {
@@ -97,6 +97,7 @@ export default {
     background-repeat: no-repeat;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
+    will-change: transform;
 }
 </style>
     

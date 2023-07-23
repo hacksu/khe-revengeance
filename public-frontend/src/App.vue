@@ -224,110 +224,15 @@ export default {
   display: none;
 }
 
-// @font-face {
-//   font-family: nandaka;
-//   src: url("./assets/fonts/nandaka_western.ttf");
-// }
-
-// @font-face {
-//   font-family: athelas;
-//   src: url("./assets/fonts/Athelas-Regular.ttf");
-// }
-
-// @font-face {
-//   font-family: Lazer84;
-//   src: url("./assets/fonts/Lazer84.ttf");
-// }
-
-// @font-face {
-//   font-family: abel;
-//   src: url("./assets/fonts/abel-regular.ttf");
-// }
-
-// @font-face {
-//   font-family: "Dagger Square";
-//   src: url("./assets/fonts/DAGGERSQUARE.otf");
-// }
-
 @font-face {
-  font-family: "Ropa Sans";
+  font-family: 'Roboto';
+  src: url('/Roboto-Regular-webfont.woff') format('woff');
+  font-weight: normal;
   font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local("Ropa Sans Regular"), local("RopaSans-Regular"),
-    url(https://fonts.gstatic.com/s/ropasans/v9/EYqxmaNOzLlWtsZSScy6UzNpY5I.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
-    U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-// @font-face {
-//   font-family: Commando;
-//   src: url("./assets/fonts/commando/commando.ttf");
-// }
-
-// @font-face {
-//   font-family: "HappyBirthday";
-//   src: url("./assets/fonts/happyBirthday.ttf") format("truetype");
-// }
-
-// @font-face {
-//   font-family: "CreamCake";
-//   src: url("./assets/fonts/CreamCake.ttf") format("truetype");
-// }
-
-// @font-face {
-//   font-family: "Hestina";
-//   src: url("./assets/fonts/Hestina.otf");
-// }
-
-// @font-face {
-//   font-family: "Buba-Outline";
-//   src: url("./assets/fonts/Buba-Outline.otf");
-// }
-
-// @font-face {
-//   font-family: "Buba-Shadow";
-//   src: url("./assets/fonts/Buba-Shadow.otf");
-// }
-
-// h1 {
-//   font-family: Commando;
-//   // color: $black-overwrite;
-//   font-size: 40px;
-// }
-
-// button {
-//   /*filter: brightness(100%);*/
-//   transition: transform 0.25s, filter 0.25s, background-color 0.05s, color 0.05s;
-// }
-
-// button:hover {
-//   transform: scale(1.1);
-//   /*filter: brightness(120%);*/
-// }
-
-// .banner-link {
-//   /*filter: brightness(100%);*/
-//   transition: transform 0.25s, filter 0.25s, background-color 0.05s, color 0.05s;
-// }
-
-// .banner-link:hover {
-//   transform: scale(1.1);
-//   /*filter: brightness(120%);*/
-// }
-
-// a {
-//   /*filter:brightness(100%);*/
-//   transition: transform 0.25s, filter 0.25s, text-decoration-color 0.25s;
-// }
-
-// a:hover {
-//   transform: scale(1.1);
-//   /*filter: brightness(120%);*/
-// }
-
 #app-container {
-  // font-family: abel;
+  font-family: Roboto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -426,53 +331,6 @@ export default {
     display: none !important;
   }
 }
-
-/*.gold-clear-button {
-  font-family: abel;
-  background: none;
-  color: $purple;
-  border: solid $purple 1px;
-  text-decoration: none;
-  font-size: 4vmin;
-  padding: 10px 20px;
-  transition-duration: 0.5s;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    color: $dark-blue;
-    background: $gold;
-  }
-}
-
-.gold-link {
-  color: $purple;
-  font-size: 2.5vmin;
-  display: inline-block;
-  text-decoration-color: transparent;
-}
-.gold-link:hover {
-  text-decoration-style: underline !important;
-  color: $gold;
-  text-decoration-color: $blue;
-}
-
-.fancy-button {
-  background: $gold;
-  box-shadow: 5px 5px 0px $blue;
-  cursor: pointer;
-  font-family: abel;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 10px 20px;
-  border: none;
-
-  p {
-    font-size: 14px;
-    margin: 0px;
-    font-weight: normal;
-  }
-}*/
 
 /* AUTH STYLING */
 /*  Putting this here so i don't need to duplicate in  two components*/
