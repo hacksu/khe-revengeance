@@ -1,5 +1,5 @@
 <template>
-  <div id="powered-by" style="padding-top: 10px; padding-bottom: 10px; margin-bottom: 30px">
+  <div id="powered-by">
     <p id="powered-by-text">
       POWERED BY
     </p>
@@ -33,6 +33,10 @@ export default {
 
 #powered-by {
   @include bg-secondary;
+  z-index: 100;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 30px
 }
 
 #powered-by-text {

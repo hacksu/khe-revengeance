@@ -5,9 +5,6 @@
       <br>
       <span id="subtitle">2023</span>
     </div>
-    <!-- <div class="image-box2 desktop-only">
-
-    </div> -->
     <div id="about-content-container">
       <img id="ascii-rocket" style="max-width: 80vh;" src="@/assets/text_rocket.png">
       <div class="text-container">
@@ -34,25 +31,6 @@ export default {
 @import '@/styles/global.scss';
 @import '@/styles/space.scss';
 
-.image-box2 {
-  background-position: 0vw 0vh;
-  right: 5vw;
-  position: absolute;
-  // background-image: url("../assets/SunglassesPink.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 25vh;
-  max-width: 35vmax;
-  height: 40vh;
-  max-height: 50vw;
-  z-index: -1;
-  margin-top: -15vh;
-  transform: rotate(-5deg);
-
-  @media only screen and (max-width: $lg-bp3) {
-    display: none;
-  }
-}
 
 #header-container {
   width: 70%;
@@ -66,11 +44,6 @@ export default {
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-
-  img {
-    height: 8vw;
-    margin-right: 1vw;
-  }
 }
 
 #ascii-rocket {
@@ -110,7 +83,6 @@ export default {
     margin: 60px 5vw;
   }
 
-  // height: 100%;
   img {
     width: 60vw;
     align-self: center;
@@ -129,14 +101,11 @@ export default {
 
 #about-text-container {
   font-size: 30px;
-  // text-align: justify;
   text-align: right;
   line-height: 50px;
   margin-left: 5vw;
 
-  // color: $light-blue;
   .highlight {
-    // color: $gold;
     color: #FF0000;
   }
 

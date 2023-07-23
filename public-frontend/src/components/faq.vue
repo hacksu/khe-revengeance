@@ -1,5 +1,6 @@
 <template>
   <div id="faq-container">
+    <img src="/moon.webp" id="the-moon" />
     <div id="faq">
       <div class="info-container">
         <h2 id="faqTitle">
@@ -88,40 +89,6 @@ export default {
 <style scoped lang="scss">
 @import '@/globalVars.scss';
 
-.image-box1 {
-  background-position: -0vh 0vh;
-  /*left: -25vh;
-  margin-left: 12vw;*/
-  left: 2vw;
-  position: absolute;
-  background-image: url("../assets/walkman2020.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 45vh;
-  max-width: 25vmax;
-  height: 40vh;
-  max-height: 50vw;
-  z-index: -1;
-  margin-top: 25vh;
-  transform: rotate(15deg);
-}
-
-.image-box2 {
-  background-position: 0vw 0vh;
-  right: 2vh;
-  position: absolute;
-  background-image: url("../assets/cassettes.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 45vh;
-  max-width: 45vmax;
-  height: 40vh;
-  max-height: 50vw;
-  z-index: -1;
-  margin-top: -20vh;
-  transform: rotate(180deg);
-}
-
 .info-container {
   padding: 50px 50px;
   border-radius: 50px;
@@ -139,12 +106,26 @@ export default {
 #faq-container {
   margin-top: 0px;
   padding-top: 20px;
-  /*background: $sand2;*/
-  /*background: rgb(0,82,224);
-  background: linear-gradient(90deg, rgba(0,82,224,1) 0%, rgba(255,255,255,1) 100%);*/
   min-height: 100vh;
-  z-index: 1000;
+  z-index: 1;
+  position: relative;
+}
 
+#the-moon {
+  position: absolute;
+  width: 60vw;
+  height: auto;
+  top: -100px;
+
+  @media only screen and (max-width: $md-bp) {
+    top: -75px;
+    width: auto;
+    height: 100%;
+  }
+
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
 }
 
 #faqTitle {
