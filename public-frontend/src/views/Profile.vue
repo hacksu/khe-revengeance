@@ -1,6 +1,5 @@
 <template>
     <div id="profile" class="widget">
-        <div class="back"></div>
         <p>Hello! Registration is not open yet, so there is not much to do on this page. Congratulations on even finding it.
         </p>
         <p v-if="isStaff">You are authenticated as: {{ user?.externalRole }}.
@@ -21,20 +20,18 @@
 </template>
 
 <script setup>
-// get user profile; save in state. if admin/staff, that should be displayed and a link to the staff site should appear.
 import { User } from "includes/users.ts";
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted, watch } from "vue";
 import { remult } from "remult";
-import { user, onUserLoaded } from "../state/user.js";
+import { user, userLoadedPromise } from "../state/user.js";
 
 const receivingEmails = ref(true);
 onMounted(() => {
-    onUserLoaded.then(() => {
+    userLoadedPromise.then(() => {
         if (user.value) {
             receivingEmails.value = user.value.receivingEmails;
             localStorage.setItem("lastIDProvider", user.value.method);
-            // TODO: globally store login status/account to be used on other pages
         }
     });
 });

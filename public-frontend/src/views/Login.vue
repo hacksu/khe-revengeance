@@ -1,6 +1,5 @@
 <template>
     <div id="login" class="widget">
-        <div class="back"></div>
         <h2>Log in and/or create an account</h2>
         <a class="loginBar largeButton" href="/login/github">
             <img src="@/assets/auth_assets/github-mark-white.svg" />
@@ -16,12 +15,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { onUserLoaded, user } from "../state/user.js";
+import { userLoadedPromise, user } from "../state/user.js";
 
 const router = useRouter()
-onUserLoaded.then(() => {
+userLoadedPromise.then(() => {
     if (user.value) {
-        console.log(user.value);
         router.push("/profile");
     }
 })
