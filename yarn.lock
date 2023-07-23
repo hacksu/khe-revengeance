@@ -266,6 +266,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@mdi/font@^7.2.96":
+  version "7.2.96"
+  resolved "https://registry.yarnpkg.com/@mdi/font/-/font-7.2.96.tgz#af800d9fe3b424f85ad45e9baa755bd003ab4986"
+  integrity sha512-e//lmkmpFUMZKhmCY9zdjRe4zNXfbOIJnn6xveHbaV2kSw5aJ5dLXUxcRt1Gxfi7ZYpFLUWlkG2MGSFAiqAu7w==
+
 "@next/env@13.2.4":
   version "13.2.4"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.2.4.tgz#8b763700262b2445140a44a8c8d088cef676dbae"
@@ -3939,6 +3944,11 @@ vue@^3.2.47:
     "@vue/runtime-dom" "3.2.47"
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
+
+vuetify@^3.3.2:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.3.9.tgz#31c097738ef5d13bcf3ab329536a2a298d382d9e"
+  integrity sha512-Oh7iLYvhd99MyVqH8nrK5rai7t2R9ivuiZAZKE0sfP4x0MSYthXRPBqXi4Vy98R7MggNFaoMBDJ/hPscuRxnQA==
 
 w3c-xmlserializer@^4.0.0:
   version "4.0.0"

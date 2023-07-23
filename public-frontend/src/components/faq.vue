@@ -5,17 +5,17 @@
         <h2 id="faqTitle">
           FREQUENTLY ASKED QUESTIONS
         </h2>
-        <div class="faqModule" v-for="faq in faqs" @click="expandFAQ(faq.id)">
-          <div class="question">
-            <span v-if="expanded != faq.id">▶ &nbsp;</span>
-            <span v-if="expanded == faq.id">▼ &nbsp;</span>
-            <span class="qText">{{ faq.question }}</span>
-          </div>
-          <transition name="wipe">
-            <div class="answer" v-html="faq.answer" v-if="expanded == faq.id"></div>
-          </transition>
-        </div>
-        <br>
+
+        <v-expansion-panels variant="accordion">
+          <v-expansion-panel v-for="faq, i in faqs" :key="i" :title="faq.question">
+            <v-expansion-panel-text>
+              <div class="faq-answer">
+                <p v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
+              </div>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
         <p class="faqModule">
           Still have questions?
           <router-link to="contact" id="contactLink">Let us know!</router-link>
@@ -30,14 +30,13 @@ export default {
   name: "Main",
   data() {
     return {
-      expanded: -1,
       faqs: [
         {
           id: 0,
           question: "What is a hackathon?",
           answer:
             `A hackathon is a weekend-long event to meet smart creative people, make connections, learn, and build something awesome! 
-            <br><br> 
+
             Attendees meet on Saturday, make a team, and have 24 hours to build a tech-related project. 
             There will be optional lessons and talks, sponsors looking to hire smart, motivated people, and tons of free stuff!`
         },
@@ -54,7 +53,7 @@ export default {
           question: "Sounds cool, but how much does it cost?",
           answer:
             `$0.00!
-            <br><br>
+            
             Thanks to the generosity of our sponsors, we're able to put on events like this for <i>free</i>.  
             We even pay for your meals for the weekend!  
             Make sure to thank our sponsors - we couldn't do it without them!`
@@ -65,7 +64,7 @@ export default {
           answer:
             `Bring a laptop/something to hack on, a change of clothes, deodorant, a blanket/pillow, toiletries, 
             and anything else you think you might use to complete your project.
-            <br><br>
+            
             We'll have an MLH hardware lab, which means we'll also have cool hardware available to rent!`
         },
         {
@@ -83,15 +82,6 @@ export default {
       ]
     };
   },
-  methods: {
-    expandFAQ(id) {
-      if (this.expanded === id) {
-        this.expanded = -1;
-      } else {
-        this.expanded = id;
-      }
-    }
-  }
 };
 </script>
 
@@ -159,6 +149,7 @@ export default {
 
 #faqTitle {
   margin-top: 0;
+  margin-bottom: 40px;
 }
 
 #faq {
@@ -167,8 +158,6 @@ export default {
     radial-gradient(var(--dark-orange) 15%, transparent 16%);
   background-size: 60px 60px;
   background-position: 0 0, 30px 30px;
-  font-size: 20px;
-  line-height: 30px;
   color: black;
   display: flex;
   justify-content: center;
@@ -177,44 +166,19 @@ export default {
 .faqModule {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
   padding: 10px 20px 10px 20px;
-  margin: 5px;
+  margin-top: 20px;
   background: white;
 }
 
-.question {
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold;
-}
+.faq-answer {
+  margin: 10px;
 
-.answer {
-  overflow: hidden;
-  max-height: 600px;
+  & p {
+    margin: 5px 0;
+  }
 }
 
 #contactLink {
   color: black;
-}
-
-.qText {
-  transition-duration: 0.4s;
-}
-
-.qText:hover {
-  letter-spacing: 1px;
-}
-
-/*  VUE TRANSITIONS*/
-.wipe-enter-active,
-.wipe-leave-active {
-  transition: max-height 0.5s;
-}
-
-.wipe-enter-to {
-  max-height: 600px;
-}
-
-.wipe-leave-to {
-  max-height: 0px;
 }
 </style>
