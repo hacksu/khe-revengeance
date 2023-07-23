@@ -40,9 +40,13 @@ export default {
             const scrollDampeningFactor = 3;
             let y = -window.scrollY / scrollDampeningFactor;
             let finalY = c.y + y;
+            // this assumes that adding window.outerHeight over and over won't
+            // just land a star in the view of the window, like if it would if
+            // it went from -105 to window.outerHeight-105. why does this work
+            // at all?? there are still jumps at least on mobile
             while (finalY < -100) {
-                y += window.innerHeight;
-                finalY += window.innerHeight;
+                y += window.outerHeight;
+                finalY += window.outerHeight;
             }
             return {
                 transform: `translate3d(\
@@ -55,14 +59,14 @@ export default {
         getRandomCircles() {
             const circles = [];
             // adjust rows and cols to aspect ratio of window?
-            const baseRows = Math.round(window.innerHeight / 100);
+            const baseRows = Math.round(window.outerHeight / 100);
             const baseCols = Math.round(window.innerWidth / 100);
             const jitter = 0.5;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             for (let x = 0; x < baseCols; x++) {
                 for (let y = 0; y < baseRows; y++) {
                     const left = (x + getJitter() * 2) * (window.innerWidth / baseCols);
-                    const top = (y + getJitter()) * (window.innerHeight / baseRows);
+                    const top = (y + getJitter()) * (window.outerHeight / baseRows);
                     const z = Math.random();
                     circles.push(
                         {
