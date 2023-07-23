@@ -226,7 +226,7 @@ html {
 }
 
 body {
-  perspective: 200px;
+  perspective: 150px;
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
   background-color: black;

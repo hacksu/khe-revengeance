@@ -1,6 +1,10 @@
 <template>
   <div id="faq-container">
-    <img src="/moon.webp" id="the-moon" />
+    <picture>
+      <source type="image/avif" srcset="moon.avif">
+      <source type="image/webp" srcset="moon.webp">
+      <img src="moon.png" id="the-moon">
+    </picture>
     <div id="faq">
       <div class="info-container">
         <h2 id="faqTitle">
@@ -117,10 +121,10 @@ export default {
   height: auto;
   top: -100px;
 
-  @media only screen and (max-width: $md-bp) {
+  @media only screen and (max-width: 1250px) {
     top: -75px;
     width: auto;
-    height: 100%;
+    height: 110%;
   }
 
   left: 50%;

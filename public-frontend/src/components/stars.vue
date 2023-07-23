@@ -49,13 +49,13 @@ export default {
     
 <style scoped>
 .star {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     transform-origin: 50% 50%;
     perspective-origin: 50% 50%;
     background-image: url("/one-star.png");
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
