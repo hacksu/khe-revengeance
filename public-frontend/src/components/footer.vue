@@ -1,5 +1,5 @@
 <template>
-  <div id="powered-by" style="padding-top: 10px; padding-bottom: 10px">
+  <div id="powered-by" style="padding-top: 10px; padding-bottom: 10px; margin-bottom: 30px">
     <p id="powered-by-text">
       POWERED BY
     </p>
@@ -45,7 +45,6 @@ export default {
 }
 
 #powered-by-hacksu {
-  float: left;
   width: 50%;
   height: 90px;
 }
