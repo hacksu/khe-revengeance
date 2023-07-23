@@ -1,9 +1,9 @@
 <template>
   <div id="faq-container">
     <picture>
-      <source type="image/avif" srcset="moon.avif">
-      <source type="image/webp" srcset="moon.webp">
-      <img src="moon.png" id="the-moon">
+      <source type="image/avif" srcset="/moon.avif">
+      <source type="image/webp" srcset="/moon.webp">
+      <img src="/moon.png" id="the-moon">
     </picture>
     <div id="faq">
       <div class="info-container">
