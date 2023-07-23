@@ -59,7 +59,7 @@ export default {
                             left: left + "px",
                             top: top + "px",
                             _y: top,
-                            opacity: 1 - z,
+                            opacity: Math.sin((1 - z) * (Math.PI / 2)),
                             distanceAway: z,
                         }
                     );
