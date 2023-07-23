@@ -1,6 +1,10 @@
 import { promises as fs } from "fs";
 
-import mailer, { ClientResponse, MailDataRequired, ResponseError } from "@sendgrid/mail";
+import mailer, {
+  ClientResponse,
+  MailDataRequired,
+  ResponseError,
+} from "@sendgrid/mail";
 import * as cheerio from "cheerio";
 import { convert as convertToText } from "html-to-text";
 import { MongoDataProvider } from "remult/remult-mongo";
@@ -27,26 +31,32 @@ mailer.send = async function safeSend(message: MailDataRequired) {
     };
   }
 
-  // no mail.
-  return [{statusCode: 0, body: {}, headers: {}}, {}];
+  // to halt all mail:
+  // return [{statusCode: 0, body: {}, headers: {}}, {}];
 
-    return new Promise(resolve => basicSend.call(mailer, message, undefined,
+  return new Promise((resolve) =>
+    basicSend.call(
+      mailer,
+      message,
+      undefined,
       (err: Error | ResponseError, result: [ClientResponse, {}]) => {
-        if (err){
+        if (err) {
           console.error("could not send email!");
           console.error("attempted to send:");
           console.error(message);
           console.error("got error:");
           console.log(err);
-          console.error("result:")
+          console.error("result:");
           console.error(result);
-          if ((err as any).response?.body){
+          if ((err as any).response?.body) {
             console.error("body:");
             console.error(JSON.stringify((err as any).response.body, null, 4));
           }
         }
         resolve(result);
-    }));
+      }
+    )
+  );
 };
 
 function textToHTML(text: string) {
@@ -62,7 +72,6 @@ function textToHTML(text: string) {
     "</p>"
   );
 }
-
 
 // based on https://making.close.com/posts/rendering-untrusted-html-email-safely
 function addSafeHead(document: cheerio.CheerioAPI) {
@@ -133,17 +142,20 @@ export function defineRemoteProcedures() {
     newTicket
   ) {
     const intro =
-      (newTicket ? "<p>A new support ticket was just created.</p>" : 
-        "<p>A new email was received regarding a support ticket.</p>") +
-        `<p>
+      (newTicket
+        ? "<p>A new support ticket was just created.</p>"
+        : "<p>A new email was received regarding a support ticket.</p>") +
+      `<p>
           <strong>
             <a href="${config.staffSite}/tickets?ticket=${ticket.id}">
               View thread and reply
             </a>
           </strong>
-        </p>`+
+        </p>` +
       `<p><strong>From:</strong> "${message.theirName}" &lt;${message.theirEmail}&gt;</p>` +
-      (newTicket ? "" : `<p><strong>Original ticket subject:</strong> ${ticket.originalSubject}</p>`) +
+      (newTicket
+        ? ""
+        : `<p><strong>Original ticket subject:</strong> ${ticket.originalSubject}</p>`) +
       `<p><strong>New message's subject:</strong> ${message.subject}</p>
       <p><strong>Message body:</strong><br />`;
 
@@ -172,7 +184,11 @@ export function defineRemoteProcedures() {
     );
   };
 
-  RemoteProcedures.sendSupportReply = async function (ticket, message, prevMessageID) {
+  RemoteProcedures.sendSupportReply = async function (
+    ticket,
+    message,
+    prevMessageID
+  ) {
     const msg: MailDataRequired = {
       to: {
         name: message.theirName,
@@ -186,10 +202,12 @@ export function defineRemoteProcedures() {
         name: message.ourName,
         email: `ticket+${ticket.id}@${config.supportEmailHost}`,
       },
-      headers: prevMessageID ? {
-        "In-Reply-To": `<${prevMessageID}>`,
-        References: `<${prevMessageID}>`
-      } : {},
+      headers: prevMessageID
+        ? {
+            "In-Reply-To": `<${prevMessageID}>`,
+            References: `<${prevMessageID}>`,
+          }
+        : {},
       subject: message.subject,
       text: message.text,
       html: message.html,
@@ -200,7 +218,7 @@ export function defineRemoteProcedures() {
       },
     };
     const sendResult = await mailer.send(msg);
-    if (sendResult?.length){
+    if (sendResult?.length) {
       console.log(
         `sent email through sendgrid at ${new Date()} for support ticket ` +
           `${ticket.id}, received status code:`,
@@ -294,6 +312,8 @@ export function defineRemoteProcedures() {
   };
 
   RemoteProcedures.deleteGridImages = async (files) => {
-    await Promise.all(files.map(f=>fs.unlink(path.resolve(gridImagePath, f))));
-  }
+    await Promise.all(
+      files.map((f) => fs.unlink(path.resolve(gridImagePath, f)))
+    );
+  };
 }
