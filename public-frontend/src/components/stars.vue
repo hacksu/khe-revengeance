@@ -1,119 +1,56 @@
 <template>
-    <div class="stars">
-        <div ref="height" id="heightref" />
-    </div>
+    <div v-for="c, i in circles" :key="i" class="star" :style="c.style" />
 </template>
     
 <script>
-let reqID = 0;
-let measuredHeight = 0;
 export default {
     name: 'Stars',
-    mounted() {
-        measuredHeight = this.$refs.height.offsetHeight;
-        const applyStyles = (styles, el) => {
-            for (const prop in styles) {
-                el.style[prop] = styles[prop];
-            }
-        };
-        const circles = this.getRandomCircles();
-        const els = [];
-        for (let i = 0; i < circles.length; ++i) {
-            const d = document.createElement("div");
-            d.classList.add("star");
-            applyStyles(circles[i].style, d);
-            applyStyles(this.getStyle(circles[i]), d);
-            els.push(d);
-            this.$el.appendChild(d);
+    data() {
+        return {
+            circles: []
         }
-        const draw = () => {
-            for (let i = 0; i < circles.length; ++i) {
-                applyStyles(this.getStyle(circles[i]), els[i]);
-            }
-            reqID = requestAnimationFrame(draw);
-        };
-        reqID = requestAnimationFrame(draw);
     },
-    unmounted() {
-        if (reqID) {
-            cancelAnimationFrame(reqID);
-        }
+    mounted() {
+        this.circles = this.getRandomCircles();
     },
     methods: {
-        getStyle(c) {
-            const scrollDampeningFactor = 3;
-            let y = -window.scrollY / scrollDampeningFactor;
-            let finalY = c.y + y;
-            // this assumes that adding measuredHeight over and over won't
-            // just land a star in the view of the window, like if it would if
-            // it went from -105 to measuredHeight-105. why does this work
-            // at all?? there are still jumps at least on mobile
-            while (finalY < -100) {
-                y += measuredHeight;
-                finalY += measuredHeight;
-            }
-            return {
-                transform: `translate3d(\
-                        0,\
-                        ${y}px,\
-                        ${(1 - c.distanceAway) * 150}px\
-                    )`,
-            };
-        },
         getRandomCircles() {
             const circles = [];
-            // adjust rows and cols to aspect ratio of window?
-            const baseRows = Math.round(measuredHeight / 100);
-            const baseCols = Math.round(window.innerWidth / 100);
+            const width = window.innerWidth;
+            const height = document.body.scrollHeight;
+            const baseRows = Math.round(height / 200);
+            const baseCols = Math.round(width / 200);
             const jitter = 0.5;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             for (let x = 0; x < baseCols; x++) {
                 for (let y = 0; y < baseRows; y++) {
-                    const left = (x + getJitter() * 2) * (window.innerWidth / baseCols);
-                    const top = (y + getJitter()) * (measuredHeight / baseRows);
+                    const left = (x + getJitter() * 2) * (width / baseCols);
+                    const top = (y + getJitter()) * (height / baseRows);
                     const z = Math.random();
                     circles.push(
                         {
                             style: {
                                 left: left + "px",
                                 top: top + "px",
-                                opacity: Math.sin((1 - z) * (Math.PI / 2))
+                                opacity: Math.sin((1 - z) * (Math.PI / 2)),
+                                transform: `translateZ(${(1 - z) * 150 - 150}px)`
                             },
-                            y: top,
-                            distanceAway: z,
+                            z
                         }
                     );
                 }
             }
-            circles.sort((c1, c2) => c2.distanceAway - c1.distanceAway);
+            circles.sort((c1, c2) => c2.z - c1.z);
             return circles;
         },
     },
 };
 </script>
     
-<style>
-#heightref {
-    position: fixed;
-    visibility: hidden;
-    height: 100vh;
-}
-
-.stars {
-    perspective: 200px;
-    transform-origin: 50% 50%;
-    perspective-origin: 50% 50%;
-    background-color: black;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    z-index: -1;
-}
-
+<style scoped>
 .star {
-    width: 25px;
-    height: 25px;
+    width: 50px;
+    height: 50px;
     position: absolute;
     transform-origin: 50% 50%;
     perspective-origin: 50% 50%;

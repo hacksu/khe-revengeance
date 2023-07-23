@@ -220,6 +220,21 @@ export default {
 @import "@/globalVars.scss";
 @import "@/styles/global.scss";
 
+html {
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+body {
+  perspective: 200px;
+  transform-origin: 50% 50%;
+  perspective-origin: 50% 50%;
+  background-color: black;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100vh;
+}
+
 #hamburgMenu {
   display: none;
 }
@@ -242,6 +257,11 @@ export default {
   top: 0px;
   left: 0px;
   min-height: 100vh;
+  transform-style: preserve-3d;
+}
+
+#app {
+  transform-style: preserve-3d;
 }
 
 #banner {
