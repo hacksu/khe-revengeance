@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
+import vuetify from 'vite-plugin-vuetify'
 import { fileURLToPath } from "url";
 
 const localRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)));
@@ -23,9 +24,12 @@ export default defineConfig({
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
-  plugins: [vue()],
+  plugins: [vue(), vuetify({ styles: { configFile: 'src/styles/vuetify-settings.scss' } })],
   build: { outDir: "dist" },
   ssgOptions: {
     entry: "src/main.js",
+  },
+  ssr: {
+    noExternal: ["vuetify"],
   },
 });

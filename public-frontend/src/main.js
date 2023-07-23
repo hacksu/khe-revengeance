@@ -3,20 +3,15 @@ import App from "./App.vue";
 import { routerConfig } from "./router";
 
 // Vuetify
-import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 export const createApp = ViteSSG(
   App,
   routerConfig,
   ({ app, router, routes, isClient, initialState }) => {
     const vuetify = createVuetify({
-      components,
-      directives,
       ssr: !isClient,
       icons: {
         defaultSet: 'mdi',
@@ -25,7 +20,7 @@ export const createApp = ViteSSG(
           mdi,
         },
       },
-    })
+    });
     app.use(vuetify);
   }
 );

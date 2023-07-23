@@ -51,6 +51,7 @@
     "sass": "^1.60.0",
     "serve-static": "^1.15.0",
     "tsx": "^3.12.6",
+    "vite-plugin-vuetify": "^1.0.2",
     "vite-ssg": "^0.22.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
