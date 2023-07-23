@@ -3,16 +3,10 @@
 </template>
     
 <script>
+let reqID = 0;
 export default {
     name: 'Stars',
-    data() {
-        return {
-            scrollFactor: 0,
-        };
-    },
     mounted() {
-        window.addEventListener('scroll', this.updateScroll);
-        this.updateScroll();
         const applyStyles = (styles, el) => {
             for (const prop in styles) {
                 el.style[prop] = styles[prop];
@@ -23,7 +17,7 @@ export default {
         for (let i = 0; i < circles.length; ++i) {
             const d = document.createElement("div");
             d.classList.add("star");
-            applyStyles(circles[i], d);
+            applyStyles(circles[i].style, d);
             applyStyles(this.getStyle(circles[i]), d);
             els.push(d);
             this.$el.appendChild(d);
@@ -32,20 +26,20 @@ export default {
             for (let i = 0; i < circles.length; ++i) {
                 applyStyles(this.getStyle(circles[i]), els[i]);
             }
-            requestAnimationFrame(draw);
+            reqID = requestAnimationFrame(draw);
         };
-        requestAnimationFrame(draw);
+        reqID = requestAnimationFrame(draw);
     },
     unmounted() {
-        window.removeEventListener('scroll', this.updateScroll);
+        if (reqID) {
+            cancelAnimationFrame(reqID);
+        }
     },
     methods: {
-        updateScroll() {
-            this.scrollFactor = window.scrollY / 3;
-        },
         getStyle(c) {
-            let y = -this.scrollFactor;
-            let finalY = c._y - this.scrollFactor;
+            const scrollDampeningFactor = 3;
+            let y = -window.scrollY / scrollDampeningFactor;
+            let finalY = c.y + y;
             while (finalY < -100) {
                 y += window.innerHeight;
                 finalY += window.innerHeight;
@@ -72,10 +66,12 @@ export default {
                     const z = Math.random();
                     circles.push(
                         {
-                            left: left + "px",
-                            top: top + "px",
-                            _y: top,
-                            opacity: Math.sin((1 - z) * (Math.PI / 2)),
+                            style: {
+                                left: left + "px",
+                                top: top + "px",
+                                opacity: Math.sin((1 - z) * (Math.PI / 2))
+                            },
+                            y: top,
                             distanceAway: z,
                         }
                     );
