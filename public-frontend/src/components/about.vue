@@ -19,7 +19,6 @@
       This is our 12th KHE! Whether you're <b>totally new</b> to tech & design or a <b>seasoned pro</b>, come spend a
       weekend making something great with us!
     </div>
-    <div class="back"></div>
   </div>
 </template>
 
@@ -67,7 +66,6 @@ export default {
 }
 
 #about-container {
-  @include bg-flashy;
   min-height: 100vh;
   overflow: hidden;
   padding: 0px;

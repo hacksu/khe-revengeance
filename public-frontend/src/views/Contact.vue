@@ -1,6 +1,5 @@
 <template>
   <div id="contact" class="widget">
-    <div class="back"></div>
     <div v-if="!submitted">
       <h1 id="contactTitle">Contact</h1>
       <p style="opacity: 0.5; margin-bottom: 40px;">

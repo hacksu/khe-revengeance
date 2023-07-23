@@ -1,20 +1,10 @@
 <template>
   <div id="landing-container" class="landing">
-    <div class="back"></div>
     <div class="hacksu-box box1" />
     <div class="hacksu-box box2" />
 
-    <!-- <a v-if="$parent.$parent.showMLH" id="mlh-trust-badge"
-      href="https://mlh.io/seasons/2021/events?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2021-season&utm_content=white"
-      target="_blank">
-      <img id="mlh-banner" src="https://s3.amazonaws.com/logged-assets/trust-badge/2023/mlh-trust-badge-2023-white.svg"
-        alt="Major League Hacking 2023 Hackathon Season" />
-    </a> -->
-
     <div id="logo-container">
       <img src="/2023_Logo_Resized.png" id="short-logo" />
-      <!-- <br /> -->
-      <!-- <h2 class="kenthackenough">Kent Hack Enough</h2> -->
     </div>
 
     <div id="landing-content-container">
@@ -31,51 +21,6 @@
         </div>
         <span v-if="updatesEmailError" style="font-size: small; color: red">{{ updatesEmailError }}</span>
       </div>
-      <!-- <span v-if="$parent.$parent.showRegister">
-        <router-link tag="button" :to="{ name: 'register' }" id="apply-btn" class="register-now"
-          v-if="$parent.$parent.user._id == ''">
-          Register Now!
-        </router-link>
-        <router-link tag="button" :to="{ name: 'apply' }" id="apply-btn" class="apply-now"
-          v-else-if="$parent.$parent.user._id == ''">
-          Apply now!
-        </router-link>
-        <p v-if="$parent.$parent.showSchedule" style="margin: 20px;">
-          <a id="schedule-link" style="
-              display: inline-block;
-              cursor: pointer;
-              text-decoration: none;
-            " href="/schedule">CHECK OUT THE SCHEDULE</a>
-        </p>
-        <p hidden title="The Event has already occured" style="
-            font-size: 5vh;
-            max-width: 800px;
-            width: 80vw;
-            margin-left: auto;
-            margin-right: auto;
-          ">
-          REGISTRATION FOR KENT HACK ENOUGH 2022 IS CLOSED
-        </p>
-        <div v-if="$parent.$parent.showMLH" style="font-size: initial !important; margin-top: 20px">
-          <a class="mlh-conduct" href="https://mlh.io/code-of-conduct/" target="_blank" style="
-              font-weight: bold;
-              opacity: 0.75;
-              font-size: 2vh;
-              text-decoration: none;
-            ">MLH Code of Conduct</a>
-        </div>
-      </span> -->
-      <span v-if="!$parent.$parent.showRegister && $parent.$parent.registrationOpens">
-        <p title="Registration has not yet opened!" class="registration-opens">
-          Registration opens {{ $parent.$parent.registrationOpens }}
-        </p>
-      </span>
-      <!-- <a class="desktop-only gold-link" v-bind:style="{ 'font-size': ((!$parent.$parent.showRegister) ? '3vh!important' : '2.5vmin') + '', 'margin-top': ((!$parent.$parent.showRegister) ? '0px' : '0px') }" href="/sponsor" target="_blank">
-        <span style="font-family: 'Dagger Square'!important; color: white;">Interested in Sponsoring?</span>
-      </a>
-      <a class="mobile-only gold-link" v-bind:style="{ 'font-size': ((!$parent.$parent.showRegister) ? '6vmin!important' : '5.5vmin') + '', 'margin-top': ((!$parent.$parent.showRegister) ? '0px' : '0px') }" href="/sponsor" target="_blank">
-        <span style="font-family: 'Dagger Square'!important; color: white;">Interested in Sponsoring?</span>
-      </a> -->
     </div>
   </div>
 </template>

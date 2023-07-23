@@ -1,7 +1,5 @@
 <template>
   <div id="sponsors" style="margin-top: -53px; min-height: calc(100vh - 80px - 50px)">
-    <div class="back" style="">
-    </div>
 
     <img src="/Logo.svg" style="margin-top: 4vh" />
     <h1 class="sponsorship-title">SPONSORSHIP</h1>
@@ -310,7 +308,6 @@ export default {
 //   width: 100vw;
 // }
 #sponsors .back {
-  @include bg-flashy;
   height: 100vh;
   width: 100%;
   position: fixed;

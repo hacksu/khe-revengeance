@@ -1,5 +1,6 @@
 <template>
   <div id="app-container">
+    <Stars />
     <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
         <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
@@ -49,10 +50,11 @@
 <script>
 // import scrollto from "vue-scrollto";
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
+import Stars from "./components/stars.vue";
 
 export default {
   name: "app",
-  components: {},
+  components: { Stars },
   data() {
     return {
       // showRegister: (window.location.href.indexOf("khe.io") >= 0) ? false : true,

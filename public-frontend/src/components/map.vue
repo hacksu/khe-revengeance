@@ -87,9 +87,7 @@ export default {
 // }
 
 #mapframe {
-  // background: rgb(215,93,222);
-  // background: linear-gradient(90deg, rgba(215,93,222,1) 0%, rgba(245,119,49,1) 100%);
-  @include bg-flashy;
+  background: linear-gradient(to bottom, #0000 0%, #000b 50px, #000b 100%);
 }
 
 .info-container {

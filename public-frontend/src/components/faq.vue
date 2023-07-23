@@ -5,16 +5,6 @@
         <h2 id="faqTitle">
           FREQUENTLY ASKED QUESTIONS
         </h2>
-
-        <!-- <div class="image-box1 desktop-only">
-
-        </div> -->
-
-        <!-- <div class="image-box2 desktop-only">
-
-        </div> -->
-
-        <!--Outputs faq objects dynamically, as defined by the 'faqs' object in the data.-->
         <div class="faqModule" v-for="faq in faqs" @click="expandFAQ(faq.id)">
           <div class="question">
             <span v-if="expanded != faq.id">▶ &nbsp;</span>
@@ -31,8 +21,6 @@
           <router-link to="contact" id="contactLink">Let us know!</router-link>
         </p>
       </div>
-
-      <div class="back"></div>
     </div>
   </div>
 </template>
@@ -144,6 +132,15 @@ export default {
   transform: rotate(180deg);
 }
 
+.info-container {
+  padding: 50px 100px;
+  border-radius: 50px;
+  width: 600px;
+  max-width: 90vw;
+  border: 1px solid gray;
+  background-color: rgb(238, 238, 238);
+}
+
 #faq-container {
   margin-top: 0px;
   padding-top: 20px;
@@ -151,18 +148,8 @@ export default {
   /*background: rgb(0,82,224);
   background: linear-gradient(90deg, rgba(0,82,224,1) 0%, rgba(255,255,255,1) 100%);*/
   min-height: 100vh;
+  z-index: 1000;
 
-}
-
-#faq-container .back {
-  background: $sand2;
-  display: inline-block;
-  top: 0px;
-  left: 0px;
-  height: 100%;
-  width: 100%;
-  z-index: -2;
-  position: absolute;
 }
 
 #faqTitle2 {
@@ -202,13 +189,8 @@ export default {
   font-size: 20px;
   line-height: 30px;
   color: black;
-  width: 50vw;
-  margin-left: 25vw;
-
-  @media only screen and (max-width: $md-bp) {
-    width: 90vw;
-    margin-left: 5vw;
-  }
+  display: flex;
+  justify-content: center;
 }
 
 .faqModule {
