@@ -133,10 +133,13 @@ $text-color: #bdbdbd;
 }
 
 .rocketing {
-  animation-name: rocket-away;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  @media (prefers-reduced-motion: no-preference) {
+    animation-name: rocket-away;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
   display: inline-block;
 }
 

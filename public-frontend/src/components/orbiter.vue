@@ -56,11 +56,14 @@ export default {
     width: 120%;
     left: 0;
     top: 0;
-    animation-name: spin;
-    animation-duration: 30s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    z-index: -1;
+
+    @media (prefers-reduced-motion: no-preference) {
+        animation-name: spin;
+        animation-duration: 30s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        z-index: -1;
+    }
 }
 
 .orbiter {
@@ -69,10 +72,13 @@ export default {
     top: 50%;
     width: 70px;
     height: auto;
-    animation-name: spin;
-    animation-duration: 30s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    animation-direction: reverse;
+
+    @media (prefers-reduced-motion: no-preference) {
+        animation-name: spin;
+        animation-duration: 30s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-direction: reverse;
+    }
 }
 </style>

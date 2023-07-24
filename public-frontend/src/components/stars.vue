@@ -72,7 +72,6 @@ export default {
     background-repeat: no-repeat;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
-    will-change: transform;
 }
 </style>
     
