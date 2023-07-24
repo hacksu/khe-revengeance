@@ -75,7 +75,7 @@ export default {
 
     @media (prefers-reduced-motion: no-preference) {
         animation-name: spin;
-        animation-duration: 30s;
+        animation-duration: 25s;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         animation-direction: reverse;

@@ -87,6 +87,7 @@ export default {
     object-fit: cover;
     object-position: 50% top;
     margin-bottom: -20px;
+    filter: brightness(1.5);
 
     @media screen and (max-width: $md-bp) {
       height: 175px;
