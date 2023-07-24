@@ -18,16 +18,20 @@ export default {
             const circles = [];
             const width = window.innerWidth;
             const height = document.body.scrollHeight;
-            const starDensity = width > 700 ? 225 : 125;
+            const fullWidth = width > 700;
+            const starDensity = fullWidth ? 225 : 125;
             const baseRows = Math.round(height / starDensity);
             const baseCols = Math.round(width / starDensity);
-            const jitter = 0.5;
+            const jitter = 0.25;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             // TODO: widen range for x and y coordinates in accordance with z being higher or lower
             // also: there are never any stars all the way on the right?? off by one error?
-            for (let x = 0; x < baseCols; x++) {
+            // actually: i think it looks better when the stars are visibly
+            // higher-density at the horizontal center and fall off towards the
+            // edges, at least in full width mode
+            for (let x = fullWidth ? 1 : 0; x < baseCols - (fullWidth ? 1 : 0); x++) {
                 for (let y = 0; y < baseRows; y++) {
-                    const left = (x + getJitter() * 2) * (width / baseCols);
+                    const left = (x + getJitter()) * (width / baseCols);
                     const top = (y + getJitter()) * (height / baseRows);
                     const z = Math.random();
                     circles.push(
