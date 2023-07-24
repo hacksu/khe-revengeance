@@ -98,7 +98,7 @@ export default {
 
 .info-container {
   display: flex;
-  gap: 30px;
+  gap: 50px;
   align-items: stretch;
 
   @media screen and (max-width: $lg-bp) {
