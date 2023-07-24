@@ -102,7 +102,6 @@ export default {
 #about-text-container {
   font-size: 30px;
   text-align: right;
-  line-height: 50px;
   margin-left: 5vw;
 
   .highlight {

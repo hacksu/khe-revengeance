@@ -7,7 +7,6 @@
                 <img src="/capsule.png" class="orbiter">
             </picture>
         </div>
-        <slot></slot>
     </div>
 </template>
 
@@ -28,7 +27,7 @@ export default {
     computed: {
         contSize() {
             return this.contWidth == -1 ?
-                {} :
+                { width: "100%", height: "100%" } :
                 { width: this.contWidth + "px", height: this.contWidth + "px" };
         }
     }
@@ -47,7 +46,9 @@ export default {
 }
 
 .orbiter-container {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .spinner {

@@ -2,34 +2,34 @@
   <div id="mapframe">
     <div id="map" class="widget">
       <div class="info-container">
-        <div class="split" style="">
-          <span style="max-width: calc(100% - 20px); display: inline-block">
-            <h1 style="font-size: 6.5vh !important">Where to Go</h1>
-            <p>
-              Kent Hack Enough is graciously hosted in the Kent State Design
-              Innovation Hub:
-            </p>
-            <p id="address">
-              <a target="_blank" href="https://goo.gl/maps/gNiw3U7YgymbPA1k6">
-                Design Innovation Hub, Art Bldg, Kent, OH 44243
-              </a>
-            </p>
-            <h3>Parking</h3>
-            <p id="parking-info">
-              The easiest parking space to use will be the Student Center Visitor Lot.
-              After parking, walk towards the visitor center, and head left between the buildings.
-              The DI Hub is located near the Honors College.
-            </p>
-            <!-- <p>
+        <Panel style="flex-shrink: 1.5">
+          <template #header>
+            <h1 style="margin: 0">Where to Go</h1>
+          </template>
+          <p style="margin-top: 0">
+            Kent Hack Enough is graciously hosted in the Kent State Design
+            Innovation Hub:
+          </p>
+          <p id="address">
+            <a target="_blank" href="https://goo.gl/maps/gNiw3U7YgymbPA1k6">
+              Design Innovation Hub, Art Bldg, Kent, OH 44243
+            </a>
+          </p>
+          <h3>Parking</h3>
+          <p id="parking-info">
+            The easiest parking space to use will be the Student Center Visitor Lot.
+            After parking, walk towards the visitor center, and head left between the buildings.
+            The DI Hub is located near the Honors College.
+          </p>
+          <!-- <p>
               KSU will not be ticketing over the weekend. The two parking lots
               closest to the library are the Visitor Lot right by the bus stop,
               and the R lot by Eastway.
             </p> -->
-          </span>
-        </div>
+        </Panel>
 
-        <iframe class="split" id="mapIframe" src="https://map.concept3d.com/?id=568&tbh&sbh#!m/613809?lh/?ct/44418,5603"
-          width="600" height="450" scrolling="no" frameborder="0" style="border: 0" @load="reset"></iframe>
+        <iframe id="mapIframe" src="https://map.concept3d.com/?id=568&tbh&sbh#!m/613809?lh/?ct/44418,5603" scrolling="no"
+          frameborder="0" style="border: 0" @load="reset"></iframe>
       </div>
     </div>
   </div>
@@ -37,8 +37,12 @@
 
 
 <script>
+import Panel from "primevue/panel";
 export default {
   name: "Map",
+  components: {
+    Panel
+  },
   data() {
     return {
       scrollPos: 0,
@@ -94,28 +98,34 @@ export default {
 
 .info-container {
   display: flex;
-  flex-wrap: wrap;
-  align-content: center;
+  gap: 30px;
+  align-items: stretch;
+
+  @media screen and (max-width: $lg-bp) {
+    flex-direction: column;
+  }
+
   justify-content: space-between;
   margin: 0 auto;
+  text-align: left;
   @include dark-bg;
 }
 
 #mapIframe {
-  flex: 1 1 500px;
   border-radius: 2%;
-}
 
-#parking-info {
-  margin-bottom: 30px;
+  @media screen and (max-width: $lg-bp) {
+    width: 100%;
+    height: 500px;
+  }
+
+  @media screen and not (max-width: $lg-bp) {
+    width: 100%;
+  }
 }
 
 .widget {
   padding: 1rem;
-}
-
-p {
-  font-size: 20px;
 }
 
 h1 {
@@ -124,7 +134,7 @@ h1 {
 
 a,
 a:visited {
-  color: white;
+  color: darkblue;
 }
 
 h3 {
@@ -132,8 +142,8 @@ h3 {
   margin: 20px 0 10px;
 }
 
-.widget {
-  padding: 20px;
+p {
+  font-size: 115%;
 }
 
 .info-container {
@@ -142,26 +152,12 @@ h3 {
   margin: 0 auto;
 }
 
-.split {
-  width: 100%;
-  z-index: 1;
-  text-align: left;
-}
 
 @media screen and (min-width: 768px) {
   .widget {
     padding: 100px 100px 100px 100px;
   }
 
-  .split {
-    width: 50%;
-  }
-}
-
-@media screen and (max-width: 1199px) {
-  .split {
-    width: 100%;
-  }
 }
 </style>
 

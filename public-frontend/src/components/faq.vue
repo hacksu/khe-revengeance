@@ -1,37 +1,34 @@
 <template>
   <div id="faq-container">
-    <orbiter>
-      <div id="faq">
-        <div class="info-container">
-          <h2 id="faqTitle">
-            FREQUENTLY ASKED QUESTIONS
-          </h2>
+    <div id="faq">
+      <orbiter />
+      <div class="info-container">
+        <h2 id="faqTitle">
+          FREQUENTLY ASKED QUESTIONS
+        </h2>
 
-          <v-expansion-panels variant="accordion">
-            <v-expansion-panel v-for="faq, i in faqs" :key="i" :title="faq.question">
-              <v-expansion-panel-text>
-                <div class="faq-answer">
-                  <p v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
-                </div>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-          </v-expansion-panels>
+        <Accordion :multiple="true">
+          <AccordionTab v-for="faq, i in faqs" :key="i" :header="faq.question">
+            <p class="faq-answer" v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
+          </AccordionTab>
+        </Accordion>
 
-          <p class="faqModule">
-            Still have questions?
-            <router-link to="contact" id="contactLink">Let us know!</router-link>
-          </p>
-        </div>
+        <p class="faqModule">
+          Still have questions?
+          <router-link to="contact" id="contactLink">Let us know!</router-link>
+        </p>
       </div>
-    </orbiter>
+    </div>
   </div>
 </template>
 
 <script>
 import orbiter from "./orbiter.vue";
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
 export default {
   name: "Main",
-  components: { orbiter },
+  components: { orbiter, Accordion, AccordionTab },
   data() {
     return {
       faqs: [
@@ -93,23 +90,19 @@ export default {
 @import '@/globalVars.scss';
 
 .info-container {
-  padding: 50px 50px;
-  border-radius: 50px;
+  padding: 20px;
+  border-radius: 20px;
   width: 600px;
-  max-width: 90vw;
+  max-width: 97.5vw;
   border: 1px solid gray;
   background-color: rgb(238, 238, 238);
 
-  @media only screen and (max-width: $md-bp) {
-    padding: 20px 10px;
-    border-radius: 20px;
-  }
 }
 
 #faq-container {
   margin-top: 0px;
+  margin-bottom: 100px;
   padding-top: 20px;
-  min-height: 100vh;
   z-index: 1;
   position: relative;
   display: flex;
@@ -118,32 +111,43 @@ export default {
 }
 
 #faqTitle {
-  margin-top: 0;
-  margin-bottom: 40px;
+  margin: 20px 10px;
 }
 
 #faq {
   color: black;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .faqModule {
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
   padding: 10px 20px 10px 20px;
   margin-top: 20px;
   background: white;
+  border-radius: 5px;
 }
 
 .faq-answer {
-  margin: 10px;
+  margin: 15px 8px;
 
-  & p {
-    margin: 5px 0;
+  &:first-of-type {
+    margin-top: 5px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 5px;
   }
 }
 
 #contactLink {
   color: black;
+}
+</style>
+
+<style>
+.p-toggleable-content {
+  transition-duration: 1s !important;
+  transition-timing-function: linear !important;
 }
 </style>

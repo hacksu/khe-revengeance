@@ -68,20 +68,8 @@ export default {
 
 $text-color: #bdbdbd;
 
-
 .hacksu-box {
   display: none;
-}
-
-.img-box {
-  position: absolute;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 40vh;
-  max-width: 50vw;
-  height: 40vh;
-  max-height: 50vw;
-  z-index: -1;
 }
 
 #date {
@@ -120,6 +108,7 @@ $text-color: #bdbdbd;
   margin: 0px;
   padding-bottom: 20px;
   position: relative;
+  text-align: center;
 }
 
 @keyframes rocket-away {
