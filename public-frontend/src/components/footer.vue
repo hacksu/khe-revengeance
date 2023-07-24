@@ -42,9 +42,14 @@ export default {
 #powered-by {
   @include bg-secondary;
   z-index: 100;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 30px;
+  padding: 10px 20px;
+  margin-top: 100px;
+  margin-bottom: -15px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 
   @media screen and (max-width: $md-bp) {
     margin-top: 100px;
@@ -55,14 +60,11 @@ export default {
   font-weight: bold;
   text-align: center;
   font-size: 20px;
-  margin-top: 0px;
-  margin-bottom: 10px;
   opacity: 0.5;
 }
 
 #powered-by-hacksu {
-  width: 50%;
-  height: 90px;
+  height: 45px;
 }
 
 #powered-by-mlh {
@@ -87,7 +89,7 @@ export default {
     margin-bottom: -20px;
 
     @media screen and (max-width: $md-bp) {
-      height: 300px;
+      height: 175px;
     }
   }
 }
@@ -103,12 +105,8 @@ h3 {
 @media screen and (min-width: 768px) {
 
   #powered-by {
-    display: flex;
-    flex-direction: row;
     min-height: 50px;
     padding-left: 50px;
-    // background-color: $sand2;
-    // filter: brightness(90%);
   }
 
   #powered-by-text {
@@ -117,18 +115,13 @@ h3 {
   }
 
   #powered-by-hacksu {
-    width: 100%;
-    height: 65px;
+    height: 45px;
   }
 
   #powered-by-mlh {
     width: 100%;
     height: 65px;
     margin-top: 0;
-  }
-
-  #small-hacksu-logo {
-    width: 150px;
   }
 
   #small-mlh-logo {
