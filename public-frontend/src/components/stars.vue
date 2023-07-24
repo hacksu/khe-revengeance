@@ -23,6 +23,8 @@ export default {
             const baseCols = Math.round(width / starDensity);
             const jitter = 0.5;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
+            // TODO: widen range for x and y coordinates in accordance with z being higher or lower
+            // also: there are never any stars all the way on the right?? off by one error?
             for (let x = 0; x < baseCols; x++) {
                 for (let y = 0; y < baseRows; y++) {
                     const left = (x + getJitter() * 2) * (width / baseCols);

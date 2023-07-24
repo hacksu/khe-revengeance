@@ -1,38 +1,37 @@
 <template>
   <div id="faq-container">
-    <picture>
-      <source type="image/avif" srcset="/moon.avif">
-      <source type="image/webp" srcset="/moon.webp">
-      <img src="/moon.png" id="the-moon">
-    </picture>
-    <div id="faq">
-      <div class="info-container">
-        <h2 id="faqTitle">
-          FREQUENTLY ASKED QUESTIONS
-        </h2>
+    <orbiter>
+      <div id="faq">
+        <div class="info-container">
+          <h2 id="faqTitle">
+            FREQUENTLY ASKED QUESTIONS
+          </h2>
 
-        <v-expansion-panels variant="accordion">
-          <v-expansion-panel v-for="faq, i in faqs" :key="i" :title="faq.question">
-            <v-expansion-panel-text>
-              <div class="faq-answer">
-                <p v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
-              </div>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+          <v-expansion-panels variant="accordion">
+            <v-expansion-panel v-for="faq, i in faqs" :key="i" :title="faq.question">
+              <v-expansion-panel-text>
+                <div class="faq-answer">
+                  <p v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
+                </div>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
 
-        <p class="faqModule">
-          Still have questions?
-          <router-link to="contact" id="contactLink">Let us know!</router-link>
-        </p>
+          <p class="faqModule">
+            Still have questions?
+            <router-link to="contact" id="contactLink">Let us know!</router-link>
+          </p>
+        </div>
       </div>
-    </div>
+    </orbiter>
   </div>
 </template>
 
 <script>
+import orbiter from "./orbiter.vue";
 export default {
   name: "Main",
+  components: { orbiter },
   data() {
     return {
       faqs: [
@@ -113,23 +112,9 @@ export default {
   min-height: 100vh;
   z-index: 1;
   position: relative;
-}
-
-#the-moon {
-  position: absolute;
-  width: 60vw;
-  height: auto;
-  top: -100px;
-
-  @media only screen and (max-width: 1250px) {
-    top: -75px;
-    width: auto;
-    height: 110%;
-  }
-
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #faqTitle {
@@ -138,11 +123,6 @@ export default {
 }
 
 #faq {
-  background-color: var(--orange);
-  background-image: radial-gradient(var(--dark-orange) 15%, transparent 16%),
-    radial-gradient(var(--dark-orange) 15%, transparent 16%);
-  background-size: 60px 60px;
-  background-position: 0 0, 30px 30px;
   color: black;
   display: flex;
   justify-content: center;

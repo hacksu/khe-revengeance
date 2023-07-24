@@ -92,10 +92,6 @@ export default {
   text-decoration: underline;
 }
 
-#mapframe {
-  background: linear-gradient(to bottom, #0000 0%, #000b 50px, #000b 100%);
-}
-
 .info-container {
   display: flex;
   flex-wrap: wrap;
