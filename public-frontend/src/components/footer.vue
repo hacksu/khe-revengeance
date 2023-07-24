@@ -44,7 +44,11 @@ export default {
   z-index: 100;
   padding-top: 10px;
   padding-bottom: 10px;
-  margin-bottom: 30px
+  margin-bottom: 30px;
+
+  @media screen and (max-width: $md-bp) {
+    margin-top: 100px;
+  }
 }
 
 #powered-by-text {
@@ -79,8 +83,12 @@ export default {
     width: 100%;
     height: 225px;
     object-fit: cover;
-    object-position: 0 0;
+    object-position: 50% top;
     margin-bottom: -20px;
+
+    @media screen and (max-width: $md-bp) {
+      height: 300px;
+    }
   }
 }
 
