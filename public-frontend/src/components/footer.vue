@@ -11,6 +11,14 @@
     <!-- <a id="small-mlh-logo" href="https://mlh.io" v-if="mlh">
       <img style="opacity: 0.5" id="powered-by-mlh" src="@/assets/mlh-logo.svg" />
     </a> -->
+
+    <div class="glow">
+      <picture>
+        <source type="image/avif" srcset="/horizon.avif">
+        <source type="image/webp" srcset="/horizon.webp">
+        <img src="/horizon.png" id="horizon">
+      </picture>
+    </div>
   </div>
 </template>
 
@@ -60,12 +68,20 @@ export default {
   margin-top: 17px;
 }
 
-.info-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: space-between;
-  margin: 0 auto;
+.glow {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+
+  #horizon {
+    width: 100%;
+    height: 225px;
+    object-fit: cover;
+    object-position: 0 0;
+    margin-bottom: -20px;
+  }
 }
 
 p {
