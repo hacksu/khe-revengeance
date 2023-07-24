@@ -247,11 +247,10 @@ body {
 }
 
 #app-container {
-  font-family: Roboto;
+  font-family: var(--font-family);
+  color: color('text-primary');
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  // color: #2c3e50;
   position: absolute;
   width: 100%;
   top: 0px;

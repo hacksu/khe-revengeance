@@ -1,14 +1,9 @@
-@import './colors.scss';
-@import './background.scss';
-@import './transition.scss';
+@import "./colors.scss";
+@import "./background.scss";
+@import "./transition.scss";
 
-@import './widgets/input.scss';
-@import './widgets/button.scss';
-@import './widgets/underline.scss';
+@import "./widgets/input.scss";
+@import "./widgets/button.scss";
+@import "./widgets/underline.scss";
 
-@import './media.scss';
-
-body, #app, textarea {
-    font-family: Roboto,sans-serif;
-    color: color('text-primary');
-}
+@import "./media.scss";
