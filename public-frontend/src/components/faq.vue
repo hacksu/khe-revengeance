@@ -144,10 +144,3 @@ export default {
   color: black;
 }
 </style>
-
-<style>
-.p-toggleable-content {
-  transition-duration: 1s !important;
-  transition-timing-function: linear !important;
-}
-</style>

@@ -24,8 +24,12 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
   plugins: [vue()],
-  build: { outDir: "dist" },
+  build: { outDir: "dist", transpile: ["primevue"] },
   ssgOptions: {
     entry: "src/main.js",
+    format: "cjs"
+  },
+  ssr: {
+    noExternal: ["primevue"],
   },
 });

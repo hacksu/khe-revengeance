@@ -14,15 +14,18 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { useRouter } from 'vue-router';
-import { userLoadedPromise, user } from "../state/user.js";
+import { user, loadUser } from "../state/user.js";
 
-const router = useRouter()
-userLoadedPromise.then(() => {
-    if (user.value) {
-        router.push("/profile");
-    }
-})
+const router = useRouter();
+onMounted(() => {
+    loadUser.then(() => {
+        if (user.value) {
+            router.push("/profile");
+        }
+    });
+});
 // TODO:
 // use "lastIDProvider" from localStorage (which is set after a successful login
 // in profile.vue) to display a "you used this one last" message on the relevant

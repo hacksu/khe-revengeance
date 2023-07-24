@@ -31,3 +31,5 @@ next-env.d.ts
 
 secrets.json
 secrets.yaml
+
+.vite-ssg-temp

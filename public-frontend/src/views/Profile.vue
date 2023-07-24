@@ -24,11 +24,11 @@ import { User } from "includes/users.ts";
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted, watch } from "vue";
 import { remult } from "remult";
-import { user, userLoadedPromise } from "../state/user.js";
+import { user, loadUser } from "../state/user.js";
 
 const receivingEmails = ref(true);
 onMounted(() => {
-    userLoadedPromise.then(() => {
+    loadUser().then(() => {
         if (user.value) {
             receivingEmails.value = user.value.receivingEmails;
             localStorage.setItem("lastIDProvider", user.value.method);
@@ -37,7 +37,7 @@ onMounted(() => {
 });
 const justSaved = ref(false);
 const updateOptions = async () => {
-    if (receivingEmails.value != user.value.receivingEmails) {
+    if (user.value && receivingEmails.value != user.value.receivingEmails) {
         user.value.receivingEmails = receivingEmails.value;
         await remult.repo(User).save(user.value);
     }

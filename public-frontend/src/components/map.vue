@@ -111,6 +111,11 @@ export default {
   @include dark-bg;
 }
 
+:deep(.p-panel .p-panel-content),
+:deep(.p-panel .p-panel-header) {
+  padding: 20px 30px;
+}
+
 #mapIframe {
   border-radius: 2%;
 
