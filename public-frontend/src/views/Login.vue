@@ -1,15 +1,6 @@
 <template>
     <div id="login" class="widget">
-        <h2>Log in and/or create an account</h2>
-        <a class="loginBar largeButton" href="/login/github">
-            <img src="@/assets/auth_assets/github-mark-white.svg" />
-            <span>Log in with GitHub</span>
-        </a>
-        <a class="loginBar largeButton" href="/login/discord">
-            <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
-            <span>Log in with Discord</span>
-        </a>
-        <p class="smallNotice">(Registration is not open yet, so this is currently only useful to staff)</p>
+        <p>🥺</p>
     </div>
 </template>
 
@@ -17,10 +8,11 @@
 import { onMounted } from "vue";
 import { useRouter } from 'vue-router';
 import { user, loadUser } from "../state/user.js";
+import LoginButton from "../components/login-button.vue";
 
 const router = useRouter();
 onMounted(() => {
-    loadUser.then(() => {
+    loadUser().then(() => {
         if (user.value) {
             router.push("/profile");
         }
@@ -49,27 +41,6 @@ onMounted(() => {
 
 h2 {
     margin-bottom: 35px;
-}
-
-.loginBar {
-    display: block;
-    width: 275px;
-
-    img {
-        height: 1.4em;
-        width: auto;
-        margin: -5px 15px;
-    }
-
-    img#discord-mark {
-        height: 1.1em;
-    }
-
-    span {
-        display: inline-block;
-        width: 160px;
-        text-align: justify;
-    }
 }
 
 .smallNotice {

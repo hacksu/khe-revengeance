@@ -15,7 +15,7 @@
               Design Innovation Hub, Art Bldg, Kent, OH 44243
             </a>
           </p>
-          <h3>Parking</h3>
+          <h3>Parking <i class="pi pi-car" /></h3>
           <p id="parking-info">
             The easiest parking space to use will be the Student Center Visitor Lot.
             After parking, walk towards the visitor center, and head left between the buildings.

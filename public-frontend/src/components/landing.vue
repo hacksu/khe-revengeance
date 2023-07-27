@@ -8,7 +8,9 @@
     </div>
 
     <div id="landing-content-container">
-      <p id="date">Blasting off this October</p>
+      <div class="date-container">
+        <p id="date">Blasting off this October</p>
+      </div>
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
         <div id="email-input">
@@ -80,6 +82,10 @@ $text-color: #bdbdbd;
   color: $text-color;
   display: inline;
   padding: 10px;
+}
+
+.date-container {
+  display: inline;
   @include dark-bg;
 }
 
