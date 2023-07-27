@@ -58,7 +58,8 @@
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vue-scrollto": "^2.20.0",
-    "yaml": "^2.2.1"
+    "yaml": "^2.2.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/connect": "^3.4.35",

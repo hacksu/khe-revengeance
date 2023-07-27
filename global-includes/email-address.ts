@@ -18,6 +18,7 @@ export enum EmailSource {
   Early2023 = "2023EarlySignup",
 }
 
+// TODO: maybe replace with zod's email validation, for consistency
 export const isEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Entity<Email>("emails", {
@@ -25,7 +26,7 @@ export const isEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 })
 export class Email {
   @Fields.cuid()
-  id="";
+  id = "";
 
   @Fields.createdAt()
   subscribedAt = new Date();
@@ -74,7 +75,7 @@ export class Email {
         .find({ where: { receivingEmails: true } });
       fromList = fromList.concat(
         fromUsers.map((u, i) => ({
-          id: "user"+i,
+          id: "user" + i,
           address: u.email,
           subscribedAt: u.createdAt,
           source: EmailSource.SiteUsers,
@@ -105,15 +106,15 @@ export class Email {
     }
   }
 
-  @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
-  static async bulkRename(oldList: string, newList: string){
+  @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
+  static async bulkRename(oldList: string, newList: string) {
     // could replace this with a more efficient mongodb updateMany RPC
     const repo = remult.repo(Email);
-    for await (const email of repo.query({where: {source: oldList}})){
-      await repo.update(
-        repo.metadata.idMetadata.getId(email),
-        {...email, source: newList}
-      );
+    for await (const email of repo.query({ where: { source: oldList } })) {
+      await repo.update(repo.metadata.idMetadata.getId(email), {
+        ...email,
+        source: newList,
+      });
     }
   }
 }

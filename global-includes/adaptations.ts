@@ -25,7 +25,15 @@ export class VFields {
     return validators;
   }
 
-  // TODO: add and use "nonEmptyString"
+  static nonEmptyString(options: FieldOptions = {}) {
+    return Fields.string({
+      ...options,
+      validate: [
+        ...this.getValidators(options.validate, "string"),
+        (e, f) => f.value.length > 0,
+      ],
+    });
+  }
 
   static string(options: FieldOptions = {}) {
     return Fields.string({
