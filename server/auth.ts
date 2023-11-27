@@ -93,7 +93,7 @@ passport.use(
         done(new Error("did not get email from discord"));
       } else {
         // TODO: figure out a discord role situation that makes sense
-        const adminIDsOnDiscord = ["402326044872409100", "344132856685002764"];
+        const adminIDsOnDiscord = ["402326044872409100", "344132856685002764", "140520164629151744"];
         let userRole = UserRole.Normal;
         let externalRole = "";
         if (adminIDsOnDiscord.includes(profile.id)) {

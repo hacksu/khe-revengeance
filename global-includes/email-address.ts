@@ -12,6 +12,12 @@ import { RemoteProcedures } from "./rpc-declarations.ts";
 import { VFields } from "./adaptations.ts";
 import { MailDataRequired } from "@sendgrid/mail";
 
+export type ImportedEmail = {
+  address: string;
+  name?: string;
+  organization?: string;
+};
+
 export enum EmailSource {
   // reserved for emails drawn directly from user accounts
   SiteUsers = "SiteUsers",
@@ -42,6 +48,12 @@ export class Email {
     },
   })
   address = "";
+
+  @Fields.string()  
+  name = "";
+
+  @Fields.string()
+  organization = "";
 
   @VFields.string()
   source: EmailSource | string = EmailSource.Early2023;
@@ -77,6 +89,8 @@ export class Email {
         fromUsers.map((u, i) => ({
           id: "user" + i,
           address: u.email,
+          name: u.registration.name,
+          organization: u.registration.school,
           subscribedAt: u.createdAt,
           source: EmailSource.SiteUsers,
         }))
@@ -86,11 +100,13 @@ export class Email {
   }
 
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
-  static async bulkAdd(source: string, addresses: string[]) {
+  static async bulkAdd(source: string, addresses: ImportedEmail[]) {
     await remult.repo(Email).insert(
-      addresses.map((a) => ({
-        address: a,
-        source: source,
+      addresses.map(({ address, name, organization }) => ({
+        address,
+        name,
+        organization,
+        source,
       }))
     );
     return await Email.getEmailList(source);

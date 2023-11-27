@@ -6,6 +6,7 @@ import { Email, EmailListNotes, EmailSource, SentListMail, isEmailRegex } from "
 import { Card, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;
 const { confirm, error } = Modal;
+const { Meta } = Card;
 import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled, SaveOutlined } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
@@ -14,7 +15,9 @@ import SentEmail from "../components/displayEmail.jsx";
 import EditableMenu from "../components/editableMenuItems.jsx";
 
 export default function EmailLists() {
-    const [emails, setEmails] = useState([]);
+
+    const [emails, setEmails] = useState([]); // TODO: an email is a complex list of fields, but can also be a string
+    
     const [list, setList] = useState(EmailSource.Early2023);
     const [allLists, setAllLists] = useState(Object.values(EmailSource).sort());
     const [listNote, setListNote] = useState("");
@@ -67,31 +70,39 @@ export default function EmailLists() {
             "load",
             async () => {
                 try {
-                    let emails = JSON.parse(reader.result);
-                    if (!Array.isArray(emails)) {
-                        throw "file was not an array";
+                    
+                    // we import the items as a indescript list
+                    let imported = JSON.parse(reader.result);
+                    if (!Array.isArray(imported)) throw "file was not an array";
+                    if (imported.length == 0) throw "array was empty";
+
+                    // we need to validate each item in the array, can be an object or string for backwards compatibility
+                    let objects = [];
+                    for (const object of imported) {
+                        if (typeof object === "object") {
+                            if (!object["address"]) throw `missing "address" field on ${JSON.stringify(object)}`;
+                            if (!object["name"]) throw `missing "name" field on ${JSON.stringify(object)}`;
+                            if (!object["organization"]) throw `missing "organization" field on ${JSON.stringify(object)}`;
+                            objects.push(object);
+                        } 
+                        else if (typeof object === "string") objects.push({ address: object });
+                        else throw `${JSON.stringify(object)} is not an object or string`;
                     }
-                    if (emails.length == 0) {
-                        throw "array was empty";
-                    }
-                    for (const address of emails) {
-                        if (typeof address !== "string") {
-                            throw JSON.stringify(address) + " is not a string";
-                        }
-                    }
-                    emails = emails.map(e => e.trim());
-                    const badEmails = emails.filter(e => !isEmailRegex.test(e));
-                    emails = emails.filter(e => isEmailRegex.test(e));
+
+                    const badEmails = objects.filter(e => !isEmailRegex.test(e.address));
+                    objects = objects.filter(e => isEmailRegex.test(e.address));
+
                     let proceed = true;
                     if (badEmails.length > 0) {
                         proceed = await new Promise(resolve => confirm({
-                            title: 'Adding items from JSON',
+                            title: "Adding items from JSON",
                             icon: <FileAddFilled />,
-                            content: <><p>This will add {emails.length} items to "{list}".</p>
-                                <p>The following emails failed validation and will be skipped:</p>
-                                <pre>{badEmails.join("\n")}</pre>
-                                <p>Proceed?</p>
-                            </>,
+                            content: <>
+                                        <p>This will add {emails.length} items to "{list}".</p>
+                                        <p>The following emails failed validation and will be skipped:</p>
+                                        <pre>{badEmails.join("\n")}</pre>
+                                        <p>Proceed?</p>
+                                     </>,
                             onOk() {
                                 resolve(true);
                             },
@@ -100,11 +111,13 @@ export default function EmailLists() {
                             },
                         }));
                     }
+
                     if (proceed) {
-                        Email.bulkAdd(list, emails).then((newListContents) => {
+                        Email.bulkAdd(list, objects).then((newListContents) => {
                             setEmails(newListContents);
                         });
                     }
+
                 } catch (e) {
                     error({
                         title: "not good file :(",
@@ -117,9 +130,11 @@ export default function EmailLists() {
             },
             false
         );
+
         if (file) {
             reader.readAsText(file);
         }
+
         return false;
     };
     const [addingEmail, setAddingEmail] = useState(false);
@@ -150,7 +165,7 @@ export default function EmailLists() {
         setPage(menuKeys.sent);
     };
     const cardStyle = {
-        width: 200,
+        width: 250,
         margin: 6
     }
     const cardBodyStyle = {
@@ -250,7 +265,11 @@ export default function EmailLists() {
                                 </Card>
                                 {emails.map((e, i) =>
                                     <div className={style.cardContainer} key={i}>
-                                        <Card style={cardStyle} bodyStyle={cardBodyStyle}>
+                                        <Card 
+                                            title={e.name} 
+                                            extra={e.organization ? <small>{e.organization}</small> : undefined}
+                                            style={cardStyle} 
+                                            bodyStyle={cardBodyStyle}>
                                             <span title={e.address}>{e.address}</span>
                                         </Card>
                                         {// emails that come from site user accounts cannot be deleted
