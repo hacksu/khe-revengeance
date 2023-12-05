@@ -22,7 +22,7 @@ export class RemoteProcedures {
   static getDistinct: (collection: string, field: string) => Promise<string[]>;
   static bulkDelete: (collection: string, filter: any) => Promise<void>;
   static sendTo: (
-    addresses: string[],
+    addresses: Email[],
     subject: string,
     from: {
       email: string;

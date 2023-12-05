@@ -165,10 +165,10 @@ export class SentListMail extends IdEntity {
     },
     contentHTML: string
   ) {
-    let addresses: string[] = [];
+    let addresses: Email[] = [];
     for (const list of lists) {
       addresses = addresses.concat(
-        (await Email.getEmailList(list)).map((e) => e.address)
+        (await Email.getEmailList(list))
       );
     }
 

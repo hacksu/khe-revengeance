@@ -12,7 +12,7 @@ import { MongoDataProvider } from "remult/remult-mongo";
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
-import { Email } from "../global-includes/email-address.ts";
+import { Email, ImportedEmail } from "../global-includes/email-address.ts";
 import { gridImagePath } from "../server/file-upload.ts";
 import path from "path";
 
@@ -269,7 +269,7 @@ export function defineRemoteProcedures() {
   };
 
   RemoteProcedures.sendTo = async function (
-    addresses: string[],
+    addresses: Email[],
     subject: string,
     from: {
       email: string;
@@ -299,7 +299,13 @@ export function defineRemoteProcedures() {
       console.log("recipientBatch", recipientBatch);
       const sendResult = await mailer.send({
         ...message,
-        to: recipientBatch,
+        personalizations: recipientBatch.map((e) => ({ 
+          to: e.address,
+          substitutions: {
+            "name": e.name ?? "N/A",
+            "organization": e.organization ?? "NONE",
+          }
+        })),
         isMultiple: true,
       });
       console.log(
@@ -308,7 +314,7 @@ export function defineRemoteProcedures() {
         sendResult[0].statusCode
       );
     }
-    return { ...message, to: addresses };
+    return { ...message, to: addresses.map(e => e.address) };
   };
 
   RemoteProcedures.deleteGridImages = async (files) => {
