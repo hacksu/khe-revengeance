@@ -39,6 +39,8 @@ export default function Tickets() {
         }
     }, [openTicket]);
 
+    // TODO: set unreadCount to 0 in more places; it doesn't always get reset
+
     const unreadMessageNode = useRef(null);
     useEffect(() => {
         unreadMessageNode.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -142,9 +144,11 @@ export default function Tickets() {
                                 </div>;
                             })}
                             {/* TODO: take the default "from" email/name from the most recent message also? */}
-                            <div class={style.metadataForm}>
+                            <div className={style.metadataForm}>
                                 <h2>Send a reply</h2>
-                                <ComposeEmail setEmailForm={setComposition} defaultFromEmail="support"
+                                <ComposeEmail setEmailForm={setComposition}
+                                    allowAttachments={false}
+                                    defaultFromEmail="support"
                                     defaultFromName="KHE Support"
                                     defaultSubject={
                                         (lastMessage.subject.toLowerCase().startsWith("re") ? "" : "RE: ") +

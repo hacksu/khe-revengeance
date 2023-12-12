@@ -234,7 +234,7 @@ export default function EmailLists() {
             <Sider width={200} theme="light">{menu}</Sider>
             {page == menuKeys.compose ?
                 <Layout style={{ padding: 20, maxWidth: 800 }}>
-                    <ComposeEmail setEmailForm={setEmailForm} />
+                    <ComposeEmail setEmailForm={setEmailForm} allowAttachments={true} />
                     <div style={{ marginTop: 10, display: "flex" }}>
                         <Select
                             mode="multiple"

@@ -30,7 +30,9 @@ const InputLabel = ({ text }) => (
         {text}
     </span>);
 
-export default function ComposeEmail({ setEmailForm, defaultFromName, defaultFromEmail, defaultSubject }) {
+export default function ComposeEmail(
+    { setEmailForm, defaultFromName, defaultFromEmail, defaultSubject, allowAttachments }
+    ) {
     useEffect(() => {
         setEmailForm({
             from: { email: defaultFromEmail + "@khe.io", name: defaultFromName },
@@ -88,10 +90,12 @@ export default function ComposeEmail({ setEmailForm, defaultFromName, defaultFro
                     ...f,
                     html
                 }))} placeholder="Write email here." />
-
-            <Upload {...attachmentUploadConfig} style={{display: "flex"}}>
-                <Button icon={<UploadOutlined />}>Add attachment</Button>
-            </Upload>
+            
+            {allowAttachments ? 
+                <Upload {...attachmentUploadConfig} style={{display: "flex"}}>
+                    <Button icon={<UploadOutlined />}>Add attachment</Button>
+                </Upload>
+            : null }
         </Space>
     </div>
 }
