@@ -63,7 +63,7 @@ export default {
             confirmPassword: "",
             showingErrors: false
         },
-        onMobile: window.innerWidth < 850
+        onMobile: typeof window !== "undefined" && window.innerWidth < 850
     }),
     watch: {
         localAccountSwitch(newValue, oldValue) {
