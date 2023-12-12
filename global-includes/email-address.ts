@@ -102,14 +102,12 @@ export class Email {
 
   @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
   static async getEmailListFields(lists: string[]){
-    const fields = new Set();
+    const fields: Set<"name" | "organization"> = new Set(["name", "organization"]);
     for (const list of lists){
       for (const email of await remult.repo(Email).find({where: {source: list}})){
-        for (const key of (Object.keys(email) as Array<keyof Email>)){
-          if (email[key] &&
-              (typeof email[key] === "string" && (email[key] as string).trim())
-          ){
-            fields.add(key);
+        for (const field of Array.from(fields)){
+          if(!email[field] || !email[field].trim()){
+            fields.delete(field);
           }
         }
       }
