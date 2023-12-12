@@ -99,6 +99,23 @@ export class Email {
     return fromList;
   }
 
+  @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
+  static async getEmailListFields(lists: string[]){
+    const fields = new Set();
+    for (const list of lists){
+      for (const email of await remult.repo(Email).find({where: {source: list}})){
+        for (const key of (Object.keys(email) as Array<keyof Email>)){
+          if (email[key] &&
+              (typeof email[key] === "string" && (email[key] as string).trim())
+          ){
+            fields.add(key);
+          }
+        }
+      }
+    }
+    return Array.from(fields);
+  }
+
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
   static async bulkAdd(source: string, addresses: ImportedEmail[]) {
     await remult.repo(Email).insert(

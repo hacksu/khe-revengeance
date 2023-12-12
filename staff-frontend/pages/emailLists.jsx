@@ -158,6 +158,13 @@ export default function EmailLists() {
         html: ""
     });
     const [recipients, setRecipients] = useState([]);
+    const [recipientFields, setRecipientFields] = useState([]);
+    useEffect(() => {
+        // i <3 race conditions
+        Email.getEmailListFields(recipients).then(
+            fields => setRecipientFields(fields.filter(f => f != "id"))
+        );
+    }, [recipients]);
     const sendAMail = async () => {
         await SentListMail.sendToLists(
             recipients, emailForm.subject, emailForm.from, emailForm.html
@@ -237,6 +244,20 @@ export default function EmailLists() {
                         />
                         <Button onClick={sendAMail} type="primary">Send</Button>
                     </div>
+                    {recipientFields.length ? <>
+                        <p>The selected recipients all have the following metadata: {
+                            recipientFields.map(
+                                (f, i) => <>{i ? ", " : ""}
+                                <pre style={{display:"inline"}}>{f}</pre>
+                            </>)
+                        }</p>
+                        <p>Use them in the email body like this:{" "}
+                            {/* &#123; is left curly brace; &#125 is right curly brace */}
+                            <pre style={{display: "inline"}}>
+                                &#123;&#123;{recipientFields[0]}&#125;&#125;
+                            </pre>
+                        </p>
+                    </> : null }
                 </Layout>
                 :
                 page == menuKeys.sent ?
