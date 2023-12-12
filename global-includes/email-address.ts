@@ -102,9 +102,11 @@ export class Email {
 
   @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
   static async getEmailListFields(lists: string[]){
+    let emailCount = 0;
     const fields: Set<"name" | "organization"> = new Set(["name", "organization"]);
     for (const list of lists){
       for (const email of await remult.repo(Email).find({where: {source: list}})){
+        ++emailCount;
         for (const field of Array.from(fields)){
           if(!email[field] || !email[field].trim()){
             fields.delete(field);
@@ -112,7 +114,11 @@ export class Email {
         }
       }
     }
-    return Array.from(fields);
+    if (!emailCount){
+      return [];
+    } else {
+      return Array.from(fields);
+    }
   }
 
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
