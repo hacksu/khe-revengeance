@@ -3,8 +3,9 @@ import { promises as fs } from "fs";
 import mailer, {
   ClientResponse,
   MailDataRequired,
-  ResponseError,
+  ResponseError
 } from "@sendgrid/mail";
+import { AttachmentData } from "@sendgrid/helpers/classes/attachment";
 import * as cheerio from "cheerio";
 import { convert as convertToText } from "html-to-text";
 import { MongoDataProvider } from "remult/remult-mongo";
@@ -275,7 +276,8 @@ export function defineRemoteProcedures() {
       email: string;
       name: string;
     },
-    contentHTML: string
+    contentHTML: string,
+    attachments?: AttachmentData | AttachmentData[]
   ) {
     // make unique
     addresses = Array.from(new Set(addresses));
@@ -307,6 +309,7 @@ export function defineRemoteProcedures() {
           }
         })),
         isMultiple: true,
+        attachments: attachments ? (Array.isArray(attachments) ? attachments : [attachments]) : []
       });
       console.log(
         `sent bulk email through sendgrid at ${new Date()} from staff site, ` +

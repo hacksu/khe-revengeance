@@ -11,6 +11,7 @@ import { User } from "./users.ts";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 import { VFields } from "./adaptations.ts";
 import { MailDataRequired } from "@sendgrid/mail";
+import { AttachmentData } from "@sendgrid/helpers/classes/attachment";
 
 export type ImportedEmail = {
   address: string;
@@ -180,7 +181,8 @@ export class SentListMail extends IdEntity {
       email: string;
       name: string;
     },
-    contentHTML: string
+    contentHTML: string,
+    attachments: AttachmentData | AttachmentData[]
   ) {
     let addresses: Email[] = [];
     for (const list of lists) {
@@ -193,7 +195,8 @@ export class SentListMail extends IdEntity {
       addresses,
       subject,
       from,
-      contentHTML
+      contentHTML,
+      attachments
     );
     await remult.repo(SentListMail).insert({ mailData: sentData });
   }

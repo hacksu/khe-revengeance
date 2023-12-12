@@ -155,7 +155,8 @@ export default function EmailLists() {
             name: ""
         },
         subject: "",
-        html: ""
+        html: "",
+        attachments: []
     });
     const [recipients, setRecipients] = useState([]);
     const [recipientFields, setRecipientFields] = useState([]);
@@ -167,7 +168,8 @@ export default function EmailLists() {
     }, [recipients]);
     const sendAMail = async () => {
         await SentListMail.sendToLists(
-            recipients, emailForm.subject, emailForm.from, emailForm.html
+            recipients, emailForm.subject, emailForm.from, emailForm.html,
+            emailForm.attachments
         );
         setPage(menuKeys.sent);
     };
@@ -251,7 +253,7 @@ export default function EmailLists() {
                                 <pre style={{display:"inline"}}>{f}</pre>
                             </>)
                         }</p>
-                        <p>Use them in the email body like this:{" "}
+                        <p>You can use them in the email body like this:{" "}
                             {/* &#123; is left curly brace; &#125 is right curly brace */}
                             <pre style={{display: "inline"}}>
                                 &#123;&#123;{recipientFields[0]}&#125;&#125;
