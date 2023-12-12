@@ -85,6 +85,7 @@ export default function Tickets() {
                 theirEmail: lastMessage.theirEmail,
                 ourName: composition.from.name,
                 ourEmail: composition.from.email
+                // TODO: attachments somehow
             })
         ).then(() => {
             setComposition({ ...composition, html: "" });

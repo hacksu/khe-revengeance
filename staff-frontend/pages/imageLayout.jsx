@@ -376,6 +376,8 @@ export default function LayoutImages() {
     const [uploadQueue, setUploadQueue] = useState([]);
     const [justSaved, setJustSaved] = useState(false);
     const uploadAll = async () => {
+        // TODO: don't save unless the current grid has a valid name (the
+        // default "__add" from editableMenuItems shouldn't be considered valid)
         const uploadPromises = [];
         let localImages = images;
         for (const image of images) {
