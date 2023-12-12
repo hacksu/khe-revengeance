@@ -1,4 +1,5 @@
 import { MailDataRequired } from "@sendgrid/mail";
+import { AttachmentData } from "@sendgrid/helpers/classes/attachment";
 import { Email } from "./email-address.ts";
 import { SupportTicket, TicketMessage } from "./support-ticket.ts";
 
@@ -22,13 +23,14 @@ export class RemoteProcedures {
   static getDistinct: (collection: string, field: string) => Promise<string[]>;
   static bulkDelete: (collection: string, filter: any) => Promise<void>;
   static sendTo: (
-    addresses: string[],
+    addresses: Email[],
     subject: string,
     from: {
       email: string;
       name: string;
     },
-    contentHTML: string
+    contentHTML: string,
+    attachments?: AttachmentData | AttachmentData[]
   ) => Promise<MailDataRequired>;
   static sanitizeMessage: (message: TicketMessage) => TicketMessage;
   static deleteGridImages: (paths: string[]) => Promise<void>;

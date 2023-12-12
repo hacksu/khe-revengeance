@@ -11,6 +11,13 @@ import { User } from "./users.ts";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 import { VFields } from "./adaptations.ts";
 import { MailDataRequired } from "@sendgrid/mail";
+import { AttachmentData } from "@sendgrid/helpers/classes/attachment";
+
+export type ImportedEmail = {
+  address: string;
+  name?: string;
+  organization?: string;
+};
 
 export enum EmailSource {
   // reserved for emails drawn directly from user accounts
@@ -42,6 +49,12 @@ export class Email {
     },
   })
   address = "";
+
+  @Fields.string()  
+  name = "";
+
+  @Fields.string()
+  organization = "";
 
   @VFields.string()
   source: EmailSource | string = EmailSource.Early2023;
@@ -77,6 +90,8 @@ export class Email {
         fromUsers.map((u, i) => ({
           id: "user" + i,
           address: u.email,
+          name: u.registration.name,
+          organization: u.registration.school,
           subscribedAt: u.createdAt,
           source: EmailSource.SiteUsers,
         }))
@@ -85,12 +100,35 @@ export class Email {
     return fromList;
   }
 
+  @BackendMethod({allowed: [UserRole.Admin, UserRole.Staff]})
+  static async getEmailListFields(lists: string[]){
+    let emailCount = 0;
+    const fields: Set<"name" | "organization"> = new Set(["name", "organization"]);
+    for (const list of lists){
+      for (const email of await remult.repo(Email).find({where: {source: list}})){
+        ++emailCount;
+        for (const field of Array.from(fields)){
+          if(!email[field] || !email[field].trim()){
+            fields.delete(field);
+          }
+        }
+      }
+    }
+    if (!emailCount){
+      return [];
+    } else {
+      return Array.from(fields);
+    }
+  }
+
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
-  static async bulkAdd(source: string, addresses: string[]) {
+  static async bulkAdd(source: string, addresses: ImportedEmail[]) {
     await remult.repo(Email).insert(
-      addresses.map((a) => ({
-        address: a,
-        source: source,
+      addresses.map(({ address, name, organization }) => ({
+        address,
+        name,
+        organization,
+        source,
       }))
     );
     return await Email.getEmailList(source);
@@ -147,12 +185,13 @@ export class SentListMail extends IdEntity {
       email: string;
       name: string;
     },
-    contentHTML: string
+    contentHTML: string,
+    attachments: AttachmentData | AttachmentData[]
   ) {
-    let addresses: string[] = [];
+    let addresses: Email[] = [];
     for (const list of lists) {
       addresses = addresses.concat(
-        (await Email.getEmailList(list)).map((e) => e.address)
+        (await Email.getEmailList(list))
       );
     }
 
@@ -160,7 +199,8 @@ export class SentListMail extends IdEntity {
       addresses,
       subject,
       from,
-      contentHTML
+      contentHTML,
+      attachments
     );
     await remult.repo(SentListMail).insert({ mailData: sentData });
   }

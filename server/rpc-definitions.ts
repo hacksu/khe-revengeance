@@ -3,8 +3,9 @@ import { promises as fs } from "fs";
 import mailer, {
   ClientResponse,
   MailDataRequired,
-  ResponseError,
+  ResponseError
 } from "@sendgrid/mail";
+import { AttachmentData } from "@sendgrid/helpers/classes/attachment";
 import * as cheerio from "cheerio";
 import { convert as convertToText } from "html-to-text";
 import { MongoDataProvider } from "remult/remult-mongo";
@@ -12,7 +13,7 @@ import { MongoDataProvider } from "remult/remult-mongo";
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
-import { Email } from "../global-includes/email-address.ts";
+import { Email, ImportedEmail } from "../global-includes/email-address.ts";
 import { gridImagePath } from "../server/file-upload.ts";
 import path from "path";
 
@@ -269,13 +270,14 @@ export function defineRemoteProcedures() {
   };
 
   RemoteProcedures.sendTo = async function (
-    addresses: string[],
+    addresses: Email[],
     subject: string,
     from: {
       email: string;
       name: string;
     },
-    contentHTML: string
+    contentHTML: string,
+    attachments?: AttachmentData | AttachmentData[]
   ) {
     // make unique
     addresses = Array.from(new Set(addresses));
@@ -299,8 +301,15 @@ export function defineRemoteProcedures() {
       console.log("recipientBatch", recipientBatch);
       const sendResult = await mailer.send({
         ...message,
-        to: recipientBatch,
+        personalizations: recipientBatch.map((e) => ({ 
+          to: e.address,
+          substitutions: {
+            "name": e.name ?? "N/A",
+            "organization": e.organization ?? "NONE",
+          }
+        })),
         isMultiple: true,
+        attachments: attachments ? (Array.isArray(attachments) ? attachments : [attachments]) : []
       });
       console.log(
         `sent bulk email through sendgrid at ${new Date()} from staff site, ` +
@@ -308,7 +317,7 @@ export function defineRemoteProcedures() {
         sendResult[0].statusCode
       );
     }
-    return { ...message, to: addresses };
+    return { ...message, to: addresses.map(e => e.address) };
   };
 
   RemoteProcedures.deleteGridImages = async (files) => {
