@@ -3,6 +3,15 @@
 </template>
     
 <script>
+
+function getNormalizedZ() {
+    // const uniform = Math.random();  // [0, 1)
+    // const inSin = (uniform*Math.PI/2) + (3*Math.PI/2);  // [3pi/2, 4pi/2)
+    // const onSin = Math.sin(inSin);  // [-1, 0)
+    // return onSin + 1;  // [0, 1)
+    return 1 - Math.random() ** 1.2; 
+}
+
 export default {
     name: 'Stars',
     data() {
@@ -18,36 +27,39 @@ export default {
             const circles = [];
             const width = window.innerWidth;
             const height = document.body.scrollHeight;
-            const fullWidth = width > 700;
-            const starDensity = fullWidth ? 225 : 125;
-            const baseRows = Math.round(height / starDensity);
-            const baseCols = Math.round(width / starDensity);
-            const jitter = 0.25;
-            const getJitter = () => (Math.random() * jitter - (jitter / 2));
-            // TODO: widen range for x and y coordinates in accordance with z being higher or lower
-            // also: there are never any stars all the way on the right?? off by one error?
-            // actually: i think it looks better when the stars are visibly
-            // higher-density at the horizontal center and fall off towards the
-            // edges, at least in full width mode
-            for (let x = fullWidth ? 1 : 0; x < baseCols - (fullWidth ? 1 : 0); x++) {
-                for (let y = 0; y < baseRows; y++) {
-                    const left = (x + getJitter()) * (width / baseCols);
-                    const top = (y + getJitter()) * (height / baseRows);
-                    const z = Math.random();
+            const starAreaSideLength = width > 700 ? 250 : 175;
+            const baseRows = Math.round(height / starAreaSideLength);
+            const baseCols = Math.round(width / starAreaSideLength);
+            const jitter = 1 / baseCols * 0.3;
+            const maxDepth = 500;
+            const getJitter = () => (Math.random()-0.5) * jitter * 2;
+            for (let colIndex = 0; colIndex < baseCols; colIndex++) {
+                for (let rowIndex = 4; rowIndex < baseRows; rowIndex++) {
+                    const z = getNormalizedZ();
+                    const depth = -(z * maxDepth);
+                    
+                    const normalizedX = colIndex * (1/baseCols) + (1/baseCols*0.5) + getJitter();
+                    const depthAdjustedX = (normalizedX - 0.5) * (z*4+2) + 0.5;
+                    const scaledX = depthAdjustedX * width;
+                    
+                    const normalizedY = rowIndex * (1/baseRows) + getJitter();
+                    const depthAdjustedY = normalizedY;
+                    const scaledY = depthAdjustedY * height;
+
                     circles.push(
                         {
                             style: {
-                                left: left + "px",
-                                top: top + "px",
-                                opacity: Math.sin((1 - z) * (Math.PI / 2)),
-                                transform: `translateZ(${(1 - z) * 150 - 150}px)`
+                                left: scaledX + "px",
+                                top: scaledY + "px",
+                                opacity: 1-z,
+                                transform: `translateZ(${depth}px)`
                             },
-                            z
+                            z: depth
                         }
                     );
                 }
             }
-            circles.sort((c1, c2) => c2.z - c1.z);
+            circles.sort((c1, c2) => c1.z - c2.z);
             return circles;
         },
     },
@@ -56,12 +68,12 @@ export default {
     
 <style scoped lang="scss">
 .star {
-    width: 60px;
-    height: 60px;
+    width: 175px;
+    height: 175px;
 
     @media only screen and (max-width: 700px) {
-        width: 45px;
-        height: 45px;
+        width: 125px;
+        height: 125px;
     }
 
     position: absolute;

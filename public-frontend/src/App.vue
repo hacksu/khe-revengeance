@@ -129,7 +129,7 @@ html {
 }
 
 body {
-  perspective: 150px;
+  perspective: 100px;
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
   background-color: black;
