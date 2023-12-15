@@ -113,7 +113,6 @@ export default {
     font-size: 20px;
     line-height: 30px;
   }
-
   @include dark-bg;
 }
 
@@ -125,7 +124,6 @@ export default {
     font-size: 18px;
     margin-top: 20px;
   }
-
   @include dark-bg;
 }
 </style>

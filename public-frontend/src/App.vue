@@ -59,21 +59,24 @@ export default {
       showMLH: true,
       expandMenu: false,
       shrinkBanner: false,
-      hamburgerIcon,
+      hamburgerIcon
     };
   },
   setup() {
     return { user };
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    document.body.addEventListener('scroll', this.handleScroll);
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll);
+    document.body.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     handleScroll() {
-      this.shrinkBanner = document.documentElement.scrollTop > 0;
+      this.shrinkBanner = document.body.scrollTop > 0;
+      if (document.body.scrollTop > 600){
+        document.body.classList.replace("light", "dark");
+      }
     },
     // userInitialState() {
     //   this.hasApp = false;
@@ -132,13 +135,13 @@ body {
   perspective: 100px;
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
-  background-color: black;
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
   padding: 0 !important;
   margin: 0 !important;
   font-family: var(--font-family);
+  @include use-theme-primary;
 }
 
 #hamburgMenu {
@@ -146,7 +149,6 @@ body {
 }
 
 #app-container {
-  color: color('text-primary');
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: absolute;
@@ -164,14 +166,10 @@ body {
 #banner {
   position: fixed;
   width: 100%;
-  transition: all 0.2s;
   display: flex;
   justify-content: space-between;
   z-index: 98;
-
-  @include mobile {
-    @include bg-primary;
-  }
+  @include use-theme-secondary;
 
   @include display-not(mobile) {
     padding-top: 20px;
@@ -188,8 +186,6 @@ body {
 }
 
 #banner.scrolled {
-  @include bg-primary;
-
   @include display-not(mobile) {
     padding-top: 10px;
     padding-bottom: 5px;
@@ -242,82 +238,6 @@ body {
     display: none !important;
   }
 }
-
-/* AUTH STYLING */
-/*  Putting this here so i don't need to duplicate in  two components*/
-
-// #register .gold-clear-button {
-//   font-size: 2vmin !important;
-// }
-
-// #auth-title2 {
-//   font-family: Lazer84;
-//   font-size: 50px;
-//   margin: 0px;
-//   /*margin-bottom: -70px;*/
-//   padding-top: -10vh;
-//   color: $gold;
-//   font-size: 5vmin;
-//   transform: rotate(-5deg) translate(0%, -80%);
-//   letter-spacing: 1vmin;
-//   display: inline-block;
-//   filter: drop-shadow(4px 4px $blue) drop-shadow(-1.5px -1.5px $blue);
-//   z-index: 5;
-// }
-
-// #auth-subtitle {
-//   font-size: 20px;
-//   margin-top: 5px;
-//   // margin-bottom: 5px;
-//   // margin-bottom: 10px;
-// }
-
-// .auth-container {
-//   position: relative;
-//   z-index: 15;
-//   padding-top: 10px;
-//   border-radius: 25px;
-//   width: 50vw;
-//   min-width: 300px;
-//   margin-left: 50%;
-//   transform: translatex(-50%);
-//   @include bg-secondary;
-// }
-
-// .simple-text-input {
-//   font-family: abel;
-//   background: none;
-//   border: none;
-//   border-bottom: 2px solid black;
-//   color: black;
-//   font-size: 16px;
-//   margin-bottom: 20px;
-// }
-
-// #auth-ground {
-//   background: $sand;
-//   width: 100vw;
-//   height: 15vh;
-//   position: absolute;
-//   bottom: 0px;
-//   z-index: 5;
-// }
-
-// #auth-cactus {
-//   height: 50vh;
-//   z-index: 10;
-//   position: absolute;
-//   bottom: 7vh;
-//   left: 10vw;
-// }
-
-// #auth-rocks {
-//   height: 7vh;
-//   z-index: 10;
-//   position: absolute;
-//   bottom: 7vh;
-//   left: 26vw;
-// }
 
 @media only screen and (max-width: 850px) {
   #bannerL {

@@ -3,15 +3,6 @@
 </template>
     
 <script>
-
-function getNormalizedZ() {
-    // const uniform = Math.random();  // [0, 1)
-    // const inSin = (uniform*Math.PI/2) + (3*Math.PI/2);  // [3pi/2, 4pi/2)
-    // const onSin = Math.sin(inSin);  // [-1, 0)
-    // return onSin + 1;  // [0, 1)
-    return 1 - Math.random() ** 1.2; 
-}
-
 export default {
     name: 'Stars',
     data() {
@@ -23,6 +14,12 @@ export default {
         this.circles = this.getRandomCircles();
     },
     methods: {
+        // TODO: something to make extra rows if the page gets taller/hide them
+        // if the page gets shorter. can't regenerate them every time while
+        // using random points... use ResizeObserver or run a check on every
+        // page transition, accordion open/close, etc, etc
+        // note: actually, the presence of the stars keeps a page from shrinking
+        // vertically even when it should, yikes
         getRandomCircles() {
             const circles = [];
             const width = window.innerWidth;
@@ -33,6 +30,7 @@ export default {
             const jitter = 1 / baseCols * 0.3;
             const maxDepth = 500;
             const getJitter = () => (Math.random()-0.5) * jitter * 2;
+            const getNormalizedZ = () => 1 - Math.random() ** 1.2;
             for (let colIndex = 0; colIndex < baseCols; colIndex++) {
                 for (let rowIndex = 4; rowIndex < baseRows; rowIndex++) {
                     const z = getNormalizedZ();
@@ -51,7 +49,7 @@ export default {
                             style: {
                                 left: scaledX + "px",
                                 top: scaledY + "px",
-                                opacity: 1-z,
+                                filter: `brightness(${1-z})`,
                                 transform: `translateZ(${depth}px)`
                             },
                             z: depth
@@ -67,7 +65,15 @@ export default {
 </script>
     
 <style scoped lang="scss">
+@import "@/globalVars.scss";
 .star {
+    .light & {
+        opacity: 0;
+    }
+    @include use-theme-transition(opacity);
+    
+    // mix-blend-mode: lighten;
+
     width: 175px;
     height: 175px;
 

@@ -115,7 +115,6 @@ export default {
     border-radius: 5px;
     border: 3px solid rgb(169, 169, 169);
     background-color: rgb(22, 36, 36);
-    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;

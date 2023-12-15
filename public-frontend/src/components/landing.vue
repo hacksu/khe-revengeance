@@ -71,7 +71,7 @@ $text-color: #bdbdbd;
   max-width: 90vw;
   margin-left: auto;
   margin-right: auto;
-  color: $text-color;
+  color: var(--text-primary);
   display: inline;
   padding: 10px;
 }
@@ -151,7 +151,7 @@ $text-color: #bdbdbd;
   #email-input-label {
     display: block;
     margin: 14px 8px;
-    color: $text-color;
+    color: var(--text-primary);
     font-size: 1.2em;
   }
 
@@ -161,6 +161,9 @@ $text-color: #bdbdbd;
     border-radius: 5px;
     overflow: clip;
     position: relative;
+    body.light & {
+      border: 1px solid black;
+    }
 
     #thank-you-message {
       position: absolute;
@@ -168,7 +171,7 @@ $text-color: #bdbdbd;
       top: 0;
       font-size: 20px;
       padding: 5px;
-      color: $text-color;
+      color: var(--text-primary);
       height: 40px;
       width: 100%;
       display: flex;
@@ -196,8 +199,8 @@ $text-color: #bdbdbd;
       height: 100%;
       border-radius: 0;
       border: none;
-      transition: background-color 0.25s;
       background-color: lightgray;
+      cursor: pointer;
 
       &:disabled {
         background-color: white;

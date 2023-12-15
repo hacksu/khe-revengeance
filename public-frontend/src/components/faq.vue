@@ -87,7 +87,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/globalVars.scss';
 
 .info-container {
   padding: 20px;

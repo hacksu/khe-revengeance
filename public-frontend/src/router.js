@@ -48,6 +48,7 @@ export const routerConfig = {
     // }
   ],
   scrollBehavior(to, from, savedPosition) {
+    // TODO: fix this. the #faq link in the header doesn't work
     if (to.hash) {
       return {
         el: to.hash,

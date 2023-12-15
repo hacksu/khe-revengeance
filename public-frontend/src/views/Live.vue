@@ -105,7 +105,6 @@
 </script>
 
 <style scoped lang="scss">
-  @import '@/globalVars.scss';
 
   #live {
     position: absolute;

@@ -1,29 +1,31 @@
-// Color palettes:
+body.light {
+  --background-color: white;
+  --offset-background: lightgray;
+  --text-primary: black;
+  --text-secondary: #222;
+}
 
-$gold: #f3ea5f;
-$dark-gold: #cd9733;
-$brown: #5a4a3a;
-$dark-blue: #181f3e;
-$blue: #92d4e7;
-$light-blue: #e4f6f8;
-$red: #e87c72;
-$purple: #e72ed7;
-$black: black;
+body.dark {
+  --background-color:  black;
+  --offset-background: rgb(35, 35, 35);
+  --text-secondary: #eee;
+  --text-primary: white;
+}
 
-$sand: #f7eee8;
-$sand2: #f2eef3;
-$white: $sand;
+@mixin use-theme-transition($properties...) {
+  transition-duration: 2s;
+  transition-property: $properties;
+}
 
-$md-bp: 700px; // Medium break point, for responsive design
-$lg-bp: 1000px;
-$lg-bp2: 1220px;
-$lg-bp3: 1060px;
+@mixin use-theme-primary {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  @include use-theme-transition(background-color, color);
+}
 
-$black-overwrite: white;
-$white-overwrite: black;
-
-.outline {
-  -webkit-text-fill-color: $black-overwrite; /* Will override color (regardless of order) */
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: $white-overwrite;
+@mixin use-theme-secondary {
+  background-color: var(--offset-background);
+  color: var(--text-secondary);
+  transition-property: background-color, color;
+  @include use-theme-transition(background-color, color);
 }

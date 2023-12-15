@@ -2,8 +2,8 @@
 
 
 @mixin bg-primary {
-    background-color: color('bg-primary');
-    color: color('text-primary');
+    background-color: var(--background-color);
+    color: var(--text-primary);
 }
 
 @mixin bg-secondary {

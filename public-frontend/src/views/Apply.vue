@@ -549,7 +549,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/globalVars.scss";
 @import '@/styles/global.scss';
 
 #application .back {
