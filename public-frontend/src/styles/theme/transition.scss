@@ -1,8 +1,0 @@
-
-
-@mixin grow($selector, $scale,  $duration) {
-    transition: transform #{$duration} ease;
-    &:#{$selector} {
-        transform: scale(#{$scale});
-    }
-}

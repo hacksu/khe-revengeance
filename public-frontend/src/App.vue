@@ -201,7 +201,6 @@ body {
   margin: 0px;
   font-size: 18px;
   cursor: pointer;
-  @include grow('hover', 1.05, 0.2s);
 }
 
 .bannerContainer {

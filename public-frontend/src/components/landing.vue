@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { remult } from 'remult';
 import { Email } from 'includes/email-address';
 
 export default {
@@ -84,20 +83,8 @@ $text-color: #bdbdbd;
 
 #apply-btn {
   @include large-btn-primary;
-  @include grow("hover", 1.1, 0.3s);
   width: 300px;
   max-width: 80vw;
-}
-
-#schedule-link {
-  @include underline;
-  @include grow("hover", 1.025, 0.2s);
-  color: color("text-primary");
-  font-size: 2vh;
-
-  @include mobile {
-    font-size: 2.5vh;
-  }
 }
 
 #landing-container {
