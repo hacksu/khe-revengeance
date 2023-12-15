@@ -1,8 +1,5 @@
 <template>
   <div id="landing-container" class="landing">
-    <div class="hacksu-box box1" />
-    <div class="hacksu-box box2" />
-
     <div id="logo-container">
       <img src="/2023_Logo_Resized.png" id="short-logo" />
     </div>
@@ -69,10 +66,6 @@ export default {
 @import "@/styles/space.scss";
 
 $text-color: #bdbdbd;
-
-.hacksu-box {
-  display: none;
-}
 
 #date {
   font-size: 1.8em;

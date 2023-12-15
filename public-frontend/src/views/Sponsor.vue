@@ -622,24 +622,6 @@ button:hover {
     padding: 20px;
   }
 
-  /*:hover {
-    transform: scale(1.1)!important;
-  }*/
 }
 
-/*
-@font-face {
-    font-family: abel;
-    src: url("./assests/fonts/abel-regular.ttf");
-}
-
-@font-face {
-    font-family: Lazer84;
-    src: url("./assests/fonts/Lazer84.ttf");
-}
-
-@font-face {
-    font-family: 'Dagger Square';
-    src: url("./assests/fonts/DAGGERSQUARE.otf");
-}*/
 </style>
