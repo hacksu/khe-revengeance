@@ -22,7 +22,65 @@ export const schoolStatus = [
   "Alumni",
 ] as const;
 
-export const genders = ["Boy", "Girl", "Other", "Prefer not to say"] as const;
+export const genders = [
+  "Male",
+  "Female",
+  "nonbinary",
+  "Other",
+  "Prefer not to answer"
+] as const;
+
+export const userPronouns = [
+  "He/Him",
+  "She/Her",
+  "He/They",
+  "She/They",
+  "They/Them",
+  "Other",
+  "Prefer not to answer"
+] as const;
+
+export const ethnicities = [
+  "Indian",
+  "Black or African",
+  "Chinese",
+  "Filipino",
+  "Guamanian or Chamorro",
+  "Hispanic / Latino / Spanish Origin",
+  "Japanese",
+  "Korean",
+  "Middle Eastern",
+  "Native American or Alaskan Native",
+  "Native Hawaiian",
+  "Samoan",
+  "Vietnamese",
+  "White",
+  "Asian",
+  "Other Pacific Islander",
+  "European",
+  "Prefer not to answer", 
+  "Other"
+] as const;
+
+export const shirtSize = [
+  "S", 
+  "M",
+  "L",
+  "XL"
+] as const;
+
+// export const dietaryRestrictions = [
+//   "Vegetarian",
+//   "Vegan",
+//   "Halal",
+//   "Celiac Disease", 
+//   "Peanut Allergy",
+//   "Other nut allergy",
+//   "Wheat",
+//   "Soy",
+//   "Lactose Intolerant",
+//   "Other"
+// ] as const;
 
 export const HackathonRegistrationDraft = z.object({
   name: z.string(),
@@ -34,14 +92,28 @@ export const HackathonRegistrationDraft = z.object({
   gender: z.enum(genders).nullable(),
   optionalExtraGender: z.string(),
   major: z.string(),
-  conduct: z.boolean(),
+  conduct: z.boolean().nullable(),
   link: z.string(),
+  attendedKhe: z.boolean().nullable(),
+  pronouns: z.enum(userPronouns).nullable(),
+  optionalExtraPronouns: z.string(),
+  ethnicity: z.enum(ethnicities).nullable(),
+  optionalExtraEthnicity: z.string(),
+  sexuality: z.array(z.string()),
+  optionalExtraSexuality: z.string(),
+  shirtSize: z.enum(shirtSize).nullable(),
+  country: z.string(),
+  state: z.string(),
+  mlhConduct: z.boolean().nullable(),
+  mlhShare: z.boolean().nullable(),
+  dietaryRestrictions: z.array(z.string()),   
+  optionalExtraRestriction: z.string()
 });
 
 export type RegistrationDraft = z.infer<typeof HackathonRegistrationDraft>;
 
 const defaultRegistration: RegistrationDraft = {
-  name: "",
+  name: '',
   school: "",
   phone: "",
   schoolStatus: null,
@@ -52,6 +124,20 @@ const defaultRegistration: RegistrationDraft = {
   major: "",
   conduct: false,
   link: "",
+  attendedKhe: false,
+  pronouns: null,
+  optionalExtraPronouns: "",
+  ethnicity: null,
+  optionalExtraEthnicity: "",
+  sexuality: [],
+  optionalExtraSexuality: "",
+  shirtSize: null,
+  country: "",
+  state: "",
+  mlhConduct: false,
+  mlhShare: false,
+  dietaryRestrictions: [],
+  optionalExtraRestriction: ""
 };
 
 export const FullRegistration = HackathonRegistrationDraft.extend({
@@ -63,7 +149,6 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   schoolStatus: z.enum(schoolStatus),
   firstHackathon: z.boolean(),
   age: z.number().gte(13).lte(130),
-  gender: z.enum(genders),
 });
 
 export type Registration = z.infer<typeof FullRegistration>;

@@ -6,10 +6,12 @@
     <div id="logo-container">
       <img src="/2023_Logo_Resized.png" id="short-logo" />
     </div>
-
-    <div id="landing-content-container">
+    <div v-if = "registrationOpen" id="landing-content-container">
+      <button id="register-button" @click = "navigateTo('/login')">Register Now!</button>
+    </div>
+    <div v-if="!registrationOpen" id="landing-content-container">
       <div class="date-container">
-        <p id="date">Blasting off this October</p>
+        <p id="date">Blasting off this April</p>
       </div>
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
@@ -37,7 +39,10 @@ export default {
     updatesEmail: "",
     updatesEmailSubmitted: false,
     updatesEmailError: "",
-    updatesEmailPlaceholder: ""
+    updatesEmailPlaceholder: "",
+    //the boolean below determines whether the page displays email input or a register button
+    //TODO: automate this with a toggle on the staff page 
+    registrationOpen: true
   }),
   mounted() {
     const prevUpdatesEmail = localStorage.getItem("updatesEmail");
@@ -59,7 +64,11 @@ export default {
       this.updatesEmailError = "";
       this.updatesEmailSubmitted = true;
       this.updatesEmail = "";
-    }
+    },
+    navigateTo: function (page, el) {
+      this.expandMenu = false;
+      this.$router.push({ path: page, hash: el });
+    },
   }
 };
 </script>
@@ -73,6 +82,19 @@ $text-color: #bdbdbd;
 .hacksu-box {
   display: none;
 }
+
+#register-button {
+  margin-top: 10px;
+  @include large-btn-primary;
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  background-color: gray;
+}
+
 
 #date {
   font-size: 1.8em;
