@@ -5,6 +5,7 @@ import {
   Profile as GitHubProfile,
 } from "passport-github2";
 import { Strategy as DiscordStrategy } from "passport-discord";
+import { Strategy as LocalStrategy } from "passport-local";
 import { VerifyCallback } from "passport-oauth2";
 import { App as GitHubApp } from "octokit";
 import session from "express-session";
@@ -15,6 +16,16 @@ import MongoStore from "connect-mongo";
 import { AuthMethod, User } from "../global-includes/users.ts";
 import { UserRole } from "../global-includes/common.ts";
 import { config } from "./config.ts";
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        console.log(
+            "hello i am looking up username",
+            username,
+            "and like making a new account if it does not exist and stuff"
+        );
+    }
+  ));
 
 // authenticating via Github login
 passport.use(
