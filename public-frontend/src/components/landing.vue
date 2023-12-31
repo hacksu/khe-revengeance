@@ -1,12 +1,23 @@
 <template>
   <div id="landing-container" class="landing">
-    <div id="logo-container">
-      <img src="/2023_Logo_Resized.png" id="short-logo" />
+
+    <div id="sun-container">
+      <img id="sun" src="/sun.png" />
+      <img id="eclipse" src="/eclipse-overlay-bottom.png" />
     </div>
+
+    <div id="moon-container">
+      <img src="/Logo.svg" id="khe-logo" />
+    </div>
+
+    <div id="sun-container">
+      <img id="eclipse" src="/eclipse-overlay-top.png" />
+    </div>
+
 
     <div id="landing-content-container">
       <div class="date-container">
-        <p id="date">Blasting off this October</p>
+        <p id="date">Come to our hackathon in April 2024.</p>
       </div>
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
@@ -61,6 +72,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@use "sass:math";
 @import "@/styles/global.scss";
 @import "@/styles/space.scss";
 
@@ -210,29 +222,75 @@ $text-color: #bdbdbd;
   }
 }
 
-#logo-container {
-  /*height: 130px;*/
-  margin-top: 22vh;
+#sun-container {
+  width: 1100px;
+  position: fixed;
+  left: 50%;
+  top: -250px;
+  transform: translateX(-50%);
 
   img {
-    height: 70%;
-    padding: 0px 10px;
-
-    @media only screen and (max-width: $md-bp) {
-      height: 80%;
-    }
+    width: 100%;
   }
 
-  #short-logo {
-    margin-top: 20px;
-    width: 350px;
-    max-width: 70vw;
-    height: auto;
+  #sun{
+    position: absolute;
+    top: 0;
+    left: 0;
+    body.dark & {
+      opacity: 0;
+    }
+    @include use-theme-transition(opacity);
+  }
+
+  #eclipse {
+    body.light & {
+      opacity: 0;
+    }
+    @include use-theme-transition(opacity);
+    transition-duration: math.div($theme-transition-length, 2);
+    transition-delay: math.div($theme-transition-length, 2);
+  }
+}
+
+#moon-container {
+  width: 360px;
+  height: 360px;
+  // #moon {
+  //   filter: brightness(1);
+  //   width: 100%;
+  //   body.dark & {
+  //     // opacity: 0;
+  //     filter: brightness(0.1);
+  //   }
+  //   @include use-theme-transition(opacity, filter);
+  // }
+  position:absolute;
+  left: 50%;
+  // body.light & {
+  //   bottom: 35%;
+  // }
+  // body.dark & {
+  //   bottom: 51%;
+  // }
+  bottom: 51%;
+  @include use-theme-transition(bottom);
+  transform: translateX(-50%);
+
+  #khe-logo {
+    position: absolute;
+    width: 60%;
+    left: 50%;
+    top: 40%;
+    transform: translateX(-50%);
   }
 }
 
 #landing-content-container {
-  margin-top: 40px;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 11;
 }
 

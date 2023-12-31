@@ -12,8 +12,11 @@ body.dark {
   --text-primary: white;
 }
 
+$theme-transition-length: 0.5s;
+
 @mixin use-theme-transition($properties...) {
-  transition-duration: 2s;
+  transition-duration: $theme-transition-length;
+  transition-timing-function: ease-out;
   transition-property: $properties;
 }
 

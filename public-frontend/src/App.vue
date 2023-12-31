@@ -74,7 +74,7 @@ export default {
   methods: {
     handleScroll() {
       this.shrinkBanner = document.body.scrollTop > 0;
-      if (document.body.scrollTop > 600){
+      if (document.body.scrollTop > 25){
         document.body.classList.replace("light", "dark");
       }
     },
