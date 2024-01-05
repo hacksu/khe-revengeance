@@ -3,6 +3,7 @@ import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 import { z } from "zod";
 import { isEmailRegex } from "./email-address.ts";
+import crypto from "crypto";
 
 export enum AuthMethod {
   Discord = "Discord",
@@ -204,6 +205,9 @@ export class User extends EntityBase {
   })
   email!: string;
 
+  @VFields.string()
+  password: string = "";
+
   // we only really need one role but having roles[] complies with remult's
   // UserInfo interface for quick allowApiX checks
   @Fields.json({
@@ -287,6 +291,59 @@ export class User extends EntityBase {
     return user as User;
   }
 
+  //called when the user fills out the form with intent to create accound
+  //returns an error message if something goes wrong
+  //returns a User object to create a session for the newly created account
+  //under ideal circumstances
+  @BackendMethod({ allowed: false })
+  static async createLocalAccount(
+    email: string, 
+    password: string, 
+    confirmPassword: string
+  ) {
+    const users = remult.repo(User);
+    //check if account already exists
+    let user: Partial<User> = await users.findFirst({email});
+    if (!user) { // user doesn't exist
+      //check if passwords match
+      if (password != confirmPassword) { return "Passwords do not match! "}
+      //hash password
+      var hashedPass = crypto.createHash("sha256").update(password).digest("hex")
+      //create remult object with the user's information and return user object
+      user = {
+        ...new User(),
+        email, 
+        password: hashedPass,
+        method: AuthMethod.Local,
+        roles: [],
+      }
+    } else { // user exists
+      return "User account already exists with this email! Try logging in, or using another authentication method";
+    }
+    return user as User;
+  }
+
+  //called when the user fills out the form with the intent to login
+  //works very similarly to the createLocalAccount function above
+  @BackendMethod({ allowed: false })
+  static async localLogin(
+    email: string, 
+    password: string
+  ) {
+    const users = remult.repo(User);
+    //attempt to find a user with the provided email
+    let user: Partial<User> = await users.findFirst({email});
+    //if the user exists, verify the password
+    if (user) {
+      let hashedInput = crypto.createHash("sha256").update(password).digest("hex");
+      if (hashedInput != user.password) {return "Incorrect Password!"}
+    } else {
+      return "No account exists with this email!";
+    }
+    //return the user object
+    return user as User;
+  }
+
   @BackendMethod({ allowed: true })
   static async submitRegistration() {
     const user = remult.user as User;
@@ -304,4 +361,16 @@ export class User extends EntityBase {
     // does this have to be its own function???
     return remult.user;
   }
+
+  //takes user credentials as input
+  //return true -> password matches record with email
+  //return false -> password does not match record with email
+  // @BackendMethod({ allowed: true })
+  // static async verifyUserPassword(user:User, password:string) {
+  //   //hash the provided plaintext password
+  //   var hashedInput = crypto.createHash("sha256").update(password).digest("hex")
+  //   //check the hashed value against the value stored in the database
+  //   if (hashedInput == user.password) { return true; }
+  //   else { return false; }
+  // }
 }

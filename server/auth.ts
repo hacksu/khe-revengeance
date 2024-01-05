@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, Express } from "express";
+import { ErrorRequestHandler, Express, application } from "express";
 import passport from "passport";
 import {
   Strategy as GitHubStrategy,
@@ -6,6 +6,7 @@ import {
 } from "passport-github2";
 import { Strategy as DiscordStrategy } from "passport-discord";
 import { VerifyCallback } from "passport-oauth2";
+import { Strategy as LocalStrategy } from "passport-local";
 import { App as GitHubApp } from "octokit";
 import session from "express-session";
 import type { RemultServer } from "remult/server/expressBridge.js";
@@ -115,6 +116,44 @@ passport.use(
   )
 );
 
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true,
+      session: false
+    },
+    async function verify(req, email:string, password:string, done:any) {
+      //check if email and password fields are populated
+      if (!email) {  //TODO: validate email formatting
+        done(new Error("no email provided"));
+      }
+      if (!password) {
+        done(new Error("no password provided"));
+      }
+      //call function to register or login based on the value of req.body.newUser
+      if (req.body.newUser) {
+        done (
+          null,
+          await User.createLocalAccount(
+            email,
+            password,
+            req.body.confirmPassword
+          )
+        );
+      } else {
+        done (
+          null,
+          await User.localLogin(
+            email,
+            password
+          )
+        );
+      }
+    }
+  )
+);
 // this function takes a User object returned by an authentication strategy
 // after login and saves its id in the data for the newly created active session
 passport.serializeUser(function (user, done) {
@@ -176,6 +215,12 @@ export function registerAuthMiddleware(
       res.redirect("/profile");
     }
   );
+  //login as local user
+  app.post("/login/local", passport.authenticate("local", {
+    successReturnToOrRedirect: '/profile',
+    failureRedirect: '/login',
+    failureMessage: true
+  }));
   // handle unrecoverable errors by logging the user out and sending them back
   // to the home page
   app.use(function (err, req, res, next) {

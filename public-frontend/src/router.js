@@ -3,6 +3,7 @@ import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+//import localLogin from "./views/localLogin.vue";
 
 export const routerConfig = {
   routes: [

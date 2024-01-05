@@ -8,18 +8,21 @@
             <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
             <span>Register with<br />Discord</span>
         </a>
-        <p class="loginBar loginButton" @click="hide(); showLocalAccountModal = true">
+        <a class="loginBar loginButton" @click="localClicked = true">
             <img id="khe-mark" src="/favicon.ico" />
             <span>Register with<br />local account</span>
-        </p>
+        </a>
+        <localLogin v-if="localClicked" @close="localClicked = false"/>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 import { user, loadUser } from "../state/user.js";
-import LoginButton from "../components/login-button.vue";
+import localLogin from "../components/localLogin.vue";
+
+const localClicked = ref(false);
 
 const router = useRouter();
 onMounted(() => {
