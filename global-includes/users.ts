@@ -301,14 +301,20 @@ export class User extends EntityBase {
     password: string, 
     confirmPassword: string
   ) {
+    console.log("creating local account...")
+    console.log("email: ", email)
+    console.log("password: ", password)
+    console.log("confirmPassword: ", confirmPassword)
     const users = remult.repo(User);
     //check if account already exists
     let user: Partial<User> = await users.findFirst({email});
     if (!user) { // user doesn't exist
+      console.log("user doesn't already exist!");
       //check if passwords match
-      if (password != confirmPassword) { return "Passwords do not match! "}
+      if (password != confirmPassword) { console.log("passwords don't match!"); return "Passwords do not match! "; }
       //hash password
-      var hashedPass = crypto.createHash("sha256").update(password).digest("hex")
+      var hashedPass = crypto.createHash("sha256").update(password).digest("hex");
+      console.log("hashed password: ", hashedPass);
       //create remult object with the user's information and return user object
       user = {
         ...new User(),
@@ -318,8 +324,11 @@ export class User extends EntityBase {
         roles: [],
       }
     } else { // user exists
+      console.log("user already exists");
       return "User account already exists with this email! Try logging in, or using another authentication method";
     }
+    console.log("saving user...")
+    user = await users.save(user);
     return user as User;
   }
 
@@ -341,6 +350,7 @@ export class User extends EntityBase {
       return "No account exists with this email!";
     }
     //return the user object
+    console.log("returning user: ", user);
     return user as User;
   }
 

@@ -1,21 +1,28 @@
 <template>
-    <Dialog @hide="close()" v-model:visible="localAccountVisible" modal header="KHE Account" contentClass="loginModal">
+    <Dialog @hide="$emit('close')" v-model:visible="localAccountVisible" modal header="KHE Account" contentClass="loginModal">
         <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
         <span class="p-float-label p-input-icon-right">
             <i class="pi pi-envelope" />
             <InputText id="email" v-model="modal.email"/>
+            <label for="email">Email</label>
         </span>
         <span class="p-float-label">
-            <Password id="email" v-model="modal.password" inputId="password" toggleMask />
+            <Password id="password" v-model="modal.password" inputId="password" toggleMask />
             <label for="password">Password</label>
         </span>
-        <span v-if="makingAccount" class="p-flaot-label">
-            <Password v-model="modal.confirmPassword" inputId="password" toggleMask />
-            <label for="password">Confirm Password</label>
+        <span v-if="makingAccount" class="p-float-label">
+            <Password v-model="modal.confirmPassword" inputId="confirmPassword" toggleMask />
+            <label for="confirmPassword">Confirm Password</label>
         </span>
-        <Button @click="modal.submit()" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
+        <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
     </Dialog>
 </template>
+<!-- <script setup>
+import { user, loadUser } from '../state/user.js';
+import { onMounted } from 'vue';
+console.log('setup script is running');
+onMounted(async () => { await loadUser(); console.log("loaded user:", user)});
+</script> -->
 <script>
 import Dialog from 'primevue/dialog';
 import SelectButton from 'primevue/selectbutton';
@@ -23,43 +30,43 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 
+import { user, loadUser } from '../state/user.js';
+import { onMounted } from 'vue';
+
 import { isEmailRegex } from '../../../global-includes/email-address';
+
+console.log('not setup script is running')
 
 const accountOptions = ["Log In", "Create Account"];
 const LogIn = accountOptions[0];
 
-//information to be sent in request on submission
-const requestOptions = {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-        email: this.email,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        newUser: null
-    })
-};
-
 export default { 
     name: "localDialog",
     methods: {
-        async register () {
-            requestOptions.body.newUser = true;
-        },
-        async login () {
-            requestOptions.body.newUser = false;
-        },
-        submit() {
-            //modify newUser variable accordingly
-            if (makingAccount) {
-                this.modal.register();
-            } else {
-                this.modal.login();
-            }
+        submit(makingAccount) {
+            //information to be sent in request on submission
+            const requestOptions = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: this.modal.email,
+                    password: this.modal.password,
+                    confirmPassword: this.modal.confirmPassword,
+                    newUser: makingAccount
+                })
+            };
             //send request using fetch
             fetch("/login/local", requestOptions)
-                .then(response => response.json())
-                .then(data => (this.postId = data.id))
+                .then(response => response.json().then(responseObject => {
+                    if (responseObject.success) {
+                        window.location.href = responseObject.goToPage;
+                    } else {
+                        console.error("login failed");
+                    }
+                }))
+                .catch( error => {
+                    console.error("Error: ", error)
+                });
         }
     },
     components: { Dialog, SelectButton, InputText, Password, Button },
@@ -75,6 +82,11 @@ export default {
         },
         onMobile: typeof window !== "undefined" && window.innerWidth < 850
     }),
+    setup() {
+        onMounted(async () => {await loadUser(); console.log("loaded user:", user)});
+        console.log("returning user: ", user);
+        return { user }
+    },
     watch: {
         localAccountSwitch(newValue, oldValue) {
             if (!newValue) {

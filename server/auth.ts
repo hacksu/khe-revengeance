@@ -125,15 +125,22 @@ passport.use(
       session: false
     },
     async function verify(req, email:string, password:string, done:any) {
+      console.log('Running verify function :3');
+      console.log("req.body: ", req.body);
+      console.log("email: ", email);
+      console.log("password: ", password)
       //check if email and password fields are populated
       if (!email) {  //TODO: validate email formatting
+        console.log("no email found")
         done(new Error("no email provided"));
       }
       if (!password) {
+        console.log("no password found")
         done(new Error("no password provided"));
       }
       //call function to register or login based on the value of req.body.newUser
       if (req.body.newUser) {
+        console.log("creating a new user...")
         done (
           null,
           await User.createLocalAccount(
@@ -143,6 +150,7 @@ passport.use(
           )
         );
       } else {
+        console.log("logging in as an existing user...")
         done (
           null,
           await User.localLogin(
@@ -217,10 +225,12 @@ export function registerAuthMiddleware(
   );
   //login as local user
   app.post("/login/local", passport.authenticate("local", {
-    successReturnToOrRedirect: '/profile',
+    //successReturnToOrRedirect: '/profile',
     failureRedirect: '/login',
     failureMessage: true
-  }));
+  }), function(req, res) {
+    res.json({success: true, goToPage: "/profile"});
+  });
   // handle unrecoverable errors by logging the user out and sending them back
   // to the home page
   app.use(function (err, req, res, next) {
