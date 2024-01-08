@@ -30,8 +30,8 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 
+import { User } from '../../../global-includes/users.ts';
 import { user, loadUser } from '../state/user.js';
-import { onMounted } from 'vue';
 
 import { isEmailRegex } from '../../../global-includes/email-address';
 
@@ -59,6 +59,8 @@ export default {
             fetch("/login/local", requestOptions)
                 .then(response => response.json().then(responseObject => {
                     if (responseObject.success) {
+                        user.value = responseObject.userObject;
+                        window.alert(JSON.stringify(responseObject.userObject));
                         window.location.href = responseObject.goToPage;
                     } else {
                         console.error("login failed");
@@ -71,6 +73,7 @@ export default {
     },
     components: { Dialog, SelectButton, InputText, Password, Button },
     data: () => ({
+        //user: user,
         localAccountVisible: true,
         localAccountSwitch: LogIn,
         localAccountOptions: accountOptions,
@@ -82,9 +85,12 @@ export default {
         },
         onMobile: typeof window !== "undefined" && window.innerWidth < 850
     }),
+    mounted() {
+        console.log("mounted is running")
+        loadUser().then(() => {console.log("loaded user: ", user); this.user = user;});
+    },
     setup() {
-        onMounted(async () => {await loadUser(); console.log("loaded user:", user)});
-        console.log("returning user: ", user);
+        console.log("localLogin: returning user: ", user.value)
         return { user }
     },
     watch: {

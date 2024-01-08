@@ -68,6 +68,7 @@ async function createServer() {
   const app = express();
   app.use(express.json());
   registerAuthMiddleware(app, remultConfig);
+  app.use("/api/users/*", (req, res, next) => {console.log("REQUEST RECIEVED: ", req.body, req.user); next()});
   // create api routes for database stuff
   app.use(remultConfig);
   // for sanity checks

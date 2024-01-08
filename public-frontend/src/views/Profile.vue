@@ -107,7 +107,7 @@
                     <div class="labeled-field">
                         <label>Do you have any of the following dietary restriction? </label>
                         <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="vegetarian" value="Vegetarian" v-model="restrictions" @change="test"/>
+                            <input type="checkbox" id="vegetarian" value="Vegetarian" v-model="user.registration.dietaryRestrictions" @change="test"/>
                             <label for="vegetarian">Vegetarian</label>
                         </div>
                         <div class="horizontal-labeled-field">
@@ -143,7 +143,7 @@
                             <label for="lactose">Lactose Intolerant</label>
                         </div>
                         <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="other" value="Other" v-model="restrictions" @change="otherRestriction = !otherRestriction"/>
+                            <input type="checkbox" id="other" value="Other" v-model="user.registration.dietaryRestrictions" @change="otherRestriction = !otherRestriction"/>
                             <label for="other">Other</label>
                         </div>
                     </div>

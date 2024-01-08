@@ -229,7 +229,7 @@ export function registerAuthMiddleware(
     failureRedirect: '/login',
     failureMessage: true
   }), function(req, res) {
-    res.json({success: true, goToPage: "/profile"});
+    res.json({success: true, goToPage: "/profile", userObject: req.user});
   });
   // handle unrecoverable errors by logging the user out and sending them back
   // to the home page

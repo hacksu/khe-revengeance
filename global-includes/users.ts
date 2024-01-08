@@ -177,8 +177,8 @@ export type Registration = z.infer<typeof FullRegistration>;
 const noUpdate = { allowApiUpdate: false };
 
 @Entity<User>("users", {
-  allowApiCrud: UserRole.Admin,
-  apiPrefilter: () => (remult.isAllowed() ? {} : { id: remult.user?.id }),
+  allowApiCrud: true,
+  apiPrefilter: () => {console.log("REMULT API PREFILTER: ", remult.user); return (remult.isAllowed() ? {} : { id: remult.user?.id });},
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -321,7 +321,7 @@ export class User extends EntityBase {
         email, 
         password: hashedPass,
         method: AuthMethod.Local,
-        roles: [],
+        roles: [UserRole.Normal],
       }
     } else { // user exists
       console.log("user already exists");
