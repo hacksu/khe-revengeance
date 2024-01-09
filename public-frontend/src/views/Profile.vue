@@ -89,30 +89,11 @@
                             v-model="user.registration.optionalExtraEthnicity" />
                     </div>
                     <div class="labeled-field">
-                        <label>Do you identify as any of the following? <failureLabel v-if="submissionStatus == 'failed' && user.registration.sexuality == undefined "/></label>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="heterosexual" value="Heterosexual or Straight" v-model="user.registration.sexuality" />
-                            <label for="heterosexual">Heterosexual or Straight</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="gayLesbian" value="Gay or Lesbian" v-model="user.registration.sexuality" />
-                            <label for="gayLesbian">Gay or Lesbian</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="bisexual" value="Bisexual" v-model="user.registration.sexuality" />
-                            <label for="bisexual">Bisexual</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="noAnswer" />
-                            <label for="noAnswer" id="noAnswer" value="noAnswer">Prefer not to Answer</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="other" value="other" v-model="otherSexuality"  @click="otherSexuality = !otherSexuality" />
-                            <label for="other">Other</label>
-                        </div>
+                        <label for="sexuality">Do you identify as any of the following? <failureLabel v-if="submissionStatus == 'failed' && user.registration.sexuality == undefined "/></label>
+                        <Dropdown is="sexuality" v-model="user.registration.sexuality" :options="sexualities"></Dropdown>
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="otherSexuality">
+                        v-if="user.registration.ssexuality == 'Other'">
                         <svg height="50" width="100%" viewBox="10 0 100 100">
                             <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
                             <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
@@ -248,7 +229,7 @@
 </template>
 
 <script setup>
-import { User, schoolStatus, FullRegistration, genders, userPronouns, ethnicities, shirtSize} from "includes/users.ts";
+import { User, schoolStatus, FullRegistration, genders, userPronouns, ethnicities, shirtSize, sexualities} from "includes/users.ts";
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted } from "vue";
 import { remult } from "remult";

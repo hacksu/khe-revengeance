@@ -31,6 +31,14 @@ export const genders = [
   "Prefer not to answer"
 ] as const;
 
+export const sexualities = [
+  "Heterosexual or Straight",
+  "Gay or Lesbian",
+  "Bisexual",
+  "Prefer not to Answer",
+  "Other"
+] as const;
+
 export const userPronouns = [
   "He/Him",
   "She/Her",
@@ -101,7 +109,7 @@ export const HackathonRegistrationDraft = z.object({
   optionalExtraPronouns: z.string(),
   ethnicity: z.enum(ethnicities).nullable(),
   optionalExtraEthnicity: z.string(),
-  sexuality: z.array(z.string()),
+  sexuality: z.string(),
   optionalExtraSexuality: z.string(),
   shirtSize: z.enum(shirtSize).nullable(),
   country: z.string(),
@@ -132,7 +140,7 @@ const defaultRegistration: RegistrationDraft = {
   optionalExtraPronouns: "",
   ethnicity: null,
   optionalExtraEthnicity: "",
-  sexuality: [],
+  sexuality: "",
   optionalExtraSexuality: "",
   shirtSize: null,
   country: "",
