@@ -6,6 +6,22 @@
                 <template #content>
                     <label v-if="submissionStatus == 'failed'" style="color: red">Please fill out marked items</label>
                     <div class="labeled-field">
+                        <span>The email currently associated with your account is: {{ user.email }}</span>
+                        <div class="horizontal-labeled-field">
+                            <input type="checkbox" @change="alternateEmail = !alternateEmail"/>
+                            <label for="email">I would like to change my contact email!</label>
+                        </div>
+                        <div class="horizontal-labeled-field" style="margin-top: 10px;"
+                            v-if="alternateEmail">
+                            <svg height="50" width="100%" viewBox="10 0 100 100">
+                                <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
+                                <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
+                            </svg>
+                            <InputText style="width:100%" id="optionalAlternateEmail" placeholder="email"
+                                v-model="alternateEmailValue" />
+                        </div>
+                    </div>
+                    <div class="labeled-field">
                         <label for="name">Name <failureLabel v-if="submissionStatus == 'failed' && user.registration.name == ''"/></label>
                         <InputText id="name" v-model="user.registration.name" />
                     </div>
@@ -250,6 +266,8 @@ import failureLabel from "@/components/failureLabel.vue";
 
 const otherSexuality = ref(false);
 const otherRestriction = ref(false);
+const alternateEmail = ref(false);
+const alternateEmailValue = ref("");
 
 const submissionStatus = ref('pending');
 
@@ -264,6 +282,11 @@ onMounted(() => {
     });
 });
 const saveUser = async () => {
+    console.log("saving user: \n", "alternateEmailValue: ", alternateEmailValue.value)
+    console.log("user.value.email: ", user.value.email)
+    if (alternateEmail.value) {user.value.registration.email = alternateEmailValue.value}
+    console.log("user.value.email: ", user.value.email)
+    console.log("saving user: ", user.value)
     await remult.repo(User).save(user.value);
 };
 const isStaff = computed(() => {

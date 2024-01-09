@@ -87,6 +87,7 @@ export const HackathonRegistrationDraft = z.object({
   name: z.string(),
   school: z.string(),
   phone: z.string(),
+  email: z.string(),
   schoolStatus: z.enum(schoolStatus).nullable(),
   firstHackathon: z.boolean().nullable(),
   age: z.number().gte(13).lte(130).nullable(),
@@ -117,6 +118,7 @@ const defaultRegistration: RegistrationDraft = {
   name: '',
   school: "",
   phone: "",
+  email: "",
   schoolStatus: null,
   firstHackathon: null,
   age: null,
@@ -357,6 +359,8 @@ export class User extends EntityBase {
   @BackendMethod({ allowed: true })
   static async submitRegistration() {
     const user = remult.user as User;
+    console.log("received user: ", user)
+    console.log("received User: ", User)
     if (!user) {
       throw "Not logged in";
     }

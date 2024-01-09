@@ -123,7 +123,7 @@ export default {
 
 html {
   height: 100vh;
-  //overflow: hidden !important;
+  //overflow: hidden !important; 
   padding: 0 !important;
   margin: 0 !important;
 }
