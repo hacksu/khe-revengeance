@@ -130,13 +130,13 @@ passport.use(
       console.log("email: ", email);
       console.log("password: ", password)
       //check if email and password fields are populated
-      if (!email) {  //TODO: validate email formatting
+      if (!email) { 
         console.log("no email found")
-        done(new Error("no email provided"));
+        done(null, {error: "invalid email"});
       }
       if (!password) {
         console.log("no password found")
-        done(new Error("no password provided"));
+        done(null, {error: "invlaid password"});
       }
       //call function to register or login based on the value of req.body.newUser
       if (req.body.newUser) {

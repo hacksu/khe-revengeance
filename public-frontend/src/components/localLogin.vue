@@ -1,6 +1,7 @@
 <template>
     <Dialog @hide="$emit('close')" v-model:visible="localAccountVisible" modal header="KHE Account" contentClass="loginModal">
         <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
+        <label v-if="validLoginWarning" style="color: red;">invalid login credentials</label>
         <span class="p-float-label p-input-icon-right">
             <i class="pi pi-envelope" />
             <InputText id="email" v-model="modal.email"/>
@@ -58,6 +59,7 @@ export default {
             //send request using fetch
             fetch("/login/local", requestOptions)
                 .then(response => response.json().then(responseObject => {
+                    console.log("response: ", responseObject)
                     if (responseObject.success) {
                         user.value = responseObject.userObject;
                         window.alert(JSON.stringify(responseObject.userObject));
@@ -67,13 +69,15 @@ export default {
                     }
                 }))
                 .catch( error => {
+                    this.validLoginWarning = true;
                     console.error("Error: ", error)
                 });
-        }
+        },
     },
     components: { Dialog, SelectButton, InputText, Password, Button },
     data: () => ({
         //user: user,
+        validLoginWarning: false,
         localAccountVisible: true,
         localAccountSwitch: LogIn,
         localAccountOptions: accountOptions,
@@ -102,13 +106,15 @@ export default {
     },
     computed: {
         makingAccount() {
+            this.validLoginWarning = false;
             return this.localAccountSwitch != LogIn;
         },
         formValid() {
             return this.makingAccount ?
                 (this.modal.password == this.modal.confirmPassword && 
                     isEmailRegex.test(this.modal.email)) : 
-                (this.modal.password && this.modal.email);
+                (this.modal.password && this.modal.email) &&
+                    isEmailRegex.test(this.modal.email);
         }
     },
 }

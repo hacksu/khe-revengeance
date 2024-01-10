@@ -263,11 +263,7 @@ onMounted(() => {
     });
 });
 const saveUser = async () => {
-    console.log("saving user: \n", "alternateEmailValue: ", alternateEmailValue.value)
-    console.log("user.value.email: ", user.value.email)
     if (alternateEmail.value) {user.value.registration.email = alternateEmailValue.value}
-    console.log("user.value.email: ", user.value.email)
-    console.log("saving user: ", user.value)
     await remult.repo(User).save(user.value);
 };
 const isStaff = computed(() => {

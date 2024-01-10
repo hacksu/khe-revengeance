@@ -335,7 +335,7 @@ export class User extends EntityBase {
       }
     } else { // user exists
       console.log("user already exists");
-      return "User account already exists with this email! Try logging in, or using another authentication method";
+      return {error: "User account already exists with this email! Try logging in, or using another authentication method"};
     }
     console.log("saving user...")
     user = await users.save(user);
@@ -355,9 +355,13 @@ export class User extends EntityBase {
     //if the user exists, verify the password
     if (user) {
       let hashedInput = crypto.createHash("sha256").update(password).digest("hex");
-      if (hashedInput != user.password) {return "Incorrect Password!"}
+      if (hashedInput != user.password) {
+        console.log("found incorrect password")
+        return {error: "Incorrect Password!"}
+      }
     } else {
-      return "No account exists with this email!";
+      console.log("found no user with email")
+      return {error: "No account exists with this email!"};
     }
     //return the user object
     console.log("returning user: ", user);
