@@ -123,7 +123,7 @@ export default {
 
 html {
   height: 100vh;
-  //overflow: hidden !important; 
+  overflow: hidden !important;
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -133,7 +133,7 @@ body {
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
   background-color: black;
-  //overflow-y: auto;
+  overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
   padding: 0 !important;
