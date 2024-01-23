@@ -144,7 +144,7 @@ h1 {
 
 a,
 a:visited {
-  color: darkblue;
+  color: lightskyblue;
 }
 
 h3 {

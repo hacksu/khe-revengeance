@@ -9,8 +9,8 @@
       <img id="ascii-rocket" style="max-width: 80vh;" src="@/assets/text_rocket.png">
       <div class="text-container">
         <div id="about-text-container">
-          Kent Hack Enough is <span class="highlight">rocketing off</span> to the unknown! Come join us at this
-          space-faring event as we work together to make outstanding projects!
+          Kent Hack Enough is <strong style="text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);">turning its gaze to the stars</strong>. Come join us at this
+           event as we work together to make outstanding projects!
         </div>
         <div id="smaller-text-container">
           This is our 12th KHE! Whether you're <b>totally new</b> to tech & design or a <b>seasoned pro</b>, come spend a

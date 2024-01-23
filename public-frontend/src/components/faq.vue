@@ -45,7 +45,7 @@ export default {
           id: 1,
           question: "Can I participate?",
           answer:
-            `If you're a high school student, a college student, or a recent college graduate, then yes! 
+            `If you're a high school student or a college student of any kind, then yes! 
             KHE is attended by people of all skill levels and backgrounds. 
             You'll fit right in and hopefully, learn something!`
         },
@@ -64,9 +64,7 @@ export default {
           question: "What should I bring?",
           answer:
             `Bring a laptop/something to hack on, a change of clothes, deodorant, a blanket/pillow, toiletries, 
-            and anything else you think you might use to complete your project.
-            
-            We'll have an MLH hardware lab, which means we'll also have cool hardware available to rent!`
+            and anything else you think you might use to complete your project.`
         },
         {
           id: 4,

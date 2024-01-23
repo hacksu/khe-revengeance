@@ -4,7 +4,7 @@
     <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
         <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
-          KENT HACK ENOUGH
+          Kent Hack Enough
         </p>
 
         <div id="hamburgMenu">
@@ -75,37 +75,6 @@ export default {
     handleScroll() {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
-    // userInitialState() {
-    //   this.hasApp = false;
-    //   return {
-    //     _id: "",
-    //     email: "",
-    //     //        password: '',
-    //     key: "",
-    //     role: "",
-    //     application: {
-    //       name: "", // full name                                      !
-    //       school: "", // name of school                               !
-    //       phone: "", // phone number                                  !
-    //       shirt: "", // t-shirt size                                  !
-    //       demographic: null, // allowed to use demographic info?       ?
-    //       first: null, // is this your first hackathon?               !
-    //       dietary: [], // food restrictions seperated by |            !
-    //       // Vegan, vegitarian, kosher, gluten free, allergy, other
-    //       year: "", // the year in school                             !
-    //       age: "", // person's age                                    !
-    //       gender: "", // gender                                       !
-    //       major: "", // degree                                        !
-    //       conduct: null, // agree to MLH code of conduct?              ?
-    //       travel: null, // need travel reimbursement?                 !
-    //       waiver: false, // agreed to waiver?                           ?
-    //       resume: "", // the filename of their resume                   ?
-    //       link: "", // a github/linkedin link                           ?
-    //       extra: "",
-    //       mlh_emails: null,
-    //     },
-    //   };
-    // },
     togMenu: function () {
       this.expandMenu = !this.expandMenu;
     },
@@ -120,6 +89,10 @@ export default {
 <style lang="scss">
 @import "@/globalVars.scss";
 @import "@/styles/global.scss";
+
+:root {
+    --font-family: "Inter", sans-serif;
+}
 
 html {
   height: 100vh;

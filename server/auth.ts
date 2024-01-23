@@ -241,13 +241,4 @@ export function registerAuthMiddleware(
         }   
     })(req, res, next);
   });
-  // handle unrecoverable errors by logging the user out and sending them back
-  // to the home page
-  app.use(function (err, req, res, next) {
-    if (err) {
-      req.session.destroy(() => res.redirect("/"));
-    } else {
-      next();
-    }
-  } as ErrorRequestHandler);
 }
