@@ -15,7 +15,7 @@ const { Header, Content, Footer } = Layout;
 export default function KHEStaffLayout({ children }) {
     const unreadMail = useUnreadMailCount();
     const pages = [
-        { key: "/", label: "KHE 2023 Dashboard" },
+        { key: "/", label: "KHE 2024 Dashboard" },
         { icon: <ContactsOutlined />, key: "/emailLists", label: "Email Lists" },
         {
             icon: <MessageOutlined />, key: "/tickets",

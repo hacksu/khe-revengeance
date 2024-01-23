@@ -2,7 +2,7 @@
     <div id="profile" class="widget">
         <template v-if="user">
             <Card>
-                <template #title> Registration for KHE 2023 </template>
+                <template #title> Registration for KHE 2024 </template>
                 <template #content>
                     <label v-if="submissionStatus == 'failed'" style="color: red">Please fill out marked items</label>
                     <div class="labeled-field">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="labeled-field">
                         <label for="gender">Gender <failureLabel v-if="submissionStatus == 'failed' && user.registration.gender == undefined"/></label>
-                        <Dropdown id="gender" v-model="user.registration.gender" :options="genders" />
+                        <Dropdown id="gender" v-model="user.registration.gender" :options="genders" append-to="self" />
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
                         v-if="user.registration.gender == 'Other'">
@@ -64,7 +64,7 @@
                     </div>
                     <div class="labeled-field">
                         <label for="pronouns">Pronouns <failureLabel v-if="submissionStatus == 'failed' && user.registration.pronouns == undefined"/></label>
-                        <Dropdown is="pronouns" v-model="user.registration.pronouns" :options="userPronouns" />
+                        <Dropdown is="pronouns" v-model="user.registration.pronouns" :options="userPronouns" append-to="self" />
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
                         v-if="user.registration.pronouns == 'Other'">
@@ -77,7 +77,7 @@
                     </div>
                     <div class="labeled-field">
                         <label for="ethnicity">Ethnicity <failureLabel v-if="submissionStatus == 'failed' && user.registration.ethnicity == undefined"/></label>
-                        <Dropdown is="ethnicity" v-model="user.registration.ethnicity" :options="ethnicities" />
+                        <Dropdown is="ethnicity" v-model="user.registration.ethnicity" :options="ethnicities" append-to="self" />
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
                         v-if="user.registration.ethnicity == 'Other'">
@@ -90,7 +90,7 @@
                     </div>
                     <div class="labeled-field">
                         <label for="sexuality">Do you identify as any of the following? <failureLabel v-if="submissionStatus == 'failed' && user.registration.sexuality == undefined "/></label>
-                        <Dropdown is="sexuality" v-model="user.registration.sexuality" :options="sexualities"></Dropdown>
+                        <Dropdown append-to="self" is="sexuality" v-model="user.registration.sexuality" :options="sexualities"></Dropdown>
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
                         v-if="user.registration.ssexuality == 'Other'">
@@ -104,7 +104,7 @@
                     <div class="labeled-field">
                         <label>Do you have any of the following dietary restriction? </label>
                         <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="vegetarian" value="Vegetarian" v-model="user.registration.dietaryRestrictions" @change="test"/>
+                            <input type="checkbox" id="vegetarian" value="Vegetarian" v-model="user.registration.dietaryRestrictions" />
                             <label for="vegetarian">Vegetarian</label>
                         </div>
                         <div class="horizontal-labeled-field">
@@ -154,19 +154,24 @@
                             v-model="user.registration.optionalExtraRestriction" />
                     </div>
                     <div class="labeled-field">
-                        <label for="size">t-shirt size <failureLabel v-if="submissionStatus == 'failed' && user.registration.shirtSize == undefined"/></label>
-                        <Dropdown id="size" v-model="user.registration.shirtSize" :options="shirtSize" />
+                        <label for="size">T-Shirt Size <failureLabel v-if="submissionStatus == 'failed' && user.registration.shirtSize == undefined"/></label>
+                        <Dropdown append-to="self" id="size" v-model="user.registration.shirtSize" :options="shirtSize" />
                     </div>
                     <div class="labeled-field">
                         <label for="schoolStatus">Education Status <failureLabel v-if="submissionStatus == 'failed' && user.registration.schoolStatus == undefined"/></label>
-                        <Dropdown id="schoolStatus" v-model="user.registration.schoolStatus" :options="schoolStatus" />
+                        <Dropdown append-to="self" id="schoolStatus" v-model="user.registration.schoolStatus" :options="schoolStatus" />
                     </div>
                     <div class="labeled-field">
-                        <label for="link">Link to your website or profile (Enter NA to skip) <failureLabel v-if="submissionStatus == 'failed' && user.registration.link == ''"/></label>
+                        <label for="resume">Upload your resume (optional):</label>
+                        <FileUpload mode="basic" name="resume" url="/api/upload" accept="application/pdf" customUpload @uploader="uploadResume" />
+                    </div>
+                    <div class="labeled-field">
+                        <label for="link">Link to your website or profile (optional):</label>
                         <InputText id="link" v-model="user.registration.link" />
                     </div>
+                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstHackathon == undefined"/>
                     <div class="horizontal-labeled-field">
-                        Is this your first hackathon? <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstHackathon == undefined"/>
+                        Is this your first hackathon?
                         <div class="horizontal-labeled-field">
                             <RadioButton v-model="user.registration.firstHackathon" inputId="isFirst" :value="true" />
                             <label for="isFirst" class="ml-2">Yes</label>
@@ -176,8 +181,9 @@
                             <label for="isNotFirst" class="ml-2">No</label>
                         </div>
                     </div>
+                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.attendedKhe == null"/>
                     <div class="horizontal-labeled-field">
-                        Is this your first time attending Kent Hack Enough? <failureLabel v-if="submissionStatus == 'failed' && user.registration.attendedKhe == undefined"/>
+                        Is this your first time attending Kent Hack Enough?
                         <div class="horizontal-labeled-field">
                             <RadioButton v-model="user.registration.attendedKhe" inputId="isFirstKhe" :value="true" />
                             <label for="isFirstKhe" class="ml-2">Yes</label>
@@ -187,9 +193,10 @@
                             <label for="isNotFirstKhe" class="ml-2">No</label>
                         </div>
                     </div>
+                    
                     <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhConduct == false"/>
                     <div class="horizontal-labeled-field">
-                        <Checkbox id="mlkConduct" v-model="user.registration.mlhConduct" :binary="true" />
+                        <Checkbox id="mlhConduct" v-model="user.registration.mlhConduct" :binary="true" />
                         <label for="mlhConduct">
                             I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>.
                         </label>
@@ -198,10 +205,10 @@
                     <div class="horizontal-labeled-field">
                         <Checkbox id="mlhShare" v-model="user.registration.mlhShare" :binary="true" />
                         <label for="mlhShare">
-                            "I authorize you to share my application/registration information with Major League Hacking for event administration, 
-                            ranking, and MLH administration in-line with the MLH Privacy Policy (https://mlh.io/privacy). I further agree to the 
-                            terms of both the MLH Contest Terms and Conditions (https://github.com/MLH/mlh-policies/blob/main/contest-terms.md)and 
-                            the MLH Privacy Policy (https://mlh.io/privacy).”
+                            I authorize you to share my application/registration information with Major League Hacking for event administration, 
+                            ranking, and MLH administration in-line with the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>. I further agree to the 
+                            terms of both the <a href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md">>MLH Contest Terms and Conditions</a> and 
+                            the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>.
                         </label>
                     </div>
                 </template>
@@ -209,7 +216,7 @@
                     <Button icon="pi pi-check" label="Save" iconPos="right" @click="saveUser" />
                     <Button v-if="submissionStatus != 'success'" @click="submitForm" icon="pi pi-envelope" label="Submit" iconPos="right"
                         :style="'margin-left: 0.5em;' + (formComplete ? `color: #333; background-color: white;` : '')" />
-                    <span style="margin-left: 0.5em;" id="submitted" v-if="submissionStatus == 'success'">Registered 💖</span>
+                    <span style="margin-left: 0.5em;" id="submitted" v-if="submissionStatus == 'success'">Application Submitted!</span>
                 </template>
             </Card>
 
@@ -217,7 +224,6 @@
                 <label for="receiveMail">Receive Emails from KHE</label>
                 <Checkbox id="receiveMail" v-model="user.receivingEmails" :binary="true" />
             </div>
-
 
             <a v-if="user?.id" class="largeButton" style="width: 200px" href="/logout">Log Out</a>
             <p v-if="isStaff">You are authenticated as: {{ user?.externalRole }}.
@@ -241,6 +247,7 @@ import Button from "primevue/button";
 import Checkbox from 'primevue/checkbox';
 import InputNumber from "primevue/inputnumber";
 import RadioButton from "primevue/radiobutton";
+import FileUpload from "primevue/fileupload";
 import { Vue2ProvideUnheadPlugin } from "@vueuse/head";
 import failureLabel from "@/components/failureLabel.vue";
 
@@ -264,7 +271,10 @@ onMounted(() => {
 });
 const saveUser = async () => {
     if (alternateEmail.value) {user.value.registration.email = alternateEmailValue.value}
-    await remult.repo(User).save(user.value);
+    await remult.repo(User).save(user.value).catch(err => {
+        const specific = JSON.parse(err.modelState.registration);
+        
+    });
 };
 const isStaff = computed(() => {
     return (
@@ -276,6 +286,9 @@ let staffSite;
 if (typeof window !== "undefined") {
     staffSite = window.location.protocol + "//staff." + window.location.host;
 }
+const uploadResume = () => {
+
+};
 const formComplete = computed(() => FullRegistration.safeParse(user.registration));
 const submitForm = async () => {
     await saveUser();
@@ -319,7 +332,7 @@ const submitForm = async () => {
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    margin: 10px 0;
+    // margin: 2px 0;
 }
 
 #options {

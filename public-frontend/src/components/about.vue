@@ -3,7 +3,7 @@
     <div id="header-container">
       <span id="title">KENT HACK ENOUGH</span>
       <br>
-      <span id="subtitle">2023</span>
+      <span id="subtitle">2024</span>
     </div>
     <div id="about-content-container">
       <img id="ascii-rocket" style="max-width: 80vh;" src="@/assets/text_rocket.png">
