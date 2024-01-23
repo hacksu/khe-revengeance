@@ -91,12 +91,27 @@ export default {
 
 .info-container {
   padding: 20px;
-  border-radius: 20px;
   width: 600px;
   max-width: 97.5vw;
-  border: 1px solid gray;
-  background-color: rgb(238, 238, 238);
+}
 
+:deep(.p-accordion .p-accordion-header) {
+    background-color: #1e1e1e!important;
+}
+
+:deep(.p-accordion) {
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+:deep(.p-accordion .p-accordion-tab.p-accordion-tab-active) {
+    margin-bottom: 0;
+}
+
+:deep(.p-accordion .p-accordion-content) {
+    background-color: #fff2;
 }
 
 #faq-container {
@@ -112,6 +127,7 @@ export default {
 
 #faqTitle {
   margin: 20px 10px;
+  color: white;
 }
 
 #faq {
@@ -124,8 +140,6 @@ export default {
 .faqModule {
   padding: 10px 20px 10px 20px;
   margin-top: 20px;
-  background: white;
-  border-radius: 5px;
 }
 
 .faq-answer {

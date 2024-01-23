@@ -1,9 +1,7 @@
 <template>
   <div id="landing-container" class="landing">
     <div v-if="registrationOpen" id="full-size-logo-container">
-        <SplashLanding id="splash-landing" />
-        <!-- <img src="/khe-eclipse-splash.svg"  /> -->
-      <!-- <button id="register-button" @click = "navigateTo('/login')">Register Now!</button> -->
+        <SplashLanding id="splash-landing" ref="splashLanding" />
     </div>
     <div v-if="!registrationOpen" id="landing-content-container">
       <div class="date-container">
@@ -48,6 +46,10 @@ export default {
     if (prevUpdatesEmail) {
       this.updatesEmailPlaceholder = "Added: " + prevUpdatesEmail;
     }
+    this.$refs.splashLanding.$el.querySelector("a").addEventListener("click", (e) => {
+        e.preventDefault();
+        this.navigateTo("/login");
+    });
   },
   methods: {
     async submitEmail() {
@@ -77,19 +79,6 @@ export default {
 @import "@/styles/space.scss";
 
 $text-color: #bdbdbd;
-
-#register-button {
-  margin-top: 10px;
-  @include large-btn-primary;
-  position: relative;
-  text-align: center;
-  display: inline-block;
-  width: 200px;
-  height: 50px;
-  font-size: 20px;
-  background-color: gray;
-}
-
 
 #date {
   font-size: 1.8em;

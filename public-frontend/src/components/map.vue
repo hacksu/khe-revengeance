@@ -2,7 +2,7 @@
   <div id="mapframe">
     <div id="map" class="widget">
       <div class="info-container">
-        <Panel style="flex-shrink: 1.5">
+        <Panel style="flex-shrink: 1.5; border: 1px solid white">
           <template #header>
             <h1 style="margin: 0">Where to Go</h1>
           </template>
@@ -114,6 +114,11 @@ export default {
 :deep(.p-panel .p-panel-content),
 :deep(.p-panel .p-panel-header) {
   padding: 20px 30px;
+}
+
+:deep(.p-panel) {
+    background-color: black;
+    z-index: 100;
 }
 
 #mapIframe {
