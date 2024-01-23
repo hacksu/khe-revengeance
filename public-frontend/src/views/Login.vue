@@ -1,18 +1,18 @@
 <template>
-    <div id = "options-container" style="padding: 0 10px">
-        <a class="loginBar loginButton" href="/login/github">
+    <div id="options-container" style="padding: 0 10px">
+        <a class="loginBar loginBox" href="/login/github">
             <img src="@/assets/auth_assets/github-mark-white.svg" />
-            <span>Register with<br />GitHub</span>
+            <span>Login with GitHub</span>
         </a>
-        <a class="loginBar loginButton" href="/login/discord">
+        <a class="loginBar loginBox" href="/login/discord">
             <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
-            <span>Register with<br />Discord</span>
+            <span>Login with <br v-if="narrow" />Discord</span>
         </a>
-        <a class="loginBar loginButton" @click="localClicked = true">
+        <a class="loginBar loginBox noHover">
             <img id="khe-mark" src="/favicon.ico" />
-            <span>Register with<br />local account</span>
+            <span>Login with KHE account:</span>
         </a>
-        <localLogin v-if="localClicked" @close="localClicked = false"/>
+        <LocalLogin/>
     </div>
 </template>
 
@@ -20,9 +20,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 import { user, loadUser } from "../state/user.js";
-import localLogin from "../components/localLogin.vue";
-
-const localClicked = ref(false);
+import LocalLogin from "../components/localLogin.vue";
 
 const router = useRouter();
 onMounted(() => {
@@ -43,16 +41,43 @@ onMounted(() => {
 @import '@/styles/space.scss';
 
 #options-container {
-    margin-top: 200px;
+    margin: 150px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center ;
+    gap: 10px;
+    max-width: 500px;
+
+}
+
+.loginBox {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 3px solid rgb(169, 169, 169);
+    background-color: rgb(22, 36, 36);
 }
 
 .loginBar {
     display: flex;
-    gap: 10px;
-    max-width: 600px;
 
-    justify-content: center;
+    gap: 10px;
+    width: 250px;
+    height: 40px;
+    &:not(.noHover) {
+        cursor: pointer;
+    }
+    // margin: 15px auto;
+    text-align: center;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
     align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+
+    &:hover:not(.noHover) {
+        background-color: rgb(46, 75, 75);
+    }
 
     img {
         height: 1.4em;
@@ -66,27 +91,6 @@ onMounted(() => {
 
     span {
         display: inline-block;
-    }
-}
-
-.loginButton {
-    cursor: pointer;
-    margin: 15px auto;
-    text-align: center;
-    font-size: 0.9em;
-    padding: 6px 10px;
-    border-radius: 5px;
-    border: 3px solid rgb(169, 169, 169);
-    background-color: rgb(22, 36, 36);
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-
-    &:hover {
-        background-color: rgb(46, 75, 75);
     }
 }
 

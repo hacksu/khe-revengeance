@@ -1,26 +1,31 @@
 <template>
-    <Dialog @hide="$emit('close')" v-model:visible="localAccountVisible" modal header="KHE Account" contentClass="loginModal">
-        <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
-        <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
-        <span class="p-float-label p-input-icon-right">
-            <i class="pi pi-envelope" />
-            <InputText id="email" v-model="modal.email"/>
-            <label for="email">Email</label>
-        </span>
-        <span class="p-float-label">
-            <Password id="password" v-model="modal.password" inputId="password" toggleMask :feedback="makingAccount" />
-            <label for="password">Password</label>
-        </span>
-        <span v-if="makingAccount" class="p-float-label">
-            <Password v-model="modal.confirmPassword" inputId="confirmPassword" toggleMask />
-            <label for="confirmPassword">Confirm Password</label>
-        </span>
-        <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
-    </Dialog>
+    <Card>
+        <template #content>
+            <div class="loginForm">
+            <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
+            <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
+            <span class="p-float-label p-input-icon-right">
+                <i class="pi pi-envelope" />
+                <InputText id="email" v-model="modal.email"/>
+                <label for="email">Email</label>
+            </span>
+            <span class="p-float-label">
+                <Password id="password" v-model="modal.password" inputId="password" toggleMask :feedback="makingAccount" />
+                <label for="password">Password</label>
+            </span>
+            <span v-if="makingAccount" class="p-float-label">
+                <Password v-model="modal.confirmPassword" inputId="confirmPassword" toggleMask />
+                <label for="confirmPassword">Confirm Password</label>
+            </span>
+            <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
+        </div>
+    </template>
+    </Card>
 </template>
 
 <script>
 import Dialog from 'primevue/dialog';
+import Card from 'primevue/card';
 import SelectButton from 'primevue/selectbutton';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -70,7 +75,7 @@ export default {
                 });
         },
     },
-    components: { Dialog, SelectButton, InputText, Password, Button },
+    components: { Dialog, SelectButton, InputText, Password, Button, Card },
     data: () => ({
         //user: user,
         validLoginWarning: false,
@@ -118,10 +123,9 @@ export default {
 }
 
 </script>
-<style lang="scss">
-.loginModal {
-    width: 500px;
-    max-width: 97vw;
+<style lang="scss" scoped>
+:deep(.loginForm) {
+    padding: 10px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -3,7 +3,6 @@
         <p class="banner-link">
             Login
         </p>
-        <LocalLogin v-if="localClicked" @close="localClicked = false"/>
         <template #popper="{ hide }">
             <div style="padding: 0 10px">
                 <a class="loginBar loginButton" href="/login/github">
@@ -14,10 +13,10 @@
                     <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
                     <span>Log in with<br />Discord</span>
                 </a>
-                <a class="loginBar loginButton" @click="localClicked = true">
+                <router-link class="loginBar loginButton" to="/login">
                     <img id="khe-mark" src="/favicon.ico" />
                     <span>Log in with<br />local account</span>
-                </a>
+                </router-link>
             </div>
         </template>
     </Dropdown>
@@ -25,10 +24,6 @@
 
 <script setup>
 import { Dropdown } from "floating-vue";
-import { ref } from 'vue';
-import LocalLogin from './localLogin.vue'
-
-const localClicked = ref(false);
 
 </script>
 
@@ -73,14 +68,3 @@ const localClicked = ref(false);
     }
 }
 </style>
-
-<!-- <style lang="scss">
-.loginModal {
-    width: 500px;
-    max-width: 97vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-</style> -->
