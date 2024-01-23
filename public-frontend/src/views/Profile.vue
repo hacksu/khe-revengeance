@@ -284,8 +284,10 @@ onMounted(() => {
     });
 });
 const existingResume = ref("");
-User.getExistingResumeName().then(name => {
-    existingResume.value = name;
+onMounted(() => {
+    User.getExistingResumeName().then(name => {
+        existingResume.value = name;
+    });
 });
 let resumeFiles = null;
 const filesChosen = (event) => {
