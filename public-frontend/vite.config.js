@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
+import svgLoader from 'vite-svg-loader'
 import { fileURLToPath } from "url";
 
 const localRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)));
@@ -23,7 +24,7 @@ export default defineConfig({
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
-  plugins: [vue()],
+  plugins: [vue(), svgLoader({defaultImport: "url"})],
   build: { outDir: "dist", transpile: ["primevue"] },
   ssgOptions: {
     entry: "src/main.js",

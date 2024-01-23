@@ -1,13 +1,9 @@
 <template>
   <div id="landing-container" class="landing">
-    <div class="hacksu-box box1" />
-    <div class="hacksu-box box2" />
-
-    <div id="logo-container">
-      <img src="/2023_Logo_Resized.png" id="short-logo" />
-    </div>
-    <div v-if = "registrationOpen" id="landing-content-container">
-      <button id="register-button" @click = "navigateTo('/login')">Register Now!</button>
+    <div v-if="registrationOpen" id="full-size-logo-container">
+        <SplashLanding id="splash-landing" />
+        <!-- <img src="/khe-eclipse-splash.svg"  /> -->
+      <!-- <button id="register-button" @click = "navigateTo('/login')">Register Now!</button> -->
     </div>
     <div v-if="!registrationOpen" id="landing-content-container">
       <div class="date-container">
@@ -30,11 +26,14 @@
 </template>
 
 <script>
+import SplashLanding from "@/assets/khe-eclipse-splash.svg?component";
+
 import { remult } from 'remult';
 import { Email } from 'includes/email-address';
 
 export default {
   name: "landing",
+  components: {SplashLanding},
   data: () => ({
     updatesEmail: "",
     updatesEmailSubmitted: false,
@@ -78,10 +77,6 @@ export default {
 @import "@/styles/space.scss";
 
 $text-color: #bdbdbd;
-
-.hacksu-box {
-  display: none;
-}
 
 #register-button {
   margin-top: 10px;
@@ -249,26 +244,31 @@ $text-color: #bdbdbd;
   }
 }
 
-#logo-container {
-  /*height: 130px;*/
-  margin-top: 22vh;
-
-  img {
-    height: 70%;
-    padding: 0px 10px;
-
-    @media only screen and (max-width: $md-bp) {
-      height: 80%;
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        // transform: translateY(70vh);
     }
-  }
-
-  #short-logo {
-    margin-top: 20px;
-    width: 350px;
-    max-width: 70vw;
-    height: auto;
-  }
+    100% {
+        opacity: 1;
+        // transform: translateY(0);
+    }
 }
+
+#full-size-logo-container {
+    text-align: center;
+    height: 100vh;
+    animation: fade-in 1s ease-in;
+    animation-delay: 0.5s;
+    animation-fill-mode: both;
+    #splash-landing {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 155vw;
+    }
+}
+
 
 #landing-content-container {
   margin-top: 40px;

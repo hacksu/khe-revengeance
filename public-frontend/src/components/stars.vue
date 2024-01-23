@@ -24,13 +24,8 @@ export default {
             const baseCols = Math.round(width / starDensity);
             const jitter = 0.25;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
-            // TODO: widen range for x and y coordinates in accordance with z being higher or lower
-            // also: there are never any stars all the way on the right?? off by one error?
-            // actually: i think it looks better when the stars are visibly
-            // higher-density at the horizontal center and fall off towards the
-            // edges, at least in full width mode
             for (let x = fullWidth ? 1 : 0; x < baseCols - (fullWidth ? 1 : 0); x++) {
-                for (let y = 0; y < baseRows; y++) {
+                for (let y = Math.ceil(window.innerHeight/starDensity); y < baseRows; y++) {
                     const left = (x + getJitter()) * (width / baseCols);
                     const top = (y + getJitter()) * (height / baseRows);
                     const z = Math.random();
