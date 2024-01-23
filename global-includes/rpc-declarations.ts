@@ -35,5 +35,8 @@ export class RemoteProcedures {
   static sanitizeMessage: (message: TicketMessage) => TicketMessage;
   static deleteGridImages: (paths: string[]) => Promise<void>;
   static getUserResumeFilename: (userID: string) => Promise<string>;
-  static uploadUserResume: (userID: string, base64Resume: string, resumeFilename: string) => Promise<void>;
+  /**
+   * If `base64Resume` is empty, any existing resume will be deleted
+   */
+  static setUserResume: (userID: string, base64Resume: string | "", resumeFilename: string) => Promise<void>;
 }

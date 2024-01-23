@@ -381,7 +381,17 @@ export class User extends EntityBase {
     if (!user) {
       throw "Not logged in";
     } else {
-        await RemoteProcedures.uploadUserResume(user.id, base64Resume, filename);
+        await RemoteProcedures.setUserResume(user.id, base64Resume, filename);
+    }
+  }
+
+  @BackendMethod({allowed: true})
+  static async getExistingResumeName() {
+    const user = remult.user as User;
+    if (!user) {
+      throw "Not logged in";
+    } else {
+        return await RemoteProcedures.getUserResumeFilename(user.id);
     }
   }
 

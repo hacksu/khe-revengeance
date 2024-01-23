@@ -342,7 +342,7 @@ export function defineRemoteProcedures() {
     }
   };
 
-  RemoteProcedures.uploadUserResume = async (userID, base64resume, resumeFilename) => {
+  RemoteProcedures.setUserResume = async (userID, base64resume, resumeFilename) => {
     resumeFilename = path.parse(resumeFilename).base;  // make sure this isn't a path
     const userResumePath = getUserResumePath(userID);
     if (!existsSync(userResumePath)) {
@@ -353,8 +353,10 @@ export function defineRemoteProcedures() {
             files.map((f) => fs.unlink(path.resolve(userResumePath, f)))
         );
     }
-    const userResumeFilePath = path.join(userResumePath, resumeFilename);
-    const bufferData = Buffer.from(base64resume, 'base64');
-    await fs.writeFile(userResumeFilePath, bufferData);
+    if (base64resume){
+        const userResumeFilePath = path.join(userResumePath, resumeFilename || "untitled.pdf");
+        const bufferData = Buffer.from(base64resume, 'base64');
+        await fs.writeFile(userResumeFilePath, bufferData);
+    }
   };
 }

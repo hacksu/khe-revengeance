@@ -165,7 +165,10 @@
                     </div>
                     <div class="labeled-field">
                         <label for="resume">Upload your resume (optional):</label>
-                        <FileUpload mode="basic" name="resume" url="/api/upload" accept="application/pdf" :show-upload-button="false" @select="filesChosen" />
+                        <p style="display:flex;align-items:center;gap:5px" v-if="existingResume">You have previously uploaded: <strong>{{ existingResume }}.</strong>
+                            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Remove" @click="removeResume" />
+                        </p>
+                        <FileUpload v-else mode="basic" name="resume" url="/api/upload" accept="application/pdf" :show-upload-button="false" @select="filesChosen" />
                     </div>
                     <div class="labeled-field">
                         <label for="link">Link to your website or profile (optional):</label>
@@ -280,11 +283,20 @@ onMounted(() => {
         }
     });
 });
+const existingResume = ref("");
+User.getExistingResumeName().then(name => {
+    existingResume.value = name;
+});
 let resumeFiles = null;
 const filesChosen = (event) => {
     console.log("upload event:", event);
     resumeFiles = event.files;
 };
+const removeResume = () => {
+    resumeFiles = null;
+    existingResume.value = "";
+    User.uploadResume("", "");
+}
 const fileToBase64 = file => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
