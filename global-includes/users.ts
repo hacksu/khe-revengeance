@@ -4,6 +4,7 @@ import { UserRole } from "./common.ts";
 import { z } from "zod";
 import { isEmailRegex } from "./email-address.ts";
 import crypto from "crypto";
+import { RemoteProcedures } from "./rpc-declarations.ts";
 
 export enum AuthMethod {
   Discord = "Discord",
@@ -19,8 +20,7 @@ export const schoolStatus = [
   "Sophmore",
   "Junior",
   "Senior",
-  "Graduate Student",
-  "Alumni",
+  "Graduate Student"
 ] as const;
 
 export const genders = [
@@ -247,9 +247,6 @@ export class User extends EntityBase {
   })
   registration = defaultRegistration;
 
-  @VFields.string(noUpdate)
-  attachedResume: string = "";
-
   @VFields.boolean(noUpdate)
   submittedApplication = false;
 
@@ -369,8 +366,6 @@ export class User extends EntityBase {
   @BackendMethod({ allowed: true })
   static async submitRegistration() {
     const user = remult.user as User;
-    console.log("received user: ", user)
-    console.log("received User: ", User)
     if (!user) {
       throw "Not logged in";
     }
@@ -380,21 +375,19 @@ export class User extends EntityBase {
     remult.repo(User).save(user);
   }
 
+  @BackendMethod({allowed: true})
+  static async uploadResume(base64Resume: string, filename: string) {
+    const user = remult.user as User;
+    if (!user) {
+      throw "Not logged in";
+    } else {
+        await RemoteProcedures.uploadUserResume(user.id, base64Resume, filename);
+    }
+  }
+
   @BackendMethod({ allowed: true })
   static async getOwnUserInfo() {
     // does this have to be its own function???
     return remult.user;
   }
-
-  //takes user credentials as input
-  //return true -> password matches record with email
-  //return false -> password does not match record with email
-  // @BackendMethod({ allowed: true })
-  // static async verifyUserPassword(user:User, password:string) {
-  //   //hash the provided plaintext password
-  //   var hashedInput = crypto.createHash("sha256").update(password).digest("hex")
-  //   //check the hashed value against the value stored in the database
-  //   if (hashedInput == user.password) { return true; }
-  //   else { return false; }
-  // }
 }

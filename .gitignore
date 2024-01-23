@@ -1,3 +1,6 @@
+server/uploads/resumes/*
+!server/uploads/resumes/.gitkeep
+
 # Node stuff
 node_modules
 dist

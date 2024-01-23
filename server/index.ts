@@ -66,7 +66,7 @@ async function getStaffDevServer() {
 // place
 async function createServer() {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({limit: "1.5mb"}));
   registerAuthMiddleware(app, remultConfig);
   // create api routes for database stuff
   app.use(remultConfig);

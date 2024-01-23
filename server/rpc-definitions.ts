@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-
+import { existsSync } from "fs";
 import mailer, {
   ClientResponse,
   MailDataRequired,
@@ -324,5 +324,37 @@ export function defineRemoteProcedures() {
     await Promise.all(
       files.map((f) => fs.unlink(path.resolve(gridImagePath, f)))
     );
+  };
+
+  const resumePath = path.join(".", "server", "uploads", "resumes");
+  const getUserResumePath = (userID: string) => path.join(resumePath, userID);
+
+  RemoteProcedures.getUserResumeFilename = async (userID) => {
+    const userResumePath = getUserResumePath(userID);
+    if (!existsSync(userResumePath)){
+        return "";
+    }
+    const files = await fs.readdir(userResumePath);
+    if (!files.length) {
+        return "";
+    } else {
+        return files[0];
+    }
+  };
+
+  RemoteProcedures.uploadUserResume = async (userID, base64resume, resumeFilename) => {
+    resumeFilename = path.parse(resumeFilename).base;  // make sure this isn't a path
+    const userResumePath = getUserResumePath(userID);
+    if (!existsSync(userResumePath)) {
+        await fs.mkdir(userResumePath, {recursive: true});
+    } else {
+        const files = await fs.readdir(userResumePath);
+        await Promise.all(
+            files.map((f) => fs.unlink(path.resolve(userResumePath, f)))
+        );
+    }
+    const userResumeFilePath = path.join(userResumePath, resumeFilename);
+    const bufferData = Buffer.from(base64resume, 'base64');
+    await fs.writeFile(userResumeFilePath, bufferData);
   };
 }

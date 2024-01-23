@@ -46,7 +46,9 @@
                         <InputText id="phone" v-model="user.registration.phone" />
                     </div>
                     <div class="labeled-field">
-                        <label for="age">Age <failureLabel v-if="submissionStatus == 'failed' && user.registration.age == undefined"/></label>
+                        <label for="age">Age <failureLabel v-if="submissionStatus == 'failed' && user.registration.age == undefined"/>
+                            <span v-else-if="submissionStatus == 'failed' && user.registration.age < 13 || user.registration.age > 130">You are either too old or too young!</span>
+                        </label>
                         <InputNumber id="age" v-model="user.registration.age" />
                     </div>
                     <div class="labeled-field">
@@ -93,7 +95,7 @@
                         <Dropdown append-to="self" is="sexuality" v-model="user.registration.sexuality" :options="sexualities"></Dropdown>
                     </div>
                     <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="user.registration.ssexuality == 'Other'">
+                        v-if="user.registration.sexuality == 'Other'">
                         <svg height="50" width="100%" viewBox="10 0 100 100">
                             <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
                             <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
@@ -163,14 +165,14 @@
                     </div>
                     <div class="labeled-field">
                         <label for="resume">Upload your resume (optional):</label>
-                        <FileUpload mode="basic" name="resume" url="/api/upload" accept="application/pdf" customUpload @uploader="uploadResume" />
+                        <FileUpload mode="basic" name="resume" url="/api/upload" accept="application/pdf" :show-upload-button="false" @select="filesChosen" />
                     </div>
                     <div class="labeled-field">
                         <label for="link">Link to your website or profile (optional):</label>
                         <InputText id="link" v-model="user.registration.link" />
                     </div>
                     <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstHackathon == undefined"/>
-                    <div class="horizontal-labeled-field">
+                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
                         Is this your first hackathon?
                         <div class="horizontal-labeled-field">
                             <RadioButton v-model="user.registration.firstHackathon" inputId="isFirst" :value="true" />
@@ -182,7 +184,7 @@
                         </div>
                     </div>
                     <failureLabel v-if="submissionStatus == 'failed' && user.registration.attendedKhe == null"/>
-                    <div class="horizontal-labeled-field">
+                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
                         Is this your first time attending Kent Hack Enough?
                         <div class="horizontal-labeled-field">
                             <RadioButton v-model="user.registration.attendedKhe" inputId="isFirstKhe" :value="true" />
@@ -195,7 +197,7 @@
                     </div>
                     
                     <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhConduct == false"/>
-                    <div class="horizontal-labeled-field">
+                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
                         <Checkbox id="mlhConduct" v-model="user.registration.mlhConduct" :binary="true" />
                         <label for="mlhConduct">
                             I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>.
@@ -213,12 +215,22 @@
                     </div>
                 </template>
                 <template #footer>
-                    <Button icon="pi pi-check" label="Save" iconPos="right" @click="saveUser" />
+                    <Button icon="pi pi-check" label="Save Draft" iconPos="right" @click="saveUser" />
                     <Button v-if="submissionStatus != 'success'" @click="submitForm" icon="pi pi-envelope" label="Submit" iconPos="right"
                         :style="'margin-left: 0.5em;' + (formComplete ? `color: #333; background-color: white;` : '')" />
                     <span style="margin-left: 0.5em;" id="submitted" v-if="submissionStatus == 'success'">Application Submitted!</span>
                 </template>
             </Card>
+
+            <p v-if="submissionStatus == 'success'">
+                Thanks for submitting your application to Kent Hack Enough! You
+                will receive an email when your application is accepted or
+                rejected.
+
+                You are free to make changes to your application and save them,
+                but please note that this will put your application back at the
+                end of the line.
+            </p>
 
             <div class="horizontal-labeled-field">
                 <label for="receiveMail">Receive Emails from KHE</label>
@@ -248,7 +260,6 @@ import Checkbox from 'primevue/checkbox';
 import InputNumber from "primevue/inputnumber";
 import RadioButton from "primevue/radiobutton";
 import FileUpload from "primevue/fileupload";
-import { Vue2ProvideUnheadPlugin } from "@vueuse/head";
 import failureLabel from "@/components/failureLabel.vue";
 
 
@@ -269,11 +280,31 @@ onMounted(() => {
         }
     });
 });
+let resumeFiles = null;
+const filesChosen = (event) => {
+    console.log("upload event:", event);
+    resumeFiles = event.files;
+};
+const fileToBase64 = file => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            // The result property contains the base64 string
+            const base64String = reader.result.split(',')[1];
+            resolve(base64String);
+        }
+        reader.readAsDataURL(file);
+    });
+}
 const saveUser = async () => {
     if (alternateEmail.value) {user.value.registration.email = alternateEmailValue.value}
+    if (resumeFiles){
+        const file = resumeFiles[0];
+        await User.uploadResume(await fileToBase64(file), file.name || "untitled.pdf");
+    }
     await remult.repo(User).save(user.value).catch(err => {
         const specific = JSON.parse(err.modelState.registration);
-        
+        console.error(specific);
     });
 };
 const isStaff = computed(() => {
@@ -286,9 +317,7 @@ let staffSite;
 if (typeof window !== "undefined") {
     staffSite = window.location.protocol + "//staff." + window.location.host;
 }
-const uploadResume = () => {
 
-};
 const formComplete = computed(() => FullRegistration.safeParse(user.registration));
 const submitForm = async () => {
     await saveUser();
@@ -352,5 +381,10 @@ const submitForm = async () => {
 
 :deep(.p-card-footer) {
     text-align: right;
+}
+
+:deep(.p-card .p-card-body) {
+    border: 1px solid white;
+    border-radius: 5px;
 }
 </style>
