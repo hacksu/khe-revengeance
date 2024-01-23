@@ -3,6 +3,7 @@
         <p class="banner-link">
             Login
         </p>
+        <LocalLogin v-if="localClicked" @close="localClicked = false"/>
         <template #popper="{ hide }">
             <div style="padding: 0 10px">
                 <a class="loginBar loginButton" href="/login/github">
@@ -18,7 +19,6 @@
                     <span>Log in with<br />local account</span>
                 </a>
             </div>
-            <localLogin v-if="localClicked" @close="localClicked = false"/>
         </template>
     </Dropdown>
 </template>
@@ -26,7 +26,7 @@
 <script setup>
 import { Dropdown } from "floating-vue";
 import { ref } from 'vue';
-import localLogin from './localLogin.vue'
+import LocalLogin from './localLogin.vue'
 
 const localClicked = ref(false);
 
