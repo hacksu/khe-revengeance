@@ -78,6 +78,7 @@ export const shirtSize = [
   "XL"
 ] as const;
 
+// TODO: this could be an array of enums
 // export const dietaryRestrictions = [
 //   "Vegetarian",
 //   "Vegan",
@@ -102,7 +103,6 @@ export const HackathonRegistrationDraft = z.object({
   gender: z.enum(genders).nullable(),
   optionalExtraGender: z.string(),
   major: z.string(),
-  conduct: z.boolean().nullable(),
   link: z.string(),
   attendedKhe: z.boolean().nullable(),
   pronouns: z.enum(userPronouns).nullable(),
@@ -133,9 +133,8 @@ const defaultRegistration: RegistrationDraft = {
   gender: null,
   optionalExtraGender: "",
   major: "",
-  conduct: false,
   link: "",
-  attendedKhe: false,
+  attendedKhe: null,
   pronouns: null,
   optionalExtraPronouns: "",
   ethnicity: null,
@@ -156,7 +155,6 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   school: z.string().nonempty(),
   phone: z.string().nonempty(),
   major: z.string().nonempty(),
-  link: z.string().url(),
   schoolStatus: z.enum(schoolStatus),
   firstHackathon: z.boolean(),
   age: z.number().gte(13).lte(130),
@@ -188,7 +186,11 @@ const noUpdate = { allowApiUpdate: false };
 
 @Entity<User>("users", {
   allowApiCrud: true,
-  apiPrefilter: () => {console.log("REMULT API PREFILTER: ", remult.user); return (remult.isAllowed() ? {} : { id: remult.user?.id });},
+  apiPrefilter: () =>  (
+    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ?
+        {} :
+        { id: remult.user?.id }
+    ),
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -311,10 +313,6 @@ export class User extends EntityBase {
     password: string, 
     confirmPassword: string
   ) {
-    console.log("creating local account...")
-    console.log("email: ", email)
-    console.log("password: ", password)
-    console.log("confirmPassword: ", confirmPassword)
     const users = remult.repo(User);
     //check if account already exists
     let user: Partial<User> = await users.findFirst({email});
@@ -335,7 +333,7 @@ export class User extends EntityBase {
       }
     } else { // user exists
       console.log("user already exists");
-      return {error: "User account already exists with this email! Try logging in, or using another authentication method"};
+      return "User account already exists with this email! Try logging in, or using another authentication method";
     }
     console.log("saving user...")
     user = await users.save(user);
@@ -357,11 +355,11 @@ export class User extends EntityBase {
       let hashedInput = crypto.createHash("sha256").update(password).digest("hex");
       if (hashedInput != user.password) {
         console.log("found incorrect password")
-        return {error: "Incorrect Password!"}
+        return "Incorrect Password!";
       }
     } else {
       console.log("found no user with email")
-      return {error: "No account exists with this email!"};
+      return "No account exists with this email!";
     }
     //return the user object
     console.log("returning user: ", user);

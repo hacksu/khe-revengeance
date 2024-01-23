@@ -126,38 +126,39 @@ passport.use(
     },
     async function verify(req, email:string, password:string, done:any) {
       console.log('Running verify function :3');
-      console.log("req.body: ", req.body);
-      console.log("email: ", email);
-      console.log("password: ", password)
       //check if email and password fields are populated
       if (!email) { 
         console.log("no email found")
-        done(null, {error: "invalid email"});
+        done("invalid email");
       }
       if (!password) {
         console.log("no password found")
-        done(null, {error: "invlaid password"});
+        done("invlaid password");
       }
       //call function to register or login based on the value of req.body.newUser
       if (req.body.newUser) {
         console.log("creating a new user...")
-        done (
-          null,
-          await User.createLocalAccount(
-            email,
-            password,
-            req.body.confirmPassword
-          )
-        );
+          const accountCreationResult = await User.createLocalAccount(
+              email,
+              password,
+              req.body.confirmPassword
+          );
+          if (typeof accountCreationResult === "string"){
+            done(accountCreationResult, null);
+          } else {
+            done (null, accountCreationResult);
+          }
       } else {
         console.log("logging in as an existing user...")
-        done (
-          null,
-          await User.localLogin(
-            email,
-            password
-          )
-        );
+          const loginResult = await User.localLogin(
+              email,
+              password
+          );
+          if (typeof loginResult === "string") {
+            done(loginResult, null);
+          } else {
+            done(null, loginResult);
+          }
       }
     }
   )
@@ -180,7 +181,7 @@ passport.deserializeUser(function (
     if (user) {
       done(null, user);
     } else {
-      done(new Error("user from session not found"));
+      done("user from session not found");
     }
   });
 });
@@ -224,12 +225,21 @@ export function registerAuthMiddleware(
     }
   );
   //login as local user
-  app.post("/login/local", passport.authenticate("local", {
-    //successReturnToOrRedirect: '/profile',
-    failureRedirect: '/login',
-    failureMessage: true
-  }), function(req, res) {
-    res.json({success: true, goToPage: "/profile", userObject: req.user});
+  app.post('/login/local', function(req, res, next) {
+    passport.authenticate('local', function(err: string, user: User) {
+      if (err) {
+        console.log("error in local login authenticate callback: ", err)
+        res.send({success: false, message: err});
+      } else {
+        req.login(user, loginErr => {
+            if (loginErr) {
+                console.error("session creation failed!");
+                return next(loginErr);
+            }
+            return res.send({ success: true, user, goToPage: "/profile" });
+        });
+        }   
+    })(req, res, next);
   });
   // handle unrecoverable errors by logging the user out and sending them back
   // to the home page

@@ -1,14 +1,14 @@
 <template>
     <Dialog @hide="$emit('close')" v-model:visible="localAccountVisible" modal header="KHE Account" contentClass="loginModal">
         <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
-        <label v-if="validLoginWarning" style="color: red;">invalid login credentials</label>
+        <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
         <span class="p-float-label p-input-icon-right">
             <i class="pi pi-envelope" />
             <InputText id="email" v-model="modal.email"/>
             <label for="email">Email</label>
         </span>
         <span class="p-float-label">
-            <Password id="password" v-model="modal.password" inputId="password" toggleMask />
+            <Password id="password" v-model="modal.password" inputId="password" toggleMask :feedback="makingAccount" />
             <label for="password">Password</label>
         </span>
         <span v-if="makingAccount" class="p-float-label">
@@ -18,12 +18,7 @@
         <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
     </Dialog>
 </template>
-<!-- <script setup>
-import { user, loadUser } from '../state/user.js';
-import { onMounted } from 'vue';
-console.log('setup script is running');
-onMounted(async () => { await loadUser(); console.log("loaded user:", user)});
-</script> -->
+
 <script>
 import Dialog from 'primevue/dialog';
 import SelectButton from 'primevue/selectbutton';
@@ -31,7 +26,6 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 
-import { User } from '../../../global-includes/users.ts';
 import { user, loadUser } from '../state/user.js';
 
 import { isEmailRegex } from '../../../global-includes/email-address';
@@ -62,9 +56,11 @@ export default {
                     console.log("response: ", responseObject)
                     if (responseObject.success) {
                         user.value = responseObject.userObject;
-                        window.alert(JSON.stringify(responseObject.userObject));
                         window.location.href = responseObject.goToPage;
+                        this.validLoginWarning = false;
                     } else {
+                        this.loginWarningMessage = responseObject.message;
+                        this.validLoginWarning = true;
                         console.error("login failed");
                     }
                 }))
@@ -78,6 +74,7 @@ export default {
     data: () => ({
         //user: user,
         validLoginWarning: false,
+        loginWarningMessage: "",
         localAccountVisible: true,
         localAccountSwitch: LogIn,
         localAccountOptions: accountOptions,
@@ -112,6 +109,7 @@ export default {
         formValid() {
             return this.makingAccount ?
                 (this.modal.password == this.modal.confirmPassword && 
+                    this.modal.password.length > 5 &&
                     isEmailRegex.test(this.modal.email)) : 
                 (this.modal.password && this.modal.email) &&
                     isEmailRegex.test(this.modal.email);

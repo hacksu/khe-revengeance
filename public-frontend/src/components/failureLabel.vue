@@ -1,8 +1,3 @@
 <template>
-    <label style="color: red;">you forgot this one 🥺</label>
+    <p style="color: red; margin: 0">Please fill in this information 🥺</p>
 </template>
-<script>
-    export default {
-
-    }
-</script>
