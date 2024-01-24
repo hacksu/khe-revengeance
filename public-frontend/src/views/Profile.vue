@@ -218,22 +218,21 @@
                     </div>
                 </template>
                 <template #footer>
-                    <Button icon="pi pi-check" label="Save Draft" iconPos="right" @click="saveUser" />
-                    <Button v-if="submissionStatus != 'success'" @click="submitForm" icon="pi pi-envelope" label="Submit" iconPos="right"
+                    <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'" iconPos="right" @click="saveUser" />
+                    <Button :disabled="submissionStatus == 'success'" @click="submissionStatus != 'success' && submitForm()"
+                        icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'" iconPos="right"
                         :style="'margin-left: 0.5em;' + (formComplete ? `color: #333; background-color: white;` : '')" />
-                    <span style="margin-left: 0.5em;" id="submitted" v-if="submissionStatus == 'success'">Application Submitted!</span>
+                        <p v-if="submissionStatus == 'success'" style="text-align: left">
+                            Thanks for submitting your application to Kent Hack Enough! You
+                            will receive an email when your application is accepted or
+                            rejected.
+
+                            You are free to make changes to your application and save them,
+                            but please note that this will put your application back at the
+                            end of the line.
+                        </p>
                 </template>
             </Card>
-
-            <p v-if="submissionStatus == 'success'">
-                Thanks for submitting your application to Kent Hack Enough! You
-                will receive an email when your application is accepted or
-                rejected.
-
-                You are free to make changes to your application and save them,
-                but please note that this will put your application back at the
-                end of the line.
-            </p>
 
             <div class="horizontal-labeled-field">
                 <label for="receiveMail">Receive Emails from KHE</label>
