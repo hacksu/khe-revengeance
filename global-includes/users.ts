@@ -158,6 +158,8 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   schoolStatus: z.enum(schoolStatus),
   firstHackathon: z.boolean(),
   age: z.number().gte(13).lte(130),
+  mlhConduct: z.literal(true),
+  mlhShare: z.literal(true)
 });
 
 export type Registration = z.infer<typeof FullRegistration>;
