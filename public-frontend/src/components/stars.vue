@@ -19,10 +19,10 @@ export default {
             const width = window.innerWidth;
             const height = document.body.scrollHeight;
             const fullWidth = width > 700;
-            const starDensity = fullWidth ? 225 : 125;
+            const starDensity = fullWidth ? 130 : 100;
             const baseRows = Math.round(height / starDensity);
             const baseCols = Math.round(width / starDensity);
-            const jitter = 0.25;
+            const jitter = 0.45;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
             for (let x = fullWidth ? 1 : 0; x < baseCols - (fullWidth ? 1 : 0); x++) {
                 for (let y = Math.ceil(window.innerHeight/starDensity); y < baseRows; y++) {
@@ -51,18 +51,18 @@ export default {
     
 <style scoped lang="scss">
 .star {
-    width: 60px;
-    height: 60px;
+    width: 30px;
+    height: 30px;
 
     @media only screen and (max-width: 700px) {
-        width: 45px;
-        height: 45px;
+        width: 25px;
+        height: 25px;
     }
 
     position: absolute;
     transform-origin: 50% 50%;
     perspective-origin: 50% 50%;
-    background-image: url("/one-star.png");
+    background-image: url("/star.svg");
     background-size: cover;
     background-repeat: no-repeat;
     image-rendering: crisp-edges;

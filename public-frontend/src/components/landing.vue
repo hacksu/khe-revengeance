@@ -254,7 +254,7 @@ $text-color: #bdbdbd;
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        max-width: 200vw;
+        max-width: 170vw;
     }
 }
 
