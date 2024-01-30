@@ -222,6 +222,12 @@
                     <Button :disabled="submissionStatus == 'success'" @click="submissionStatus != 'success' && submitForm()"
                         icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'" iconPos="right"
                         :style="'margin-left: 0.5em;' + (formComplete ? `color: #333; background-color: white;` : '')" />
+                        <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
+                            Could not update application! Make sure all fields are filled out.
+                        </p>
+                        <p v-if="saveStatus == 'saved'" style="text-align: left; color: lightgreen;">
+                            Saved application!
+                        </p>
                         <p v-if="submissionStatus == 'success'" style="text-align: left">
                             Thanks for submitting your application to Kent Hack Enough! You
                             will receive an email when your application is accepted or
@@ -271,6 +277,7 @@ const alternateEmail = ref(false);
 const alternateEmailValue = ref("");
 
 const submissionStatus = ref('pending');
+const saveStatus = ref("");
 
 const receivingEmails = ref(true);
 onMounted(() => {
@@ -315,9 +322,17 @@ const saveUser = async () => {
         const file = resumeFiles[0];
         await User.uploadResume(await fileToBase64(file), file.name || "untitled.pdf");
     }
-    await remult.repo(User).save(user.value).catch(err => {
-        const specific = JSON.parse(err.modelState.registration);
-        console.error(specific);
+    await remult.repo(User).save(user.value)
+        .then(() => {
+            saveStatus.value = "saved";
+        }).catch(err => {
+            const specific = JSON.parse(err.modelState.registration);
+            console.error(specific);
+            // saving should only fail if there is something really, really
+            // weird with the data that violates the HackathonRegistrationDraft
+            // type check or if the application was previously submitted and is
+            // thus validated with the FullRegistration type check.
+            saveStatus.value = 'failed';
     });
 };
 const isStaff = computed(() => {

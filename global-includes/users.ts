@@ -154,10 +154,18 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   name: z.string().nonempty(),
   school: z.string().nonempty(),
   phone: z.string().nonempty(),
-  major: z.string().nonempty(),
   schoolStatus: z.enum(schoolStatus),
   firstHackathon: z.boolean(),
   age: z.number().gte(13).lte(130),
+  gender: z.enum(genders),
+  major: z.string().nonempty(),
+  sexuality: z.string().nonempty(),
+  attendedKhe: z.boolean(),
+  pronouns: z.enum(userPronouns),
+  ethnicity: z.enum(ethnicities),
+  shirtSize: z.enum(shirtSize),
+  country: z.string().nonempty(),
+  state: z.string().nonempty(),
   mlhConduct: z.literal(true),
   mlhShare: z.literal(true)
 });
@@ -243,8 +251,12 @@ export class User extends EntityBase {
   receivingEmails = true;
 
   @Fields.json({
-    validate(entity, fieldRef) {
-      HackathonRegistrationDraft.parse(fieldRef.value);
+    validate(user: User, fieldRef) {
+        if (!user.submittedApplication){
+            HackathonRegistrationDraft.parse(fieldRef.value);
+        } else {
+            FullRegistration.parse(fieldRef.value);
+        }
     },
   })
   registration = defaultRegistration;
