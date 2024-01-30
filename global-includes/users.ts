@@ -374,7 +374,10 @@ export class User extends EntityBase {
     FullRegistration.parse(user.registration);
     user.submittedApplication = true;
     user.applicationApproved = false;
-    remult.repo(User).save(user);
+    await remult.repo(User).save(user);
+    RemoteProcedures.sendApplicationAcknowledgement(
+        user.registration.email || user.email
+    );
   }
 
   @BackendMethod({allowed: true})

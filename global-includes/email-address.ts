@@ -61,7 +61,7 @@ export class Email {
 
   @BackendMethod({ allowed: true })
   static async addEmailAndSendWelcome(email: Partial<Email>) {
-    RemoteProcedures.sendWelcome(await remult.repo(Email).insert(email));
+    RemoteProcedures.sendWelcome((await remult.repo(Email).insert(email)).address);
   }
 
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })

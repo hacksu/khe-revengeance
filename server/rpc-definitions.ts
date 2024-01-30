@@ -228,13 +228,13 @@ export function defineRemoteProcedures() {
     }
   };
 
-  RemoteProcedures.sendWelcome = async function (email: Email) {
-    const emailBody = await fs.readFile("./server/emails/welcome.html", {
+  RemoteProcedures.sendUpdate = async function (emailHtmlFile: string, address: string) {
+    const emailBody = await fs.readFile(emailHtmlFile, {
       encoding: "utf-8",
     });
     const msg: MailDataRequired = {
       to: {
-        email: email.address,
+        email: address,
       },
       from: {
         name: "KHE Updates",
@@ -244,28 +244,38 @@ export function defineRemoteProcedures() {
       html: emailBody,
       text: convertToText(emailBody),
       asm: {
-        groupId: 22053, // KHE 2023 Updates
+        groupId: 22053, // KHE 2024 Updates
         groupsToDisplay: [22053],
       },
     };
     const sendResult = await mailer.send(msg);
     console.log(
       `sent email through sendgrid at ${new Date()} for signup ` +
-        `${email.address}, received status code:`,
+        `${address}, received status code:`,
       sendResult[0].statusCode
     );
   };
 
+  // TODO: better system for grabbing email content than raw relative file paths
+  
+  RemoteProcedures.sendWelcome = async function (address: string) {
+    await RemoteProcedures.sendUpdate("./server/emails/welcome.html", address);
+  }
+
+  RemoteProcedures.sendApplicationAcknowledgement = async function (address: string) {
+    await RemoteProcedures.sendUpdate("./server/emails/application.html", address);
+  }
+
   RemoteProcedures.getDistinct = async function (collection, field) {
     const mongo = MongoDataProvider.getDb();
-    const coll = mongo.collection(collection);
+    const coll = mongo.db.collection(collection);
     const distincts = await coll.distinct(field);
     return distincts;
   };
 
   RemoteProcedures.bulkDelete = async function (collection, filter) {
     const mongo = MongoDataProvider.getDb();
-    const coll = mongo.collection(collection);
+    const coll = mongo.db.collection(collection);
     await coll.deleteMany(filter);
   };
 

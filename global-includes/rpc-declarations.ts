@@ -19,7 +19,13 @@ export class RemoteProcedures {
     message: TicketMessage,
     prevMessageID: string | undefined
   ) => Promise<void>;
-  static sendWelcome: (email: Email) => Promise<void>;
+  /** General function to send KHE emails based on files, with the "KHE 2024
+   * Updates" unsubscribe group */
+  static sendUpdate: (emailHtmlFile: string, address: string) => Promise<void>;
+  /** Specifically sends an email sign-up welcome email */
+  static sendWelcome: (address: string) => Promise<void>;
+  /** Specifically sends an application acknowledgement email */
+  static sendApplicationAcknowledgement: (address: string) => Promise<void>;
   static getDistinct: (collection: string, field: string) => Promise<string[]>;
   static bulkDelete: (collection: string, filter: any) => Promise<void>;
   static sendTo: (
