@@ -51,8 +51,8 @@ export default {
     
 <style scoped lang="scss">
 .star {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 
     @media only screen and (max-width: 700px) {
         width: 25px;

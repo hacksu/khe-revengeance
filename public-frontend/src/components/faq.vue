@@ -114,7 +114,6 @@ export default {
 
 #faq-container {
   margin-top: 0px;
-  margin-bottom: 100px;
   padding-top: 20px;
   z-index: 1;
   position: relative;
@@ -129,7 +128,7 @@ export default {
 }
 
 #faq {
-  color: black;
+  color: white;
   display: flex;
   justify-content: center;
   position: relative;
@@ -150,9 +149,5 @@ export default {
   &:last-of-type {
     margin-bottom: 5px;
   }
-}
-
-#contactLink {
-  color: black;
 }
 </style>
