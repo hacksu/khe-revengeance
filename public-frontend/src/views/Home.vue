@@ -4,7 +4,7 @@
     <About></About>
     <FAQ></FAQ>
     <div id="sponsors-container">
-      <h3><router-link to="/sponsors">Our Sponsors:</router-link></h3>
+      <h3><router-link to="/sponsor">Our Sponsors:</router-link></h3>
       <Sponsors :row="true" :item-width="200" :item-height="50" />
     </div>
     <Map></Map>
