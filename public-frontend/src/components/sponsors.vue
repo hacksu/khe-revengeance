@@ -82,7 +82,7 @@ a:has(.item) {
     font-size: 2rem;
     display: flex; align-items: center; justify-content: center;
     @media (max-width: 600px) {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 }
 </style>
