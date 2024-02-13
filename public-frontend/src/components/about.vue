@@ -64,7 +64,7 @@
 }
 
 #about-content-container {
-  margin: 60px 10vw;
+  margin: 60px 10vw 10px;
   margin-top: 15px;
   display: flex;
   justify-content: space-between;
@@ -72,15 +72,13 @@
 
   @media only screen and (max-width: $md-bp) {
     flex-flow: column;
-    margin: 60px 5vw;
+    margin: 60px 5vw 10px;
   }
 
   img {
     width: 60vw;
     align-self: center;
   }
-
-  z-index: 1;
 }
 
 .text-container {
