@@ -13,6 +13,7 @@ export default {
     mounted() {
         this.circles = this.getRandomCircles(window.location.pathname == "/");
         this.$router.afterEach((to) => {
+            document.body.scrollTop = 0;
             this.circles = [];
             this.$nextTick(() => {
                 this.circles = this.getRandomCircles(to.path == "/");
