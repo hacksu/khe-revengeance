@@ -11,10 +11,16 @@ export default {
         }
     },
     mounted() {
-        this.circles = this.getRandomCircles();
+        this.circles = this.getRandomCircles(window.location.pathname == "/");
+        this.$router.afterEach((to) => {
+            this.circles = [];
+            this.$nextTick(() => {
+                this.circles = this.getRandomCircles(to.path == "/");
+            });
+        });
     },
     methods: {
-        getRandomCircles() {
+        getRandomCircles(startBelowFold) {
             const circles = [];
             const width = window.innerWidth;
             const height = document.body.scrollHeight;
@@ -24,8 +30,9 @@ export default {
             const baseCols = Math.round(width / starDensity);
             const jitter = 0.45;
             const getJitter = () => (Math.random() * jitter - (jitter / 2));
+            const startingY = startBelowFold ? Math.ceil(window.innerHeight/starDensity) : 0;
             for (let x = fullWidth ? 1 : 0; x < baseCols - (fullWidth ? 1 : 0); x++) {
-                for (let y = Math.ceil(window.innerHeight/starDensity); y < baseRows; y++) {
+                for (let y = startingY; y < baseRows; y++) {
                     const left = (x + getJitter()) * (width / baseCols);
                     const top = (y + getJitter()) * (height / baseRows);
                     const z = Math.random();
