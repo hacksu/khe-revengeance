@@ -197,10 +197,8 @@ const noUpdate = { allowApiUpdate: false };
 @Entity<User>("users", {
   allowApiCrud: true,
   apiPrefilter: () =>  (
-    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ?
-        {} :
-        { id: remult.user?.id }
-    ),
+    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
+  ),
 })
 export class User extends EntityBase {
   @Fields.uuid()

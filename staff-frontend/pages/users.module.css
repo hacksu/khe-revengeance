@@ -1,0 +1,11 @@
+.cardContainer {
+    display: flex;
+}
+
+.cardContainer :global .anticon {
+    visibility: hidden;
+}
+
+.cardContainer:hover :global .anticon {
+    visibility: visible;
+}

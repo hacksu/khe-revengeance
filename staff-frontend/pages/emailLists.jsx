@@ -6,7 +6,6 @@ import { Email, EmailListNotes, EmailSource, SentListMail, isEmailRegex } from "
 import { Card, Layout, Button, Input, Upload, Popconfirm, Select, Modal } from "antd";
 const { Sider, Footer, Content } = Layout;
 const { confirm, error } = Modal;
-const { Meta } = Card;
 import { PlusOutlined, UploadOutlined, DeleteOutlined, FileAddFilled, SaveOutlined } from "@ant-design/icons";
 import layoutStyle from "../layouts/layout.module.css";
 import style from "./emailLists.module.css";
@@ -222,10 +221,7 @@ export default function EmailLists() {
         keyForAddButton={menuKeys.add}
         enclose={editableSection => [
             { key: menuKeys.compose, label: "Write a mail" },
-            {
-                key: menuKeys.list, label: "Email Lists",
-                children: editableSection
-            },
+            { key: menuKeys.list, label: "Email Lists", children: editableSection },
             { key: menuKeys.sent, label: "Mail what was sent" }
         ]}
     />
