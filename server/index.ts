@@ -91,6 +91,22 @@ async function createServer() {
       next();
     }
   });
+  // TODO: Proper way to server a resume file on an
+  // app.get("/api/resume/:id", remultConfig.withRemult, async (req, res) => {
+  //   const user = remult.user;
+  //   if (!user) {
+  //     res.sendStatus(403);
+  //     return;
+  //   }
+
+  //   let id = req.params.id ?? user.id;
+  //   if (!remult.isAllowed([ UserRole.Admin, UserRole.Staff ])) {
+  //     id = user.id;
+  //   }
+
+  //   console.log(projectRoot);
+  //   res.sendFile(getUserResumePath(id), { root: projectRoot });
+  // });
   if (dev) {
     // in development mode, we create and use the vite and next.js development
     // servers and route traffic to them based on the subdomain for the request
