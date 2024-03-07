@@ -3,8 +3,6 @@ import { remult } from "remult";
 import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 
-import style from "./users.module.css";
-
 import { Button, Card, Layout, Modal, Row, Col, Divider } from "antd";
 const { Content } = Layout;
 
@@ -34,7 +32,7 @@ export default function UsersManager() {
         update()
     }
 
-    const update = () => {
+    const loadUsers = () => {
         repo.find().then(users => setUsers(users));
     }
 
@@ -46,7 +44,7 @@ export default function UsersManager() {
         return actions;
     }
 
-    useEffect(update, []);
+    useEffect(loadUsers, []);
 
     const cardStyle = {
         width: 350,
@@ -57,7 +55,7 @@ export default function UsersManager() {
         <Layout>
             <Content>
                 {users.map((user, i) =>
-                    <div className={style.cardContainer} key={i}>
+                    <div key={i}>
                         <Card
                             title={user.email}
                             extra={<small>{user.roles.join(", ")}</small>}

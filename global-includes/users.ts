@@ -400,14 +400,13 @@ export class User extends EntityBase {
     }
   }
 
-  @BackendMethod({allowed: true})
+  @BackendMethod({ allowed: true })
   static async getExistingResumeName() {
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
-    } else {
-        return await RemoteProcedures.getUserResumeFilename(user.id);
     }
+    return await RemoteProcedures.getUserResumeFilename(user.id);
   }
 
   @BackendMethod({ allowed: true })
