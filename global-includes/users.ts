@@ -197,10 +197,8 @@ const noUpdate = { allowApiUpdate: false };
 @Entity<User>("users", {
   allowApiCrud: true,
   apiPrefilter: () =>  (
-    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ?
-        {} :
-        { id: remult.user?.id }
-    ),
+    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
+  ),
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -402,14 +400,13 @@ export class User extends EntityBase {
     }
   }
 
-  @BackendMethod({allowed: true})
+  @BackendMethod({ allowed: true })
   static async getExistingResumeName() {
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
-    } else {
-        return await RemoteProcedures.getUserResumeFilename(user.id);
     }
+    return await RemoteProcedures.getUserResumeFilename(user.id);
   }
 
   @BackendMethod({ allowed: true })
