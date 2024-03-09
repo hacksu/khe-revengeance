@@ -40,7 +40,9 @@ export default function UsersManager() {
 
     const getActions = (user) => {
         const checkedIn = user.checkedIn;
-        const actions = [<Button key="view" onClick={() => showReview(user)}>View Application</Button>];
+        const actions = [];
+        if (user.submittedApplication)
+            actions.push(<Button key="view" onClick={() => showReview(user)}>View Application</Button>);
         if (user.applicationApproved) 
             actions.push(<Button key="checkin" disabled={checkedIn} type="primary" onClick={() => checkInUser(user)}>{checkedIn ? "Checked in" : "Check in"}</Button>)
         return actions;
