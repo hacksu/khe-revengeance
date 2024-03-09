@@ -25,6 +25,12 @@ export enum EmailSource {
   Early2023 = "2023EarlySignup",
 }
 
+export enum EmailTemplates {
+  Application = "application",
+  Approved = "approved",
+  Welcome = "welcome"
+}
+
 // TODO: maybe replace with zod's email validation, for consistency
 export const isEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -61,7 +67,13 @@ export class Email {
 
   @BackendMethod({ allowed: true })
   static async addEmailAndSendWelcome(email: Partial<Email>) {
-    RemoteProcedures.sendWelcome((await remult.repo(Email).insert(email)).address);
+    RemoteProcedures.sendTemplateEmail(EmailTemplates.Welcome, (await remult.repo(Email).insert(email)).address);
+  }
+
+  // TODO: should this be here?????
+  @BackendMethod({ allowed: [ UserRole.Admin, UserRole.Staff ] })
+  static async sendTemplateEmail(template: EmailTemplates, email: string) {
+    RemoteProcedures.sendTemplateEmail(template, email);
   }
 
   @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })

@@ -13,7 +13,7 @@ import { MongoDataProvider } from "remult/remult-mongo";
 import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
-import { Email, ImportedEmail } from "../global-includes/email-address.ts";
+import { Email, EmailTemplates, ImportedEmail } from "../global-includes/email-address.ts";
 import { gridImagePath } from "../server/file-upload.ts";
 import path from "path";
 
@@ -257,13 +257,8 @@ export function defineRemoteProcedures() {
   };
 
   // TODO: better system for grabbing email content than raw relative file paths
-  
-  RemoteProcedures.sendWelcome = async function (address: string) {
-    await RemoteProcedures.sendUpdate("./server/emails/welcome.html", address);
-  }
-
-  RemoteProcedures.sendApplicationAcknowledgement = async function (address: string) {
-    await RemoteProcedures.sendUpdate("./server/emails/application.html", address);
+  RemoteProcedures.sendTemplateEmail = async function (template: EmailTemplates, address: string) {
+    await RemoteProcedures.sendUpdate(`./server/emails/${template}.html`, address);
   }
 
   RemoteProcedures.getDistinct = async function (collection, field) {
