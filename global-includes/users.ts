@@ -2,7 +2,7 @@ import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
 import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 import { z } from "zod";
-import { isEmailRegex } from "./email-address.ts";
+import { EmailTemplates, isEmailRegex } from "./email-address.ts";
 import crypto from "crypto";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 
@@ -385,7 +385,8 @@ export class User extends EntityBase {
     user.submittedApplication = true;
     user.applicationApproved = false;
     await remult.repo(User).save(user);
-    RemoteProcedures.sendApplicationAcknowledgement(
+    RemoteProcedures.sendTemplateEmail(
+        EmailTemplates.Application,
         user.registration.email || user.email
     );
   }

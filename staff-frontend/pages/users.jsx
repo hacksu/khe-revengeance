@@ -4,6 +4,7 @@ import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 
 import { Button, Card, Layout, Modal, Row, Col, Divider } from "antd";
+import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content } = Layout;
 
 export default function UsersManager() {
@@ -19,9 +20,10 @@ export default function UsersManager() {
     const approveUser = async (user) => {
         setLoading(true);
         await repo.save({ id: user.id, applicationApproved: true });
+        await Email.sendTemplateEmail(EmailTemplates.Approved, user.email || user.registration.email)
         closeReview();
         setLoading(false);
-        update()
+        loadUsers();
     }
 
     const checkInUser = async (user) => {
@@ -29,7 +31,7 @@ export default function UsersManager() {
         await repo.save({ id: user.id, checkedIn: true });
         closeReview();
         setLoading(false);
-        update()
+        loadUsers();
     }
 
     const loadUsers = () => {
