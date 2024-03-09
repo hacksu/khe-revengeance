@@ -3,7 +3,7 @@ import { remult } from "remult";
 import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 
-import { Button, Card, Layout, Modal, Row, Col, Divider } from "antd";
+import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content } = Layout;
 
@@ -93,7 +93,12 @@ export default function UsersManager() {
                         <Col span={8}><strong>Class Standing:</strong> {viewing.registration.schoolStatus}</Col>
                         <Col span={8}><strong>Gender:</strong> {viewing.registration.gender}</Col>
                         <Col span={8}><strong>Major:</strong> {viewing.registration.major}</Col>
-                        <Col span={8}><strong>Website:</strong> {viewing.registration.link}</Col>
+                        <Col span={8}>
+                            <strong>Website:</strong>
+                            <Tooltip title="Be careful!" color="red">
+                                <a href={viewing.registration.link} target="_blank"> {viewing.registration.link}</a>
+                            </Tooltip>
+                        </Col>
                         <Col span={8}><strong>Attended KHE:</strong> {viewing.registration.attendedKhe ? "Yes" : "No"}</Col>
                         <Col span={8}><strong>Pronouns:</strong> {viewing.registration.pronouns}</Col>
                         <Col span={8}><strong>Ethnicity:</strong> {viewing.registration.ethnicity}</Col>
