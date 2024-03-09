@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Badge, Layout, Menu, ConfigProvider, theme } from "antd";
-import { ContactsOutlined, LockOutlined, MessageOutlined, UnlockOutlined, LinkOutlined, FileImageOutlined, UserOutlined } from "@ant-design/icons";
+import { ContactsOutlined, LockOutlined, MessageOutlined, UnlockOutlined, LinkOutlined, FileImageOutlined, UserOutlined, ScheduleFilled } from "@ant-design/icons";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,6 +17,7 @@ export default function KHEStaffLayout({ children }) {
     const pages = [
         { key: "/", label: "KHE 2024 Dashboard" },
         { icon: <UserOutlined />, key: "/users", label: "Users" },
+        { icon: <ScheduleFilled />, key: "/schedule", label: "Schedule" },
         { icon: <ContactsOutlined />, key: "/emailLists", label: "Email Lists" },
         { icon: <MessageOutlined />, key: "/tickets", label: <span>Support Tickets <Badge count={unreadMail} /></span> },
         { icon: <LinkOutlined />, key: "/redirects", label: "Redirect Links" },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
 
@@ -16,7 +16,7 @@ import EditableMenu from "../components/editableMenuItems.jsx";
 export default function EmailLists() {
 
     const [emails, setEmails] = useState([]); // TODO: an email is a complex list of fields, but can also be a string
-    
+
     const [list, setList] = useState(EmailSource.Early2023);
     const [allLists, setAllLists] = useState(Object.values(EmailSource).sort());
     const [listNote, setListNote] = useState("");
@@ -69,7 +69,7 @@ export default function EmailLists() {
             "load",
             async () => {
                 try {
-                    
+
                     // we import the items as a indescript list
                     let imported = JSON.parse(reader.result);
                     if (!Array.isArray(imported)) throw "file was not an array";
@@ -83,7 +83,7 @@ export default function EmailLists() {
                             if (!object["name"]) throw `missing "name" field on ${JSON.stringify(object)}`;
                             if (!object["organization"]) throw `missing "organization" field on ${JSON.stringify(object)}`;
                             objects.push(object);
-                        } 
+                        }
                         else if (typeof object === "string") objects.push({ address: object });
                         else throw `${JSON.stringify(object)} is not an object or string`;
                     }
@@ -97,11 +97,11 @@ export default function EmailLists() {
                             title: "Adding items from JSON",
                             icon: <FileAddFilled />,
                             content: <>
-                                        <p>This will add {emails.length} items to "{list}".</p>
-                                        <p>The following emails failed validation and will be skipped:</p>
-                                        <pre>{badEmails.join("\n")}</pre>
-                                        <p>Proceed?</p>
-                                     </>,
+                                <p>This will add {emails.length} items to "{list}".</p>
+                                <p>The following emails failed validation and will be skipped:</p>
+                                <pre>{badEmails.join("\n")}</pre>
+                                <p>Proceed?</p>
+                            </>,
                             onOk() {
                                 resolve(true);
                             },
@@ -200,8 +200,8 @@ export default function EmailLists() {
             setPage(menuKeys.sent);
         }
     };
-    // TODO: could memoize this?
-    const menu = <EditableMenu
+
+    const menu = useMemo(() => <EditableMenu
         selectedKeys={[page == menuKeys.list ? list : page]}
         defaultOpenKeys={[menuKeys.list]} defaultSelectedKeys={[menuKeys.compose]}
         className={layoutStyle.sidebarWidth}
@@ -224,7 +224,8 @@ export default function EmailLists() {
             { key: menuKeys.list, label: "Email Lists", children: editableSection },
             { key: menuKeys.sent, label: "Mail what was sent" }
         ]}
-    />
+    />, [allLists, page, list]);
+
     return <KHELayout>
         <Layout style={{ height: "100%" }}>
             <Sider width={200} theme="light">{menu}</Sider>
@@ -246,16 +247,16 @@ export default function EmailLists() {
                         <p>The selected recipients all have the following metadata: {
                             recipientFields.map(
                                 (f, i) => <>{i ? ", " : ""}
-                                <pre style={{display:"inline"}}>{f}</pre>
-                            </>)
+                                    <pre style={{ display: "inline" }}>{f}</pre>
+                                </>)
                         }</p>
                         <p>You can use them in the email body like this:{" "}
                             {/* &#123; is left curly brace; &#125 is right curly brace */}
-                            <pre style={{display: "inline"}}>
+                            <pre style={{ display: "inline" }}>
                                 &#123;&#123;{recipientFields[0]}&#125;&#125;
                             </pre>
                         </p>
-                    </> : null }
+                    </> : null}
                 </Layout>
                 :
                 page == menuKeys.sent ?
@@ -284,10 +285,10 @@ export default function EmailLists() {
                                 </Card>
                                 {emails.map((e, i) =>
                                     <div className={style.cardContainer} key={i}>
-                                        <Card 
-                                            title={e.name} 
+                                        <Card
+                                            title={e.name}
                                             extra={e.organization ? <small>{e.organization}</small> : undefined}
-                                            style={cardStyle} 
+                                            style={cardStyle}
                                             bodyStyle={cardBodyStyle}>
                                             <span title={e.address}>{e.address}</span>
                                         </Card>
