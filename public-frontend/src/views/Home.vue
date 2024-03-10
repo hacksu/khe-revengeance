@@ -3,9 +3,11 @@
     <Landing></Landing>
     <About></About>
     <FAQ></FAQ>
-    <div id="sponsors-container">
-      <h3><router-link to="/sponsor">Our Sponsors:</router-link></h3>
-      <Sponsors :row="true" :item-width="200" :item-height="50" />
+    <div class="sponsors">
+      <div class="container" id="sponsors-container">
+        <h3><router-link to="/sponsor">Our Sponsors:</router-link></h3>
+        <Sponsors :row="true" :item-width="200" :item-height="50" />
+      </div>
     </div>
     <Map></Map>
     <Footer></Footer>
@@ -37,15 +39,19 @@ export default {
 <style scoped lang="scss">
 @import '@/globalVars.scss';
 
-#sponsors-container {
+.sponsors {  
+  margin: 0px 10vw; 
+  @media only screen and (max-width: $md-bp) {
+    margin: 10px 5vw;
+  }
+}
+
+.sponsors .container {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
-  margin: 0px 10vw;
-  @media only screen and (max-width: $md-bp) {
-    margin: 10px 5vw;
-  }
 }
 
 </style>
