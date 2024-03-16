@@ -43,7 +43,7 @@ const UsersBarChart = () => {
     }, []);
 
     return (
-        <Skeleton loading={loading} active>
+        <Skeleton loading={loading ? loading : undefined} active>
             <BarChart width={500} height={400} data={chart}>
                 <CartesianGrid strokeDasharray="4 4" />
                 <XAxis dataKey="name" />
@@ -85,18 +85,18 @@ function HomePage() {
             <Sider width={200} theme="light">
                 <Layout>
                     <DBCard>
-                        <Statistic loading={loading} title="2023 Email Signups" value={counts?.early} />
+                        <Statistic loading={loading ? loading : undefined} title="2023 Email Signups" value={counts?.early} />
                     </DBCard>
                     <DBCard>
-                        <Statistic loading={loading} title={<Link href="/emailLists">Total Email Addresses In DB</Link>} value={counts?.emails} />
+                        <Statistic loading={loading ? loading : undefined} title={<Link href="/emailLists">Total Email Addresses In DB</Link>} value={counts?.emails} />
                     </DBCard>
                     <DBCard>
-                        <Statistic loading={loading} title={<Link href="/users">User Accounts</Link>} value={counts?.users} />
+                        <Statistic loading={loading ? loading : undefined} title={<Link href="/users">User Accounts</Link>} value={counts?.users} />
                     </DBCard>
                 </Layout>
             </Sider>
             <Content>
-                <Layout loading={loading} style={{ padding: "10px" }}>
+                <Layout loading={loading ? loading : undefined} style={{ padding: "10px" }}>
                     <Row>
                         <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
                             <UsersBarChart />

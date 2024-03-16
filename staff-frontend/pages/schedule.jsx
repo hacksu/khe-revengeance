@@ -3,7 +3,7 @@ import { remult } from "remult";
 import KHELayout from "../layouts/layout";
 
 import { Layout, Form, Table, Input, Typography, Popconfirm, Button } from "antd";
-import { ScheduleFilled } from "@ant-design/icons";
+import { DownCircleOutlined, ScheduleFilled, UpCircleFilled, UpCircleOutlined } from "@ant-design/icons";
 import EditableMenu from "../components/editableMenuItems";
 import layoutStyle from "../layouts/layout.module.css";
 import { Schedule } from "../../global-includes/schedule";
@@ -16,7 +16,7 @@ const EditableCell = ({ editing, dataIndex, title, inputType, record, index, chi
                 <Form.Item
                     name={dataIndex}
                     style={{ margin: 0 }}
-                    rules={[ { required: true, message: `Please Input ${title}!` } ]}
+                    rules={[{ required: true, message: `Please Input ${title}!` }]}
                 >
                     {inputType == "textarea" ? <Input.TextArea /> : <Input type={inputType} />}
                 </Form.Item>
@@ -38,7 +38,18 @@ export default function ScheduleManager() {
 
     const repo = remult.repo(Schedule);
 
-    const loadSchedules = () => repo.find().then(schedules => setSchedules(schedules));
+    // need the key to be index, goofy, IK
+    const loadSchedules = async () => {
+        const schedules = await repo.find();
+        setSchedules(schedules.map(schedule => {
+            schedule.items = schedule.items.map((item, index) => {
+                item.key = index;
+                return item;
+            });
+            return schedule;
+        }));
+    }
+
     const addSchedule = async (name) => {
         await repo.insert({ name, year: new Date().getFullYear() });
         await loadSchedules();
@@ -49,14 +60,21 @@ export default function ScheduleManager() {
         await loadSchedules();
     }
 
-    const saveSchedule = async (key) => {
-        const row = await form.validateFields();
+    const saveSchedule = async (key = undefined) => {
         const items = schedule.items;
-        items.splice(key, 1, row);
-        setSchedule({
-            ...schedule,
-            items: [...items]
-        })
+        if (key != undefined) {
+            const row = await form.validateFields();
+            console.log(row);
+            items.splice(key, 1, row);
+        }
+        
+        // remap keys to new values
+        items.map((item, index) => { 
+            item.key = index; 
+            return item; 
+        });
+
+        setSchedule(schedule => ({ ...schedule, items: [...items] })) // REACT MOMENT
         await repo.update(schedule.id, { items: schedule.items });
         setEditingKey('');
     }
@@ -66,8 +84,7 @@ export default function ScheduleManager() {
     const columns = [
         { title: 'Title', dataIndex: 'name', inputType: 'text', width: '25%', editable: true },
         { title: 'Description', dataIndex: 'description', inputType: 'textarea', width: '25%', editable: true },
-        { title: 'Start Time', dataIndex: 'startTime', inputType: 'time', width: '15%', editable: true },
-        { title: 'End Time', dataIndex: 'endTime', inputType: 'time', width: '15%', editable: true },
+        { title: 'Date and time', dataIndex: 'date', inputType: 'datetime-local', width: '15%', editable: true },
         {
             title: '',
             dataIndex: 'operation',
@@ -84,12 +101,36 @@ export default function ScheduleManager() {
                     </span>
                 ) : (
                     <Typography.Link disabled={editingKey !== ''} onClick={() => {
-                        form.setFieldsValue({ name: "", description: "", startTime: "", endTime: "", ...record });
+                        form.setFieldsValue({ ["dataIndex" in columns]: "", ...record });
                         setEditingKey(record.key);
                     }}>
                         Edit
                     </Typography.Link>
                 );
+            },
+        },
+        {
+            title: '',
+            dataIndex: 'operation',
+            render: (_, record) => {
+                return <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <Typography.Link disabled={record.key <= 0} onClick={() => {
+                        const items = schedule.items;
+                        items.splice(record.key, 1);
+                        items.splice(record.key - 1, 0, record);
+                        saveSchedule();
+                    }}>
+                        <UpCircleOutlined />
+                    </Typography.Link>
+                    <Typography.Link disabled={record.key >= schedule.items.length - 1} onClick={() => {
+                        const items = schedule.items;
+                        items.splice(record.key, 1);
+                        items.splice(record.key + 1, 0, record);
+                        saveSchedule();
+                    }}>
+                        <DownCircleOutlined />
+                    </Typography.Link>
+                </div>
             },
         },
     ];
