@@ -25,4 +25,9 @@ export class Schedule {
 
 class ScheduleItem {
 
+    key = 0;
+    name = "";
+    description = "";
+    date = "";
+
 }

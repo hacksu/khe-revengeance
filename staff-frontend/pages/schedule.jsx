@@ -62,16 +62,18 @@ export default function ScheduleManager() {
 
     const saveSchedule = async (key = undefined) => {
         const items = schedule.items;
+
+        // of course in javascript, 0 is falsey so we need to check
         if (key != undefined) {
             const row = await form.validateFields();
-            console.log(row);
             items.splice(key, 1, row);
+            form.setFieldsValue({ ...row, name: "", description: "" });
         }
-        
+
         // remap keys to new values
-        items.map((item, index) => { 
-            item.key = index; 
-            return item; 
+        items.map((item, index) => {
+            item.key = index;
+            return item;
         });
 
         setSchedule(schedule => ({ ...schedule, items: [...items] })) // REACT MOMENT
@@ -82,9 +84,9 @@ export default function ScheduleManager() {
     useEffect(() => { loadSchedules() }, []);
 
     const columns = [
-        { title: 'Title', dataIndex: 'name', inputType: 'text', width: '25%', editable: true },
-        { title: 'Description', dataIndex: 'description', inputType: 'textarea', width: '25%', editable: true },
-        { title: 'Date and time', dataIndex: 'date', inputType: 'datetime-local', width: '15%', editable: true },
+        { title: 'Name', dataIndex: 'name', inputType: 'text', width: '25%', editable: true },
+        { title: 'Description', dataIndex: 'description', inputType: 'textarea', width: '30%', editable: true },
+        { title: 'Time', dataIndex: 'date', inputType: 'datetime-local', width: '25%', editable: true },
         {
             title: '',
             dataIndex: 'operation',
@@ -108,6 +110,18 @@ export default function ScheduleManager() {
                     </Typography.Link>
                 );
             },
+        },
+        {
+            title: '',
+            dataIndex: 'operation',
+            render: (_, record) =>
+                <Typography.Link onClick={() => {
+                    const items = schedule.items;
+                    items.splice(record.key, 1);
+                    saveSchedule();
+                }}>
+                    Delete
+                </Typography.Link>,
         },
         {
             title: '',
@@ -182,7 +196,7 @@ export default function ScheduleManager() {
             <Layout style={{ padding: "20px" }}>
                 {schedule &&
                     <>
-                        <Button onClick={() => setSchedule(({ ...schedule, items: [...schedule.items, { ["dataIndex" in columns]: "", key: schedule.items.length }] }))}
+                        <Button onClick={() => saveSchedule(schedule.items.length)}
                             style={{ width: "15%", marginBottom: "10px" }}
                             type="primary">
                             <ScheduleFilled /> Add schedule item
@@ -190,11 +204,10 @@ export default function ScheduleManager() {
                         <Form form={form} component={false}>
                             <Table
                                 components={{ body: { cell: EditableCell } }}
-                                bordered
                                 dataSource={schedule.items}
                                 columns={mergedColumns}
                                 rowClassName="editable-row"
-                                pagination={false}
+                                pagination={true}
                             />
                         </Form>
                     </>
