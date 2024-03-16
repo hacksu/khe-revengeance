@@ -1,13 +1,19 @@
 <template>
   <div id="schedule-container">
-      <h1>{{ schedule.name }}</h1>
-      <div id="schedule-cards">
-        <div v-for="item of schedule.items">
-        <Card class="schedule-card">
-          <template #title>{{ item.name }}</template>
-          <template #subtitle>{{ dateToString(item.date) }}</template>
-          <template #content>{{ item.description }}</template>
-        </Card>
+    <h1>{{ scheduleName }}</h1>
+    <div id="schedule-cards">
+      <div v-for="section of Object.keys(sections).sort(dateSort)">
+        <div class="section">
+          <h2>{{ section }}</h2>
+          <div class="cards">
+            <div v-for="item of sections[section]">
+              <Card class="card">
+                <template #title>{{ item.name }}</template>
+                <template #subtitle>{{ item.description }}</template>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -19,15 +25,22 @@ import { ref, onMounted } from "vue";
 import { Schedule } from "../../../global-includes/schedule";
 import Card from "primevue/card";
 
-const schedule = ref({});
+const name = ref("");
+const sections = ref({});
 
 onMounted(async () => {
   const selected = await Schedule.getSelectedSchedule();
-  selected.items = selected.items.map(item => {
-    item.date = new Date(item.date);
-    return item;
+  name.value = selected.name;
+
+  const sectionsMap = {};
+  selected.items.forEach(({ name, date, description })=> {
+    const dateString = dateToString(new Date(date));
+    const section = sectionsMap[dateString];
+    const item = { name, description };
+    if (section) sectionsMap[dateString].push(item);
+    else sectionsMap[dateString] = [ item ];
   })
-  schedule.value = selected;
+  sections.value = sectionsMap;
 });
 
 const dateToString = (date) => {
@@ -41,6 +54,8 @@ const dateToString = (date) => {
     }
   );
 }
+
+const dateSort = (d, d1) => new Date(d).getTime() - new Date(d1).getTime();
 
 </script>
 
@@ -58,18 +73,30 @@ const dateToString = (date) => {
 
 #schedule-cards {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+  flex-direction: column;
   gap: 10px;
-  flex-wrap: wrap;
-  max-width: 75%;
 
-  .schedule-card {
-    border-radius: 5px;
-    padding: 10px 15px;
-    border: 1px solid white;
+  .section {
+    display: flex;
+    flex-direction: column;
+
+    .cards {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 100%;
+
+      .card {
+        border-radius: 5px;
+        padding: 10px 15px;
+        min-width: 100%;
+        border: 1px solid white;
+      }
+    }
   }
+
+
 }
 
 </style>
