@@ -3,6 +3,7 @@ import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+import Schedule from "./views/Schedule.vue";
 //import localLogin from "./views/localLogin.vue";
 
 export const routerConfig = {
@@ -42,11 +43,11 @@ export const routerConfig = {
       name: "profile",
       component: Profile,
     },
-    // {
-    //   path: '/schedule',
-    //   name: 'schedule',
-    //   component: Schedule
-    // }
+    {
+      path: '/schedule',
+      name: 'schedule',
+      component: Schedule
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {

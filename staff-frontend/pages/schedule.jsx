@@ -50,13 +50,19 @@ export default function ScheduleManager() {
         }));
     }
 
-    const addSchedule = async (name) => {
+    const addSchedule = async name => {
         await repo.insert({ name, year: new Date().getFullYear() });
         await loadSchedules();
     }
 
     const editSchedule = async (id, name) => {
         await repo.update(id, { name });
+        await loadSchedules();
+    }
+
+    const selectSchedule = async id => {
+        await Schedule.selectSchedule(id);
+        setSchedule(schedule => ({ ...schedule, selected: true }));
         await loadSchedules();
     }
 
@@ -195,22 +201,31 @@ export default function ScheduleManager() {
             <Sider width={200} theme="light">{menu}</Sider>
             <Layout style={{ padding: "20px" }}>
                 {schedule &&
-                    <>
-                        <Button onClick={() => saveSchedule(schedule.items.length)}
-                            style={{ width: "15%", marginBottom: "10px" }}
-                            type="primary">
-                            <ScheduleFilled /> Add schedule item
-                        </Button>
-                        <Form form={form} component={false}>
-                            <Table
-                                components={{ body: { cell: EditableCell } }}
-                                dataSource={schedule.items}
-                                columns={mergedColumns}
-                                rowClassName="editable-row"
-                                pagination={true}
-                            />
-                        </Form>
-                    </>
+                    <Form form={form} component={false}>
+                        <Table
+                            components={{ body: { cell: EditableCell } }}
+                            dataSource={schedule.items}
+                            columns={mergedColumns}
+                            rowClassName="editable-row"
+                            pagination={true}
+                            footer={() => 
+                                <div style={{ display: "flex", gap: "10px" }}>
+                                    <Button 
+                                        onClick={() => saveSchedule(schedule.items.length)}
+                                        style={{ width: "15%", marginBottom: "10px" }}
+                                        type="primary">
+                                            <ScheduleFilled /> Add schedule item
+                                    </Button>
+                                    <Button
+                                        disabled={schedule.selected}
+                                        onClick={() => selectSchedule(schedule.id)}
+                                        style={{ width: "15%", marginBottom: "10px" }}>
+                                            <ScheduleFilled /> Set as selected schedule
+                                    </Button>
+                                </div>
+                            }
+                        />
+                    </Form>
                 }
             </Layout>
         </Layout>

@@ -47,7 +47,6 @@ onMounted(() => {
     align-items: center ;
     gap: 10px;
     max-width: 500px;
-
 }
 
 .loginBox {
