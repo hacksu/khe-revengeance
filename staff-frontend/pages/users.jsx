@@ -3,7 +3,7 @@ import { remult } from "remult";
 import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 
-import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip } from "antd";
+import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Grid } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content } = Layout;
 
@@ -58,18 +58,20 @@ export default function UsersManager() {
     return <KHELayout>
         <Layout>
             <Content>
-                {users.map((user, i) =>
-                    <div key={i}>
-                        <Card
-                            title={user.email}
-                            extra={<small>{user.roles.join(", ")}</small>}
-                            actions={getActions(user)}
-                            style={cardStyle}>
-                            {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
-                            <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
-                        </Card>
-                    </div>
-                )}
+                <Row>
+                    {users.map((user, i) =>
+                        <div key={i}>
+                            <Card
+                                title={user.email}
+                                extra={<small>{user.roles.join(", ")}</small>}
+                                actions={getActions(user)}
+                                style={cardStyle}>
+                                {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
+                                <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
+                            </Card>
+                        </div>
+                    )}
+                </Row>
             </Content>
         </Layout>
 
