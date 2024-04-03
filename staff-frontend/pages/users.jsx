@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { remult } from "remult";
 import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
+import style from "./users.module.css";
 
 import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
@@ -35,7 +36,7 @@ export default function UsersManager() {
     }
 
     const loadUsers = () => {
-        repo.find().then(users => setUsers(users));
+        repo.find().then(setUsers);
     }
 
     const getActions = (user) => {
@@ -58,9 +59,10 @@ export default function UsersManager() {
     return <KHELayout>
         <Layout>
             <Content>
-                {users.map((user, i) =>
-                    <div key={i}>
+                <div className={style.mainList}>
+                    {users.map((user, i) =>
                         <Card
+                            key={i}
                             title={user.email}
                             extra={<small>{user.roles.join(", ")}</small>}
                             actions={getActions(user)}
@@ -68,8 +70,8 @@ export default function UsersManager() {
                             {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
                             <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
                         </Card>
-                    </div>
-                )}
+                    )}
+                </div>
             </Content>
         </Layout>
 
