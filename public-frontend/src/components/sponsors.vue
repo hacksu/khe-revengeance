@@ -2,23 +2,23 @@
     <div
     style="display: flex; gap: 30px; flex-wrap: wrap; align-items: center; justify-content: center;"
     :style="{flexDirection: row ? 'row' : 'column'}" >
-        <a href="https://www.wolframalpha.com/" target="_blank" title="Wolfram Alpha">
-            <WolframAlpha class="item" />
-        </a>
-        <a href="https://ybi.org" target="_blank" title="Youngstown Business Incubator">
-            <img src="@/assets/ybi.png" class="item" style="object-fit: cover;" />
+        <a href="https://www.kent.edu/cs" target="_blank" title="Kent State CS">
+            <KSU class="item" style="padding: 10px" />
         </a>
         <a href="https://enbasis.com/" target="_blank" title="Enbasis">
             <Enbasis class="item" />
         </a>
-        <a href="https://www.kentdisplays.com/" target="_blank" title="Kent Displays">
-            <img src="@/assets/kentdisplays.webp" class="item"  style="object-fit: cover;" />
+        <a href="https://ybi.org" target="_blank" title="Youngstown Business Incubator">
+            <img src="@/assets/ybi.png" class="item" style="object-fit: cover;" />
         </a>
         <a href="https://www.bawls.com/" target="_blank" title="BAWLS">
             <img src="@/assets/bawls.webp" class="item"  style="object-fit: cover;" />
         </a>
-        <a href="https://www.kent.edu/cs" target="_blank" title="Kent State CS">
-            <KSU class="item" style="padding: 10px" />
+        <a href="https://www.wolframalpha.com/" target="_blank" title="Wolfram Alpha">
+            <WolframAlpha class="item" />
+        </a>
+        <a href="https://www.kentdisplays.com/" target="_blank" title="Kent Displays">
+            <img src="@/assets/kentdisplays.webp" class="item"  style="object-fit: cover;" />
         </a>
         <div v-if="showAd" class="item" id="extra-item">
             And You?
