@@ -4,7 +4,7 @@ import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 import style from "./users.module.css";
 
-import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip } from "antd";
+import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Grid } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content } = Layout;
 
