@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, Express, application } from "express";
+import { Express } from "express";
 import passport from "passport";
 import {
   Strategy as GitHubStrategy,
@@ -188,7 +188,7 @@ passport.deserializeUser(function (
 
 export function registerAuthMiddleware(
   app: Express,
-  remultConfig: RemultServer
+  remultConfig: any // TODO: weird error with RemultServer type
 ) {
   app.use(
     session({

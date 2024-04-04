@@ -17,7 +17,7 @@
           </p>
           <h3>Parking <i class="pi pi-car" /></h3>
           <p id="parking-info">
-            The easiest parking space to use will be the Student Center Visitor Lot.
+            The easiest parking space to use will be the Student Center Visitor Lot, the R19 Lot or the R7 Lot directly next to Satterfield.
             After parking, walk towards the visitor center, and head left between the buildings.
             The DI Hub is located near the Honors College.
           </p>

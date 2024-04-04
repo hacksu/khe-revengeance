@@ -2,7 +2,7 @@ import { BackendMethod, Entity, Fields, EntityBase, remult } from "remult";
 import { VFields } from "./adaptations.ts";
 import { UserRole } from "./common.ts";
 import { z } from "zod";
-import { isEmailRegex } from "./email-address.ts";
+import { EmailTemplates, isEmailRegex } from "./email-address.ts";
 import crypto from "crypto";
 import { RemoteProcedures } from "./rpc-declarations.ts";
 
@@ -197,10 +197,8 @@ const noUpdate = { allowApiUpdate: false };
 @Entity<User>("users", {
   allowApiCrud: true,
   apiPrefilter: () =>  (
-    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ?
-        {} :
-        { id: remult.user?.id }
-    ),
+    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
+  ),
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -387,7 +385,8 @@ export class User extends EntityBase {
     user.submittedApplication = true;
     user.applicationApproved = false;
     await remult.repo(User).save(user);
-    RemoteProcedures.sendApplicationAcknowledgement(
+    RemoteProcedures.sendTemplateEmail(
+        EmailTemplates.Application,
         user.registration.email || user.email
     );
   }
@@ -402,14 +401,13 @@ export class User extends EntityBase {
     }
   }
 
-  @BackendMethod({allowed: true})
+  @BackendMethod({ allowed: true })
   static async getExistingResumeName() {
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
-    } else {
-        return await RemoteProcedures.getUserResumeFilename(user.id);
     }
+    return await RemoteProcedures.getUserResumeFilename(user.id);
   }
 
   @BackendMethod({ allowed: true })

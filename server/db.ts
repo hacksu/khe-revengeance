@@ -42,7 +42,7 @@ export const remultConfig = remultExpress({
     options.remult.context.incomingIP = request.ip;
   },
   dataProvider: async () => {
-    return new MongoDataProvider(await getDB(), await getDBClient());
+    return new MongoDataProvider(await getDB(), await getDBClient(), {disableTransactions: true});
   },
   entities: [
     Email,
