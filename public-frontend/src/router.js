@@ -3,6 +3,7 @@ import Sponsor from "./views/Sponsor.vue";
 import Contact from "./views/Contact.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+import Guide from "./views/Guide.vue";
 //import localLogin from "./views/localLogin.vue";
 
 export const routerConfig = {
@@ -42,6 +43,11 @@ export const routerConfig = {
       name: "profile",
       component: Profile,
     },
+    {
+      path: "/guide",
+      name: "guide", 
+      component: Guide
+    }
     // {
     //   path: '/schedule',
     //   name: 'schedule',

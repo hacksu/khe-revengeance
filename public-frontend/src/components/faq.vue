@@ -45,7 +45,7 @@ export default {
           id: 1,
           question: "Can I participate?",
           answer:
-            `If you're a high school student or a college student of any kind, then yes! 
+            `If you're a college student of any kind, then yes! 
             KHE is attended by people of all skill levels and backgrounds. 
             You'll fit right in and hopefully, learn something!`
         },
