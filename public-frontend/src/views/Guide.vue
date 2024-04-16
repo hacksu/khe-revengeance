@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <h1>
-        Our Guide to Hackathons
+        A Quickstart Guide to Hackathons
     </h1>
     <p class="large-text">
         Throwing together a revolutionary new product that <strong>shakes the
@@ -21,16 +21,17 @@
             link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
             <p>
                 This online game adds an online component to hide-and-seek: both
-                the hider and the seekers bring up the game on their phone, and
+                the hider and the seekers bring up the game on their phones, and
                 then when the hider hides, the seekers are shown a
                 randomly-placed circle on the map that the hider is
-                <em>somewhere</em> within. The hider can go anywhere, but the
-                game stays fair.
+                <em>somewhere</em> within. The hider can explore a wide range of
+                possible hiding spots, across a whole college campus, for
+                example, but the game stays fair.
             </p>
             <p>
                 This simple enhancement to an age-old pastime shows how
                 technology can be integrated with the real world in a new way to
-                create something fun!
+                create something fun.
             </p>
             <p class="small-text">
                 <strong>Technologies used: </strong><br />
@@ -93,13 +94,14 @@
             </p>
             <p>
                 There is still a lot of untapped potential within the world of
-                AI, probably, and something as simple as a new animal recognizer
-                can make use of that.
+                AI, probably, and this project used it to connect people with
+                animals.
             </p>
             <p class="small-text">
                 <strong>Technologies used: </strong><br />
                 Flask, a Python library, to create a web server for the web interface <br />
                 Google Cloud Vision to recognize animals with AI <br />
+                APIs for Wikipedia and animal databases
             </p>
         </Project>
 
@@ -200,15 +202,15 @@
 
     <TechnologyGuide title="Web Development">
         <template #description>
-            This is the most common way to create apps with centralized data and
-            convenient graphical user interfaces.
+            This is the most common way to create apps, using centralized data
+            and computation and convenient graphical user interfaces.
         </template>
         <p style="text-align: center;">
-            <img :src="wwwGif" />
+            <img :src="wwwGif" alt="A retro animated spinning globe." />
         </p>
         <p>
-            The technologies originally developed to make Geocities websites and
-            mailing list address forms eventually broke containment and
+            The web technologies originally developed to make Geocities pages
+            and mailing list address forms eventually broke containment and
             infiltrated every single facet of the modern graphical user
             interface-based world.
         </p>
@@ -218,9 +220,9 @@
             network, and usually do most of the actual work that the thing
             you're making needs to do. When a web browser (aka a
             <strong>client</strong>) connects to it, the backend server will
-            send <strong>client-side code</strong> to the browser. The server
-            application is known as the <strong>backend</strong>; the
-            client-side code that tells the web browser what to display is
+            send <strong>client-side code</strong> to the browser that will tell
+            the browser what to display to the user. The server application is
+            known as the <strong>backend</strong>; the client-side code is
             called the <strong>frontend</strong>.
         </p>
 
@@ -261,7 +263,7 @@
 
             <p style="grid-column: 1/3">
                 <a href="https://nextjs.org/">Next.js</a>
-                (JavaScript backend + React-based frontend components.)
+                <span>(JavaScript backend + <a href="https://react.dev/">React</a> frontend components.)</span>
             </p>
 
             <p><span>
@@ -298,7 +300,7 @@
             </li>
             <li>
                 You don't need backend code if you just stick frontend code in
-                HTML files and open them with your web browser, but that makes
+                HTML files and open them with your web browser, but that does make
                 it pretty much impossible to do things like persist data or
                 communicate with an API over the Internet.
             </li>
@@ -337,19 +339,289 @@
         </ul>
     </TechnologyGuide>
 
+    <TechnologyGuide title="APIs">
+        <template #description>
+            A quick note on the concept
+        </template>
+        <p style="text-align: center">
+            <img :src="apiImage" style="width: 300px; max-width: 80%" alt="A picture from Wikipedia of a person working at a very old-fashioned computer, captioned: 'Although the people who coined the term API were implementing software on a Univac 1108, the goal of their API was to make hardware independent programs possible.'" />
+        </p>
+        <p>
+            API stands for Application Programming Interface and it is a very
+            broad term that can refer to any agreed-upon system for enabling two
+            computer programs or libraries to interact in a constructive way.
+        </p>
+        <p>
+            A lot of the time, though, an API is going to turn out to be a
+            service that provides structured data over the Internet. A classic
+            example is the <a href="https://openweathermap.org/api">OpenWeather
+            API</a>. You can create an API call, which in this case requires you
+            to identify yourself using a unique API key that you got by making
+            an account with the service, and your program will get back data in
+            some specified format like JSON or XML that informs it what the
+            weather is, was, or is predicted to be in a certain area. It will
+            handle a certain amount of requests for free, and then expect you to
+            pay up for more. You can create a program that uses that data to do
+            things like critique picnicking schedules.
+        </p>
+        <p>
+            This is essentially a backend web server (see the section above)
+            that responds to network requests with raw data, instead of with
+            client-side code that creates a graphical user interface. It is
+            often useful to use an API to interact with fancy tools that you
+            can't build yourself, like large language models (see the section
+            below.)
+        </p>
+        <p>
+            Often, libraries exist that provide pre-programmed ways to request
+            data from any given API, like <a
+            href="https://github.com/csparpa/pyowm">this</a> Python library that
+            lets you get weather data with simple function calls. Keep an eye
+            out for libraries like this, because they can be helpful.
+        </p>
+        <p>
+            <a href="https://github.com/public-api-lists/public-api-lists">Here
+            is a big list I found that encompasses many web APIs.</a>
+        </p>
+    </TechnologyGuide>
+
     <TechnologyGuide title="Artificial Intelligence">
         
         <template #description>
-            This typically refers to technology that can make sense out of the
-            ambiguities involved in natural phenomenona like language or images
-            in a probabilistic way.
+            This term typically refers to technology that can make sense out of
+            the ambiguities involved in natural phenomenona like language or
+            images in a probabilistic way.
         </template>
 
+        <a href="https://nedroid.com" style="text-align: center; display: block; margin-bottom: 15px; margin-top: -10px" target="_blank">
+            <img :src="aiImage" style="max-width: 90%" alt="A cartoonish drawing of a robot breakdancing. The caption reads 'I was built to destroy but right now I'm busy'" />
+        </a>
         <p>
-            
+            Artificial intelligence is a highly technical field replete with
+            functions with weird names like softmax and sigmoid and the promise
+            that it'll replace us all (humans) any minute now, but the basic
+            ideas are actually pretty approachable, and there are a lot of tools
+            out there right now that package up the last few decades of the
+            field's progress so you don't have to redo it.
+        </p>
+        <p>
+            Here are a few ways to <a
+            href="https://www.businessinsider.com/y-combinator-paul-graham-delve-ai-chatgpt-giveaway-email-pitch-2024-4">delve</a>
+            into this fertile territory, from least to most hands-on:
+        </p>
+        <h3>
+            Using existing tools via APIs
+        </h3>
+        <ul>
+            <li>
+                As covered in the section above, APIs let you request data from
+                other people's computers and use it in your own endeavors. The <a
+                href="https://platform.openai.com/docs/introduction">OpenAI API</a>,
+                which you can use to get freshly generated text or images or
+                transcribed audio or various other things, is the basis of tons of
+                products and projects. However, as such, it's not free.
+                <ul>
+                    <li>
+                        If you haven't opened an OpenAI account before, you are granted $5
+                        of free credit for signing up, which expires after three months; $5
+                        doesn't sound like a lot, but if you look at <a
+                        href="https://openai.com/pricing">OpenAI's pricing</a>, it can go a
+                        fairly long way.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Google offers a lot more free credit for its <a
+                href="https://cloud.google.com/use-cases/free-ai-tools">AI
+                tools</a>, including <a
+                href="https://ai.google.dev/pricing">Gemini</a>, its large
+                language model. You can use Gemini 1.0 Pro for free at a maximum
+                rate of 15 requests per minute - that won't let you deploy a
+                product to hundreds of thousands of users, but it can be useful
+                for a hackathon project here and there.
+            </li>
+            <li>
+                Cohere, which has recently released a new large language model
+                called Command R+ that has climbed the ranks on the Chatbot
+                Arena Leaderboard, also <a
+                href="https://cohere.com/pricing">offers free trial access to
+                their API</a>.
+            </li>
+        </ul>
+
+        <h3>
+            Using existing tools through libraries
+        </h3>
+
+        <ul>
+            <li>
+                There are also many options for those ambitious enough to want
+                to install a mechanical soul into their own actual computer. <a
+                href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> is a
+                library that lets you run a variety of large language models
+                locally for text completion and chat, although you'll be
+                expected to have pretty decent specs to run the high-end ones.
+            </li>
+            <li>
+                <a href="https://huggingface.co">Hugging Face</a> provides a vast
+                array of models for different use cases that involve handling text,
+                images, and audio, most of which can be downloaded and utilised in a
+                few lines of code using their <a
+                href="https://github.com/huggingface/transformers">transformers</a>
+                Python library. Again, you might have to be a little bit patient to
+                get results on an ordinary computer, but it is more exciting to see
+                things like speech recognition happen right there in front of you.
+            </li>
+            <li>
+                Also, there exist higher-level libraries that can make use of
+                local and non-local machine learning models, like <a
+                href="https://www.ibm.com/topics/langchain">LangChain</a>, which
+                is a popular framework for building applications around large
+                language models using techniques like retrieval-augmented
+                generation (RAG), where the AI is given the ability to skim
+                through text that you provide to identify relevant information
+                and answer your questions. (Basically.)
+            </li>
+        </ul>
+    
+        <h3>
+            Training brand new models
+        </h3>
+        <p>
+            Although getting new machine learning models working takes quite a
+            bit of ambition and patience, it is interesting to see how computers
+            can turn data into the appearance of intelligence, and there are two
+            whole extremely popular Python libraries to do it with.
+        </p>
+        <ul>
+            <li>
+                <a
+                href="https://github.com/tensorflow/tensorflow">TensorFlow</a>
+                has more stars on Github so I'm putting it first. It is a
+                machine learning library created by Google and later integrated
+                with another library called Keras that provides a high-level
+                interface to the problem of turning e.g. a gigantic number of
+                pictures of birds into a machine learning model that can
+                recognize species of bird. It also provides access to <a
+                href="https://www.tensorflow.org/hub">TensorFlow Hub</a>, which
+                provides many models pre-trained for things like image
+                recognition, which can be customized to recognize specific kinds
+                of images, like those of birds.
+            </li>
+            <li>
+                <a href="https://github.com/pytorch/pytorch">PyTorch</a> is used
+                more by academics and is also perfectly capable of being used to
+                create a bird recognizer. Although it seems to me like a lot of
+                generalist usage of these libraries is centered around
+                recognizing pictures of things, <a
+                href="https://www.youtube.com/watch?v=kCc8FmEb1nY">here</a> is a
+                YouTube video where a former OpenAI engineer uses PyTorch to
+                build a GPT-style LLM, which is something.
+            </li>
+        </ul>
+
+        <p>
+            Note that <a href="https://colab.research.google.com/">Google
+            Colab</a> and <a href="https://www.kaggle.com/">Kaggle</a> both
+            provide <a href="https://jupyter.org/">Jupyter Notebook</a>-based
+            Python environments that are commonly used to test out AI projects.
         </p>
 
     </TechnologyGuide>
+
+    <TechnologyGuide title="Apps!">
+        
+        <template #description>
+            Creating simple and useful programs that one can install on one's
+            phone or computer is still a thing.
+        </template>
+
+        <p style="text-align: center">
+            <img :src="appImage" style="width: 400px; max-width: 90%" />
+        </p>
+
+        <p>
+            Native, installable apps can benefit in speed, look, and feel from
+            being built to run on a specific kind of device. There are usually
+            relatively straightforward recommended ways to build apps for a
+            specific platform; there aren't a huge number of different ideas for
+            how to deploy things crowding into the field. How you create your app
+            depends largely on where you want it to run, so let's go through the
+            possibilities:
+        </p>
+
+        <h3>Windows</h3>
+
+        <p>
+            If you want to create an app for Windows, you should probably use
+            the Windows Presentation Foundation (WPF) framework. It lets you
+            create apps using XAML, which is like HTML but for Windows, and C#.
+            The simplest way to use WPF is to create a new project with it in <a
+            href="https://visualstudio.microsoft.com/vs/">Microsoft Visual
+            Studio</a>.
+        </p>
+
+        <h3>MacOS/iOS</h3>
+        <p>
+            Apple's devices currently use the <a
+            href="https://developer.apple.com/xcode/swiftui/">SwiftUI</a>
+            framework for creating apps, which is build around the new-ish programming
+            language called Swift.
+        </p>
+
+        <h3>Android</h3>
+        <p>
+            Android apps are currently usually built in <a
+            href="https://developer.android.com/studio">Android Studio</a> using
+            a new-ish programming language called Kotlin.
+        </p>
+
+        <h3>Cross-Platform for Desktop</h3>
+        <p>
+            <a href="https://www.qt.io/">Qt</a> is a C++ library that is mostly
+            used to make desktop apps for MacOS, Linux, and Windows by projects
+            ranging from Maya to VLC Player. It also has a Python version.
+        </p>
+
+        <h3>Cross-Platform for Mobile</h3>
+        <p>
+            Guess what, React Native is a popular way to create apps for phones
+            that are not on the web but somehow still use JavaScript. God why.
+        </p>
+
+        <h3>Cross-platform in General</h3>
+        <p>
+            <a href="https://flutter.dev/">Flutter</a> is a new-ish framework
+            created by Google that I've seen work well on desktop and on mobile.
+        </p>
+
+    </TechnologyGuide>
+
+    <!-- <TechnologyGuide title="Games">
+        
+        <template #description>
+            Video games can be fun.
+        </template>
+
+    </TechnologyGuide> -->
+
+    <h2>But:</h2>
+    <p>
+        Don't let this list of technologies hold you back!
+    </p>
+    <p>
+        The above is meant to be a survey of the most common ways to accomplish
+        different tasks, not an exhaustive list of interesting bases for
+        projects. You can ignore all of the above and build a GUI in <a
+        href="https://ziglang.org/">Zig</a> or a command line app in Lisp, as
+        long as it does something interesting and you learn something while
+        doing it.
+    </p>
+
+    <p style="font-size: small">
+        This content is released under the terms of <a
+        href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>.
+    </p>
 
 </div>
 </template>
@@ -369,7 +641,10 @@ import subwayImage from "@/assets/example_projects/subway.jpg";
 import escapeImage from "@/assets/example_projects/escape.jpg";
 import faunaImage from "@/assets/example_projects/fauna.jpg";
 
-import wwwGif from "@/assets/technology_guide/www.gif"
+import wwwGif from "@/assets/technology_guide/www.gif";
+import aiImage from "@/assets/technology_guide/ai.jpg";
+import apiImage from "@/assets/technology_guide/api.jpg";
+import appImage from "@/assets/technology_guide/app.png";
 
 useHead({
   title: "KHE's Guide to Hackathons",
@@ -446,8 +721,6 @@ p {
     grid-template-columns: repeat(2, 1fr);
     & > p, & > h3 {
         text-align: center;
-    }
-    & > p {
         margin: 5px;
         padding: 5px;
         background-color: #fff3;
@@ -457,6 +730,9 @@ p {
         align-items: center;
         justify-content: center;
         min-height: 50px;
+    }
+    & > h3 {
+        border-radius: 0;
     }
 }
 li {

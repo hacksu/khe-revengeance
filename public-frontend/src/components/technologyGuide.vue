@@ -2,8 +2,8 @@
     <Accordion style="margin-top: 30px">
         <AccordionTab>
             <template #header>
-                <div>
-                    <h2 style="margin: 0">{{ title }}</h2>
+                <div style="margin-right: 10px">
+                    <h2 style="margin: 0 0 10px 0">{{ title }}</h2>
                     <slot name="description"></slot>
                 </div>
             </template>
@@ -32,6 +32,5 @@ defineProps({
 }
 :deep(.p-accordion-toggle-icon) {
     flex-shrink: 0;
-    margin-left: 10px!important;
 }
 </style>
