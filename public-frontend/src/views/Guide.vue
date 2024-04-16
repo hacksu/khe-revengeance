@@ -15,7 +15,7 @@
 
     <h2 style="text-align: center; margin-bottom: 0">~ Previous Projects ~</h2>
         
-    <ProjectCarousel :numVisible="1" :numScroll="1" :showIndicators="false">
+    <ProjectCarousel :numVisible="1" :numScroll="1">
 
         <Project title="Escape Pursuit (HackPSU Spring 2024)"
             link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
@@ -162,6 +162,12 @@
             </p>
         </Project>
 
+    <!--
+        more projects that could be added:
+        third place khe 2022, nfc tap-based check-in: https://devpost.com/software/duckduckgoose
+        simple top-down driving game, "best game" from khe 2019: https://devpost.com/software/picky-alien
+    -->
+
     </ProjectCarousel>
 
     <p>
@@ -188,6 +194,163 @@
         </li>
     </ul>
 
+    <p>For more on those last two points, read on:</p>
+
+    <h2>Technologies</h2>
+
+    <TechnologyGuide title="Web Development">
+        <template #description>
+            This is the most common way to create apps with centralized data and
+            convenient graphical user interfaces.
+        </template>
+        <p style="text-align: center;">
+            <img :src="wwwGif" />
+        </p>
+        <p>
+            The technologies originally developed to make Geocities websites and
+            mailing list address forms eventually broke containment and
+            infiltrated every single facet of the modern graphical user
+            interface-based world.
+        </p>
+        <p>
+            Generally, to use them, you need to create a <strong>backend server
+            application</strong> that can store data, make itself available on a
+            network, and usually do most of the actual work that the thing
+            you're making needs to do. When a web browser (aka a
+            <strong>client</strong>) connects to it, the backend server will
+            send <strong>client-side code</strong> to the browser. The server
+            application is known as the <strong>backend</strong>; the
+            client-side code that tells the web browser what to display is
+            called the <strong>frontend</strong>.
+        </p>
+
+        <p>
+            Here is a list of some of the more currently popular
+            backend/frontend combos in very approximately escalating order of
+            complexity:
+        </p>
+
+        <div class="web-dev-grid">
+            <h3>Backend</h3>
+            <h3>Frontend</h3>
+            
+            <p>None</p>
+            <p><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML">HTML files</a></p>
+
+            <p><a href="https://flask.palletsprojects.com/en/3.0.x/">Flask</a><br />(Python library)</p>
+            <p><a href="https://jinja.palletsprojects.com/en/3.1.x/">Jinja HTML templates</a></p>
+
+            <!-- <p>
+                <a href="https://expressjs.com">Express.js</a>
+                (JavaScript library)
+            </p>
+            <p><span>
+                HTML templates using <a href="https://ejs.co/">EJS</a>, <a
+                href="https://handlebarsjs.com/">Handlebars</a>, etc.
+            </span></p> -->
+            
+            <p>
+                <a href="https://expressjs.com">Express.js</a>
+                (JavaScript library)
+            </p>
+            <p><span>
+                Interactive components using
+                <a href="https://vuejs.org/">Vue</a> &
+                <a href="https://vitejs.dev/">Vite</a> (more JavaScript)
+            </span></p>
+
+            <p style="grid-column: 1/3">
+                <a href="https://nextjs.org/">Next.js</a>
+                (JavaScript backend + React-based frontend components.)
+            </p>
+
+            <p><span>
+                Serverless Functions, deployed to something like
+                <a href="https://vercel.com/">Vercel</a> or
+                <a href="https://www.netlify.com/">Netlify</a>
+            </span></p>
+            <p><span>
+                Static site generation with a framework like <a href="https://astro.build/">Astro</a>
+                <br />
+                (The <a href="https://jamstack.org/">Jamstack</a> approach)
+            </span></p>
+
+        </div>
+
+        <h2>Follow-up points:</h2>
+        <ul>
+            <li>
+                Yes, there are several zillion web development frameworks. We'll
+                come up with one that leaves your sanity intact eventually.
+            </li>
+            <li>
+                Note that you need to download <a
+                href="https://nodejs.org/en">Node.js</a> to run JavaScript
+                outside of the browser just like you need to download <a
+                href="https://www.python.org/downloads/">Python</a> to run
+                Python.
+            </li>
+            <li>
+                Backend code can be written in any language that has a library
+                that lets you communicate over a network.
+                <a href="https://github.com/yhirose/cpp-httplib">Even C++!</a>
+                But usually not C++.
+            </li>
+            <li>
+                You don't need backend code if you just stick frontend code in
+                HTML files and open them with your web browser, but that makes
+                it pretty much impossible to do things like persist data or
+                communicate with an API over the Internet.
+            </li>
+            <li>
+                Frontend code must be written in HTML, CSS, and JavaScript
+                because those are the languages web browsers understand.
+                <ul>
+                    <li style="font-size: 90%">
+                        Unless you're using a language that can be transformed
+                        into one of those languages, like TypeScript.
+                    </li>
+                    <li style="font-size: 80%">
+                        Or you're compiling code from other languages into
+                        WebAssembly. Look, I might be getting too
+                        detail-oriented here.
+                    </li>
+                </ul>
+            </li>
+            <!-- <li>
+                You can also combine the frontend and backend into one
+                installable app using a framework like <a
+                href="https://www.electronjs.org/">Electron</a>, which is how
+                Discord, VSCode, and Microsoft Teams hide the fact that they use
+                JavaScript. You probably don't need to think that hard about
+                shipping an installable app for your hackathon project, though.
+            </li>
+            <li>
+                Similarly, most web apps use databases to store
+                data, like <a href="https://www.postgresql.org/">PostgreSQL</a>
+                or <a href="https://www.mongodb.com/">MongoDB</a>, but hot take,
+                for a quick project, you probably don't need much more than a <a
+                href="https://tinydb.readthedocs.io/en/latest/">simple</a> <a
+                href="https://github.com/typicode/lowdb">library</a> that can
+                store stuff in JSON files.
+            </li> -->
+        </ul>
+    </TechnologyGuide>
+
+    <TechnologyGuide title="Artificial Intelligence">
+        
+        <template #description>
+            This typically refers to technology that can make sense out of the
+            ambiguities involved in natural phenomenona like language or images
+            in a probabilistic way.
+        </template>
+
+        <p>
+            
+        </p>
+
+    </TechnologyGuide>
+
 </div>
 </template>
 
@@ -195,7 +358,8 @@
 import { useHead } from '@unhead/vue';
 
 import Project from '../components/project.vue';
-import ProjectCarousel from "../components/projectCarousel.vue"
+import ProjectCarousel from "../components/projectCarousel.vue";
+import TechnologyGuide from "../components/technologyGuide.vue";
 
 import rtclImage from "@/assets/example_projects/rtcl.jpg";
 import safeRoadsImage from "@/assets/example_projects/safe_roads.jpg";
@@ -204,6 +368,8 @@ import singlehandedImage from "@/assets/example_projects/singlehanded.jpg";
 import subwayImage from "@/assets/example_projects/subway.jpg";
 import escapeImage from "@/assets/example_projects/escape.jpg";
 import faunaImage from "@/assets/example_projects/fauna.jpg";
+
+import wwwGif from "@/assets/technology_guide/www.gif"
 
 useHead({
   title: "KHE's Guide to Hackathons",
@@ -216,25 +382,20 @@ useHead({
   ],
 });
 
-// more projects that could be added:
-// third place khe 2022, nfc tap-based check-in: https://devpost.com/software/duckduckgoose
-// simple top-down driving game, "best game" from khe 2019: https://devpost.com/software/picky-alien
-
 </script>
 
 <style scoped lang="scss">
 .container {
     width: 600px;
-    max-width: 90vw;
+    max-width: 96vw;
     margin: 100px auto;
-
     line-height: 1.5;
 }
 h1 {
     font-size: 2rem;
 }
 p {
-    margin: 30px 0;
+    margin: 20px 0;
     font-size: 1.1rem;
     &.large-text {
         font-size: 1.25rem;
@@ -247,5 +408,58 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+:deep(button.p-carousel-next), :deep(button.p-carousel-prev) {
+    background-color: #fff3!important;
+}
+:deep(.p-carousel-indicator.p-highlight) button {
+    background-color: white!important;
+}
+// adjusting the positions and sizes of carousel control buttons by a couple
+// pixels at a time because i care so much it hurts
+:deep(button.p-carousel-next) {
+    transform: translateX(-2px);
+    @media (max-width: 600px) {
+        display: none;
+    }
+}
+:deep(button.p-carousel-prev) {
+    transform: translateX(2px);
+    @media (max-width: 600px) {
+        display: none;
+    }
+}
+:deep(.p-carousel-next-icon) {
+    transform: scale(1.5) translateX(-1px);
+}
+:deep(.p-carousel-prev-icon) {
+    transform: scale(1.5) translateX(1px);
+}
+:deep(.p-accordion-content) > p:first-of-type {
+    margin-top: 0px;
+}
+.web-dev-grid {
+    display: grid;
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+    & > p, & > h3 {
+        text-align: center;
+    }
+    & > p {
+        margin: 5px;
+        padding: 5px;
+        background-color: #fff3;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+    }
+}
+li {
+    margin: 8px;
 }
 </style>
