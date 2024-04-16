@@ -2,7 +2,7 @@
   "name": "khe-revengeance",
   "type": "module",
   "version": "0.0.5",
-  "description": "Kent Hack Enough is a hackathon happening in October 2024.",
+  "description": "Kent Hack Enough is a hackathon happening in April 2024.",
   "main": "server/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch --ignore staff-frontend --ignore public-frontend ./server/index.ts",

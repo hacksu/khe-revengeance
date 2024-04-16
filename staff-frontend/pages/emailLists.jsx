@@ -97,9 +97,9 @@ export default function EmailLists() {
                             title: "Adding items from JSON",
                             icon: <FileAddFilled />,
                             content: <>
-                                        <p>This will add {emails.length} items to "{list}".</p>
+                                        <p>This will add {objects.length} items to "{list}".</p>
                                         <p>The following emails failed validation and will be skipped:</p>
-                                        <pre>{badEmails.join("\n")}</pre>
+                                        <pre>{badEmails.map(badEmail=>badEmail.address).join("\n")}</pre>
                                         <p>Proceed?</p>
                                      </>,
                             onOk() {
