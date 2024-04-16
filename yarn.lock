@@ -3234,9 +3234,9 @@ primeicons@^6.0.1:
   integrity sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA==
 
 primevue@^3.30.2:
-  version "3.30.2"
-  resolved "https://registry.npmjs.org/primevue/-/primevue-3.30.2.tgz"
-  integrity sha512-mxth2kjCrZH8wem+HgzBe9SeO0+sBf0giTsyKT6oU+nu2Fx/rnkMhvwZm/j4x3gmWaHuxSFhZHsH2IZ861i1Og==
+  version "3.51.0"
+  resolved "https://registry.yarnpkg.com/primevue/-/primevue-3.51.0.tgz#afea7e501626f4a5099e9358945ab840389d70c9"
+  integrity sha512-BdMveidLSr0fNJ5+mxuke8mMCHyiXwvfDP4iwPr6R98rl3E0Wcm1u4/RKVrL7o0Iq606SXyhPQL3LGyAfXngcA==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
