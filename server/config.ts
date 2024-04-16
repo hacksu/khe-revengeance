@@ -25,7 +25,7 @@ export interface ServerConfig {
   githubOrgPrivateKey: string;
   mongoURI: string;
   port: number;
-  supportEmailHost: string;
+  incomingEmailHost: string;
   outgoingEmailWhitelist?: string[];
 }
 
