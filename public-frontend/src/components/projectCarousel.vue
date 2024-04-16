@@ -1,5 +1,5 @@
 <template>
-    <Carousel :value="$slots.default()">
+    <Carousel :value="children">
         <template #item="inputValue">
             <RenderNode :nodeToRender="inputValue.data" />
         </template>
@@ -17,8 +17,8 @@
 // carousel can easily have different HTML in it.
 
 // to accomplish this, the children of this component are retrieved using
-// $slots.default(). each of those children will take the form of an object of
-// type VNode. these VNodes are passed to the <Carousel> as the objects that
+// this.$slots.default(). each of those children will take the form of an object
+// of type VNode. these VNodes are passed to the <Carousel> as the objects that
 // need to be mapped into DOM elements. then, a very simple utility component
 // called <RenderNode> is used to trivially "map" the VNodes into Vue's virtual
 // DOM using a render function.
@@ -36,6 +36,13 @@ export default {
         RenderNode: {
             props: ["nodeToRender"],
             render: (instance) => instance.nodeToRender
+        }
+    },
+    computed: {
+        children(){
+            return this.$slots.default()
+                // remove HTML comment nodes
+                .filter(n => typeof n.children !== "string");
         }
     }
 }
