@@ -209,10 +209,10 @@
             <img :src="wwwGif" alt="A retro animated spinning globe." />
         </p>
         <p>
-            The web technologies originally developed to make Geocities pages
-            and mailing list address forms eventually broke containment and
-            infiltrated every single facet of the modern graphical user
-            interface-based world.
+            The web technologies that were originally developed for the creation
+            of Geocities pages and mailing list address forms eventually broke
+            containment and infiltrated every single facet of the modern
+            graphical user interface-based world.
         </p>
         <p>
             Generally, to use them, you need to create a <strong>backend server
