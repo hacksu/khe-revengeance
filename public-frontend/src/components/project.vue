@@ -10,17 +10,13 @@
 
         <div class="project-content"><slot></slot></div>
 
-        <Dialog appendTo="#app-container" v-model:visible="imageModalOpen"
-                modal dismissableMask :blockScroll="false"
-        >
-            <img :src="image" class="modalImage"/>
-        </Dialog>
+        <img :src="image" class="modalImage"/>
+
     </div>
 </div>
 </template>
 
 <script setup>
-import Dialog from "primevue/dialog";
 import { ref } from "vue";
 
 defineProps({

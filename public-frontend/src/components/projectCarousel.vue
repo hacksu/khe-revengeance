@@ -28,22 +28,24 @@
 // functionality)
 
 import Carousel from "primevue/carousel";
+
+// this technically constitutes a complete component definition:
+const RenderNode = {
+    props: ["nodeToRender"],
+    render: (instance) => instance.nodeToRender
+};
+
 export default {
     name: "ProjectCarousel",
     components: {
         Carousel,
-        // this technically constitutes a complete component definition:
-        RenderNode: {
-            props: ["nodeToRender"],
-            render: (instance) => instance.nodeToRender
-        }
+        RenderNode
     },
-    computed: {
-        children(){
-            return this.$slots.default()
-                // remove HTML comment nodes
-                .filter(n => typeof n.children !== "string");
-        }
+    data() {
+        console.log(this.$slots.default())
+        return {
+            children: this.$slots.default()
+        };
     }
-}
+};
 </script>

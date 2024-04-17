@@ -20,6 +20,9 @@
         <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
           FAQ
         </p>
+        <p class="banner-link" @click="navigateTo('/guide')">
+          Guide
+        </p>
         <p v-if="showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
           Sponsors
         </p>

@@ -16,7 +16,6 @@
     <h2 style="text-align: center; margin-bottom: 0">~ Previous Projects ~</h2>
         
     <ProjectCarousel :numVisible="1" :numScroll="1">
-
         <Project title="Escape Pursuit (HackPSU Spring 2024)"
             link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
             <p>
@@ -41,7 +40,6 @@
                 Cloudflare Workers to host the site
             </p>
         </Project>
-        
         <Project title="RTCL (KHE 2022)"
             :image="rtclImage" link="https://devpost.com/software/rtcl-article">
             <p>
@@ -62,7 +60,6 @@
                 pptx (a Python library) to put them in PowerPoints
             </p>
         </Project>
-
         <Project title="Single-Handed Typing (KHE 2022)"
             link="https://devpost.com/software/singlehanded-typing-tech" :image="singlehandedImage">
             <p>
@@ -84,7 +81,6 @@
                 Vue and Nuxt to create the website that demoed the project
             </p>
         </Project>
-
         <Project title="FaunaFinder (MakeUC 2023)"
             link="https://devpost.com/software/faunafinder-ai-powered-animal-breed-recognition" :image="faunaImage">
             <p>
@@ -104,7 +100,6 @@
                 APIs for Wikipedia and animal databases
             </p>
         </Project>
-
         <Project title="Subway Cheese Chase (MakeUC 2023)"
             link="https://devpost.com/software/subway-cheese-chase" :image="subwayImage">
             <p>
@@ -120,7 +115,6 @@
                 Blender, a program for creating 3D art
             </p>
         </Project>
-
         <Project title="CWRU Full-Text Class Search (KHE 2019)"
             :image="cwruClassesImage" link="https://devpost.com/software/cwru-full-text-class-search">
             <p>
@@ -142,7 +136,6 @@
                 Google Cloud to host the resulting website
             </p>
         </Project>
-
         <Project title="Safe-Roads (MakeUC 2023)"
             link="https://devpost.com/software/safe-roads" :image="safeRoadsImage">
             <p>
@@ -163,14 +156,13 @@
                 Streamlit, a Python framework for visualizing data, to visualize data
             </p>
         </Project>
+    </ProjectCarousel>
 
     <!--
         more projects that could be added:
         third place khe 2022, nfc tap-based check-in: https://devpost.com/software/duckduckgoose
         simple top-down driving game, "best game" from khe 2019: https://devpost.com/software/picky-alien
     -->
-
-    </ProjectCarousel>
 
     <p>
         <a href="https://devpost.com/software">For even more projects, browse

@@ -24,7 +24,7 @@
 
 <script setup>
 import { Dropdown } from "floating-vue";
-
+const onMobile = typeof window !== "undefined" && window.innerWidth < 850;  // bad
 </script>
 
 <style scoped lang="scss">
