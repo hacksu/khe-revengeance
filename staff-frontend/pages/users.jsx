@@ -4,40 +4,20 @@ import KHELayout from "../layouts/layout";
 import { User } from "../../global-includes/users";
 import style from "./users.module.css";
 
-import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Grid } from "antd";
+import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Menu } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
-const { Content } = Layout;
+import { useQueryState, parseAsString } from "nuqs";
+const { Content, Sider } = Layout;
 
 export default function UsersManager() {
 
     const [users, setUsers] = useState([]);
     const [viewing, setViewing] = useState(null);
     const [loading, setLoading] = useState(false);
-    const repo = remult.repo(User);
+    const userRepo = remult.repo(User);
 
     const showReview = (user) => setViewing(user);
     const closeReview = () => setViewing(null);
-
-    const approveUser = async (user) => {
-        setLoading(true);
-        await repo.save({ id: user.id, applicationApproved: true });
-        await Email.sendTemplateEmail(EmailTemplates.Approved, user.email || user.registration.email)
-        closeReview();
-        setLoading(false);
-        loadUsers();
-    }
-
-    const checkInUser = async (user) => {
-        setLoading(true);
-        await repo.save({ id: user.id, checkedIn: true });
-        closeReview();
-        setLoading(false);
-        loadUsers();
-    }
-
-    const loadUsers = () => {
-        repo.find().then(setUsers);
-    }
 
     const getActions = (user) => {
         const checkedIn = user.checkedIn;
@@ -49,34 +29,122 @@ export default function UsersManager() {
         return actions;
     }
 
-    useEffect(loadUsers, []);
-
     const cardStyle = {
         width: 350,
         margin: 6
     }
 
+    const userStatuses = {
+        accountCreated: {
+            label: "Account Created",
+            filter: {
+                applicationApproved: false,
+                submittedApplication: false,
+                checkedIn: false
+            }
+        },
+        applicationReceived: {
+            label: "Application Received",
+            filter: {
+                submittedApplication: true,
+                applicationApproved: false,
+                checkedIn: false
+            }
+        },
+        approved: {
+            label: "Application Approved",
+            filter: {
+                submittedApplication: true,
+                applicationApproved: true,
+                checkedIn: false
+            }
+        },
+        checkedIn: {
+            label: "Checked In",
+            filter: {
+                checkedIn: true
+            }
+        }
+    };
+
+    const [userStatusCounts, setUserStatusCounts] = useState({});
+
+    const userStatusMenuItems = Object.keys(userStatuses).map(
+        key => {
+            const count = userStatusCounts[key] ? ` (${userStatusCounts[key]})` : "";
+            const label = userStatuses[key].label + count;
+            return { label, key };
+        }
+    );
+
+    const [viewingStatus, setViewingStatus] = useQueryState(
+        "status",
+        parseAsString.withDefault("applicationReceived")
+    );
+
+    const navigateStatuses = (clickedItem) => {
+        setViewingStatus(clickedItem.key);
+    };
+
+    const loadUsers = () => {
+        userRepo
+            .find({where: userStatuses[viewingStatus].filter})
+            .then(setUsers);
+        for (const status of Object.keys(userStatuses)){
+            userRepo
+                .count(userStatuses[status].filter)
+                .then(count => setUserStatusCounts(c => ({...c, [status]: count})));
+        }
+    }
+
+    useEffect(loadUsers, [viewingStatus]);
+
+    const approveUser = async (user) => {
+        setLoading(true);
+        await userRepo.save({ id: user.id, applicationApproved: true });
+        await Email.sendTemplateEmail(EmailTemplates.Approved, user.email || user.registration.email)
+        closeReview();
+        setLoading(false);
+        loadUsers();
+    }
+
+    const checkInUser = async (user) => {
+        setLoading(true);
+        await userRepo.save({ id: user.id, checkedIn: true });
+        closeReview();
+        setLoading(false);
+        loadUsers();
+    }
+
     return <KHELayout>
         <Layout>
-            <Content>
-                <div className={style.mainList}>
-                    {users.map((user, i) =>
-                        <Card
-                            key={i}
-                            title={user.email}
-                            extra={<small>{user.roles.join(", ")}</small>}
-                            actions={getActions(user)}
-                            style={cardStyle}>
-                            {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
-                            <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
-                        </Card>
-                    )}
-                </div>
-            </Content>
+            <Sider width={300} theme="light">
+                <Menu title="User Statuses" mode="inline" onClick={navigateStatuses}
+                    style={{ overflowY: "auto", height: "100%", width: "100%" }}
+                    items={userStatusMenuItems}
+                    defaultSelectedKeys={[viewingStatus]} />
+            </Sider>
+            <Layout>
+                <Content>
+                    <div className={style.mainList}>
+                        {users.map((user, i) =>
+                            <Card
+                                key={i}
+                                title={user.email}
+                                extra={<small>{user.roles.join(", ")}</small>}
+                                actions={getActions(user)}
+                                style={cardStyle}>
+                                {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
+                                <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
+                            </Card>
+                        )}
+                    </div>
+                </Content>
+            </Layout>
         </Layout>
 
         {/* TODO: really do not like this really long JSON access syntax (viewing.registration.someotherlongname),
-            this should become it's own component at some point 
+            this should become its own component at some point 
         */}
         <Modal
             width="800px"
