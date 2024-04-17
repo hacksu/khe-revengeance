@@ -42,7 +42,6 @@ export default {
         RenderNode
     },
     data() {
-        console.log(this.$slots.default())
         return {
             children: this.$slots.default()
         };
