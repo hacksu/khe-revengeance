@@ -1,32 +1,22 @@
 <template>
 <div class="project-container" style="text-align: center">
     <div style="border: 1px solid white; border-radius: 10px; padding: 10px">
-
-        <img :src="image" v-if="image" @click="imageModalOpen=true" class="headerImage" />
-
+        <img :src="image" v-if="image" class="headerImage" />
         <a :href="link">
             <h3 style="margin-bottom: 0; font-size: 110%">{{ title }}</h3>
         </a>
-
         <div class="project-content"><slot></slot></div>
-
-        <img :src="image" class="modalImage"/>
-
     </div>
 </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-
 defineProps({
     title: String,
     link: String,
     image: String,
     content: String
 });
-
-const imageModalOpen = ref(false);
 </script>
 
 <style scoped lang="scss">
@@ -39,7 +29,6 @@ const imageModalOpen = ref(false);
     .headerImage {
         max-height: 200px;
         max-width: 100%;
-        cursor: pointer;
     }
     .modalImage {
         max-height: 80vh;
