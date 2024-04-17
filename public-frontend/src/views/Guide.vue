@@ -231,7 +231,10 @@
             <p>None</p>
             <p><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML">HTML files</a></p>
 
-            <p><a href="https://flask.palletsprojects.com/en/3.0.x/">Flask</a><br />(Python library)</p>
+            <p>
+                <a href="https://flask.palletsprojects.com/en/3.0.x/">Flask</a>
+                (Python library)
+            </p>
             <p><a href="https://jinja.palletsprojects.com/en/3.1.x/">Jinja HTML templates</a></p>
 
             <!-- <p>
@@ -268,8 +271,20 @@
                 <br />
                 (The <a href="https://jamstack.org/">Jamstack</a> approach)
             </span></p>
-
         </div>
+
+        <p>
+            <strong><a href="https://flask.palletsprojects.com/en/3.0.x/">Flask
+            with Jinja templates</a></strong> is popular and highly recommended
+            for fairly straightforward static websites.
+        </p>
+
+        <p>
+            <strong><a href="https://nextjs.org/">Next.js</a></strong> is
+            popular and highly recommended for somewhat more polished and
+            complex user interfaces, if you're willing to deal with writing
+            JavaScript for the frontend and backend at the same time.
+        </p>
 
         <h2>Follow-up points:</h2>
         <ul>
