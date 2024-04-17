@@ -6,7 +6,7 @@
         </a>
         <a class="loginBar loginBox" href="/login/discord">
             <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
-            <span>Login with <br v-if="narrow" />Discord</span>
+            <span>Login with Discord</span>
         </a>
         <a class="loginBar loginBox noHover">
             <img id="khe-mark" src="/favicon.ico" />
