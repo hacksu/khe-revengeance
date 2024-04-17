@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 // @ is an alias to /src
 import Landing from '@/components/landing.vue';
 import About from '@/components/about.vue';
@@ -23,17 +23,21 @@ import Map from '@/components/map.vue';
 import Footer from '@/components/footer.vue';
 import Sponsors from '@/components/sponsors.vue';
 
-export default {
-  name: 'home',
-  components: {
-    Landing,
-    About,
-    FAQ,
-    Map,
-    Footer,
-    Sponsors,
-  }
-}
+import { useHead } from '@unhead/vue';
+
+useHead({
+  title: "Kent Hack Enough",
+  meta: [
+    {
+      name: "description",
+      content: "Take 24 hours out of your schedule on April 20th-21st, 2024 to make something amazing."
+    },
+    {
+      property: "og:image",
+      content: "/khe-eclipse-centered.jpg"
+    }
+  ]
+});
 </script>
 
 <style scoped lang="scss">
