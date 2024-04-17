@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { SupportTicket, SupportTicketController, TicketMessage, TicketStatus } from "../../global-includes/support-ticket";
 import { remult } from "remult";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { Layout, Menu, Button, Popconfirm, Badge, Form, Switch, Input } from "antd";
 const { Sider } = Layout;
 const { TextArea } = Input;
