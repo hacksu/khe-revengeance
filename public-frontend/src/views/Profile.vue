@@ -218,25 +218,28 @@
                     </div>
                 </template>
                 <template #footer>
-                    <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'" iconPos="right" @click="saveUser" />
-                    <Button :disabled="submissionStatus == 'success'" @click="submissionStatus != 'success' && submitForm()"
-                        icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'" iconPos="right"
-                        :style="'margin-left: 0.5em;' + (formComplete ? `color: #333; background-color: white;` : '')" />
-                        <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
-                            Could not update application! Make sure all fields are filled out.
-                        </p>
-                        <p v-if="saveStatus == 'saved'" style="text-align: left; color: lightgreen;">
-                            Saved application!
-                        </p>
-                        <p v-if="submissionStatus == 'success'" style="text-align: left">
-                            Thanks for submitting your application to Kent Hack Enough! You
-                            will receive an email when your application is accepted or
-                            rejected.
+                    <div class="action-buttons">
+                        <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'" iconPos="right" @click="saveUser" />
+                        <Button :disabled="submissionStatus == 'success'" @click="submissionStatus != 'success' && submitForm()"
+                            icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'" iconPos="right"
+                            :style="(formComplete ? `color: #333; background-color: white;` : '')" />
+                        <Button v-if="submissionStatus == 'success'" label="Withdraw Application" @click="deregister" />
+                    </div>
+                    <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
+                        Could not update application! Make sure all fields are filled out.
+                    </p>
+                    <p v-if="saveStatus == 'saved'" style="text-align: left; color: lightgreen;">
+                        Saved application!
+                    </p>
+                    <p v-if="submissionStatus == 'success'" style="text-align: left">
+                        Thanks for submitting your application to Kent Hack Enough! You
+                        will receive an email when your application is accepted or
+                        rejected.
 
-                            You are free to make changes to your application and save them,
-                            but please note that this will put your application back at the
-                            end of the line.
-                        </p>
+                        You are free to make changes to your application and save them,
+                        but please note that this will put your application back at the
+                        end of the line.
+                    </p>
                 </template>
             </Card>
 
@@ -276,7 +279,9 @@ const otherRestriction = ref(false);
 const alternateEmail = ref(false);
 const alternateEmailValue = ref("");
 
+// this is basically an enum: either "success", "failed", or "pending"
 const submissionStatus = ref('pending');
+
 const saveStatus = ref("");
 
 const receivingEmails = ref(true);
@@ -359,6 +364,11 @@ const submitForm = async () => {
     }
 }
 
+const deregister = async () => {
+    await User.withdrawRegistration();
+    submissionStatus.value = "pending";
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -414,5 +424,14 @@ const submitForm = async () => {
 :deep(.p-card .p-card-body) {
     border: 1px solid white;
     border-radius: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    @media (max-width: 700px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 </style>
