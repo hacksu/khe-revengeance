@@ -8,6 +8,49 @@ import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Menu } from "a
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content, Sider } = Layout;
 
+function UserModalContent({registration}) {
+
+    const dietaryRestrictions = registration.dietaryRestrictions.map(
+        r => r == "Other" ?
+            `Other (${registration.optionalExtraRestriction || "not specified"})` :
+            r
+    ).join(", ") || "This user has no dietary restrictions.";
+
+    return <>
+        <Divider orientation="left" plain>Personal</Divider>
+        <Row gutter={16}>
+            <Col span={8}><strong>Age:</strong> {registration.age}</Col>
+            <Col span={8}><strong>School:</strong> {registration.school}</Col>
+            <Col span={8}><strong>Phone:</strong> {registration.phone}</Col>
+            <Col span={8}><strong>Class Standing:</strong> {registration.schoolStatus}</Col>
+            <Col span={8}><strong>Gender:</strong> {registration.gender}</Col>
+            <Col span={8}><strong>Major:</strong> {registration.major}</Col>
+            <Col span={8}>
+                <strong>Website:</strong>
+                <Tooltip title="Be careful!" color="red">
+                    <a href={registration.link} target="_blank"> {registration.link}</a>
+                </Tooltip>
+            </Col>
+            <Col span={8}><strong>Attended KHE:</strong> {registration.attendedKhe ? "Yes" : "No"}</Col>
+            <Col span={8}><strong>Pronouns:</strong> {registration.pronouns}</Col>
+            <Col span={8}><strong>Ethnicity:</strong> {registration.ethnicity}</Col>
+            <Col span={8}><strong>Sexuality:</strong> {registration.sexuality}</Col>
+            <Col span={8}><strong>Shirt Size:</strong> {registration.shirtSize}</Col>
+            <Col span={8}><strong>State:</strong> {registration.state}</Col>
+            <Col span={8}><strong>Country:</strong> {registration.country}</Col>
+        </Row>
+        <Divider orientation="left" plain>Dietary Restrictions</Divider>
+        <Row gutter={16}>
+            <Col span={12}>{dietaryRestrictions}</Col>
+        </Row>
+        <Divider orientation="left" plain>MLH</Divider>
+        <Row gutter={16}>
+            <Col span={12}>{registration.name} has <strong>{registration.mlhConduct ? "accepted" : "not accepted"}</strong> the MLH Code of Conduct.</Col>
+            <Col span={12}>{registration.name} has <strong>{registration.mlhShare ? "accepted" : "not accepted"}</strong> the MLH Share.</Col>
+        </Row>
+    </>;
+}
+
 export default function UsersManager() {
 
     const [users, setUsers] = useState([]);
@@ -128,14 +171,14 @@ export default function UsersManager() {
         const checkedIn = user.checkedIn;
         const archived = user.archived;
         const actions = [
-            <Button key="archive" type="primary" onClick={() => setArchiveStatusForUser(user, !archived)}>
+            <Button key="archive" onClick={() => setArchiveStatusForUser(user, !archived)}>
                 {archived ? "Unarchive" : "Archive"}
             </Button>
         ];
         if (user.submittedApplication) {
             actions.push(<Button key="view" onClick={() => showReview(user)}>View Application</Button>);
         }
-        if (user.applicationApproved) {
+        if (user.applicationApproved && !archived) {
             actions.push(
                 <Button key="checkin" disabled={checkedIn} type="primary" onClick={() => checkInUser(user)}>
                     {checkedIn ? "Checked in" : "Check in"}
@@ -190,41 +233,7 @@ export default function UsersManager() {
             okButtonProps={viewing?.applicationApproved ? { disabled: true } : { loading }}
             okText="Approve"
         >
-            {viewing &&
-                <>
-                    <Divider orientation="left" plain>Personal</Divider>
-                    <Row gutter={16}>
-                        <Col span={8}><strong>Age:</strong> {viewing.registration.age}</Col>
-                        <Col span={8}><strong>School:</strong> {viewing.registration.school}</Col>
-                        <Col span={8}><strong>Phone:</strong> {viewing.registration.phone}</Col>
-                        <Col span={8}><strong>Class Standing:</strong> {viewing.registration.schoolStatus}</Col>
-                        <Col span={8}><strong>Gender:</strong> {viewing.registration.gender}</Col>
-                        <Col span={8}><strong>Major:</strong> {viewing.registration.major}</Col>
-                        <Col span={8}>
-                            <strong>Website:</strong>
-                            <Tooltip title="Be careful!" color="red">
-                                <a href={viewing.registration.link} target="_blank"> {viewing.registration.link}</a>
-                            </Tooltip>
-                        </Col>
-                        <Col span={8}><strong>Attended KHE:</strong> {viewing.registration.attendedKhe ? "Yes" : "No"}</Col>
-                        <Col span={8}><strong>Pronouns:</strong> {viewing.registration.pronouns}</Col>
-                        <Col span={8}><strong>Ethnicity:</strong> {viewing.registration.ethnicity}</Col>
-                        <Col span={8}><strong>Sexuality:</strong> {viewing.registration.sexuality}</Col>
-                        <Col span={8}><strong>Shirt Size:</strong> {viewing.registration.shirtSize}</Col>
-                        <Col span={8}><strong>State:</strong> {viewing.registration.state}</Col>
-                        <Col span={8}><strong>Country:</strong> {viewing.registration.country}</Col>
-                    </Row>
-                    <Divider orientation="left" plain>Dietary Restrictions</Divider>
-                    <Row gutter={16}>
-                        <Col span={12}>{viewing.registration.dietaryRestrictions.join(", ") || "This user has no dietary restrictions."}</Col>
-                    </Row>
-                    <Divider orientation="left" plain>MLH</Divider>
-                    <Row gutter={16}>
-                        <Col span={12}>{viewing.registration.name} has <strong>{viewing.registration.mlhConduct ? "accepted" : "not accepted"}</strong> the MLH Code of Conduct.</Col>
-                        <Col span={12}>{viewing.registration.name} has <strong>{viewing.registration.mlhShare ? "accepted" : "not accepted"}</strong> the MLH Share.</Col>
-                    </Row>
-                </>
-            }
+            {viewing && <UserModalContent registration={viewing.registration} />}
         </Modal>
     </KHELayout>
 }
