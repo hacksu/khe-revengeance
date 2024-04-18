@@ -268,6 +268,9 @@ export class User extends EntityBase {
   @VFields.boolean({ allowApiUpdate: [UserRole.Admin, UserRole.Staff] })
   checkedIn = false;
 
+  @VFields.boolean({ allowApiUpdate: [UserRole.Admin, UserRole.Staff] })
+  archived = false;
+
   /** Called on backend when OAuth succeeds; finds or creates a User object in
    * the database and returns it. A session is then created using the returned
    * User object*/
@@ -389,6 +392,17 @@ export class User extends EntityBase {
         EmailTemplates.Application,
         user.registration.email || user.email
     );
+  }
+
+  @BackendMethod({ allowed: true })
+  static async withdrawRegistration() {
+    const user = remult.user as User;
+    if (!user) {
+      throw "Not logged in";
+    }
+    user.submittedApplication = false;
+    user.applicationApproved = false;
+    await remult.repo(User).save(user);
   }
 
   @BackendMethod({allowed: true})
