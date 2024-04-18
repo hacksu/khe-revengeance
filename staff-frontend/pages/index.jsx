@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import KHELayout from "../layouts/layout.jsx";
 import { remult } from "remult";
-import { Email, EmailSource } from "../../global-includes/email-address.ts";
-import { Card, Col, Layout, Row, Skeleton, Statistic } from "antd";
+import { Email } from "../../global-includes/email-address.ts";
+import { Card, Layout, Row, Skeleton, Statistic } from "antd";
 import { User } from "../../global-includes/users.ts";
 import Link from "next/link.js";
-import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 const { Sider, Content } = Layout;
 
@@ -53,27 +53,75 @@ const UsersBarChart = () => {
             </BarChart>
         </Skeleton>
     )
-}
+};
+
+const UsersLineGraph = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [chart, setChart] = useState({});
+
+    useEffect(() => {
+
+        const repo = remult.repo(User);
+
+        const loadChart = async () => {
+
+            const dataPoints = 20;
+
+            const earliest = (await repo.findFirst()).createdAt;
+            const now = new Date();
+            const range = now.getTime() - earliest.getTime();
+            const rangeBetweenPoints = range / (dataPoints - 1);
+
+            const points = [{name: earliest.toLocaleDateString(), amount: 0}];
+            for (let i = 1; i < dataPoints; ++i) {
+                const before = new Date(earliest.getTime() + i * rangeBetweenPoints);
+                const count = await repo.count({ createdAt: { $lt: before } });
+                points.push({
+                    name: before.toLocaleDateString(),
+                    amount: count
+                });
+            }
+            
+            setChart(points);
+            setLoading(false);
+        }
+
+        setLoading(true);
+        loadChart();
+    }, []);
+
+    return (
+        <Skeleton loading={loading} active >
+            <LineChart width={500} height={400} data={chart}>
+                <CartesianGrid strokeDasharray="4 4" />
+                <XAxis dataKey="name" interval="preserveStartEnd" />
+                <YAxis label={{value: "User Accounts Created", angle: -90}} />
+                <Tooltip />
+                <Line dataKey="amount" name="Users" />
+            </LineChart>
+        </Skeleton>
+    )
+};
 
 function HomePage() {
 
-    const [loading, setLoading] = useState(false);
+    const [loadingCounts, setLoadingCounts] = useState(false);
     const [counts, setCounts] = useState(null);
-    const [chart, setChart] = useState([]);
 
     useEffect(() => {
 
         const loadCounts = async () => {
             setCounts({
                 emails: await remult.repo(Email).count(),
-                early: await Email.getEmailList(EmailSource.Early2023).then(l => l.length),
-                users: await remult.repo(User).count()
+                users: await remult.repo(User).count(),
+                accepted: await remult.repo(User).count({applicationApproved: true})
             });
 
-            setLoading(false);
+            setLoadingCounts(false);
         }
 
-        setLoading(true);
+        setLoadingCounts(true);
         loadCounts();
 
     }, []);
@@ -85,22 +133,26 @@ function HomePage() {
             <Sider width={200} theme="light">
                 <Layout>
                     <DBCard>
-                        <Statistic loading={loading} title="2023 Email Signups" value={counts?.early} />
+                        <Statistic
+                            loading={loadingCounts}
+                            title={<Link href="/users">User Accounts</Link>}
+                            value={counts?.users}
+                        />
                     </DBCard>
                     <DBCard>
-                        <Statistic loading={loading} title={<Link href="/emailLists">Total Email Addresses In DB</Link>} value={counts?.emails} />
-                    </DBCard>
-                    <DBCard>
-                        <Statistic loading={loading} title={<Link href="/users">User Accounts</Link>} value={counts?.users} />
+                        <Statistic
+                            loading={loadingCounts}
+                            title={<Link href="/users">Accepted Applications</Link>}
+                            value={counts?.accepted}
+                        />
                     </DBCard>
                 </Layout>
             </Sider>
             <Content>
-                <Layout loading={loading} style={{ padding: "10px" }}>
-                    <Row>
-                        <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                            <UsersBarChart />
-                        </Col>
+                <Layout loading={loadingCounts} style={{ padding: "10px" }}>
+                    <Row style={{flexWrap: "nowrap", minWidth: 800}}>
+                        <UsersLineGraph />
+                        <UsersBarChart />
                     </Row>
                 </Layout>
             </Content>
