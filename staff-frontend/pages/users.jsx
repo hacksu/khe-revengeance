@@ -6,7 +6,6 @@ import style from "./users.module.css";
 
 import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Menu } from "antd";
 import { Email, EmailTemplates } from "../../global-includes/email-address";
-import { useQueryState, parseAsString } from "nuqs";
 const { Content, Sider } = Layout;
 
 export default function UsersManager() {
@@ -19,18 +18,8 @@ export default function UsersManager() {
     const showReview = (user) => setViewing(user);
     const closeReview = () => setViewing(null);
 
-    const getActions = (user) => {
-        const checkedIn = user.checkedIn;
-        const actions = [];
-        if (user.submittedApplication)
-            actions.push(<Button key="view" onClick={() => showReview(user)}>View Application</Button>);
-        if (user.applicationApproved) 
-            actions.push(<Button key="checkin" disabled={checkedIn} type="primary" onClick={() => checkInUser(user)}>{checkedIn ? "Checked in" : "Check in"}</Button>)
-        return actions;
-    }
-
     const cardStyle = {
-        width: 350,
+        width: 400,
         margin: 6
     }
 
@@ -40,7 +29,8 @@ export default function UsersManager() {
             filter: {
                 applicationApproved: false,
                 submittedApplication: false,
-                checkedIn: false
+                checkedIn: false,
+                archived: false
             }
         },
         applicationReceived: {
@@ -48,7 +38,8 @@ export default function UsersManager() {
             filter: {
                 submittedApplication: true,
                 applicationApproved: false,
-                checkedIn: false
+                checkedIn: false,
+                archived: false
             }
         },
         approved: {
@@ -56,17 +47,27 @@ export default function UsersManager() {
             filter: {
                 submittedApplication: true,
                 applicationApproved: true,
-                checkedIn: false
+                checkedIn: false,
+                archived: false
             }
         },
         checkedIn: {
             label: "Checked In",
             filter: {
-                checkedIn: true
+                checkedIn: true,
+                archived: false
             }
-        }
+        },
+        archived: {
+            label: "Archived",
+            filter: {
+                archived: true
+            }
+        },
     };
 
+    // this object is populated in loadUsers based on the counts of users that
+    // meet the filters in userStatuses
     const [userStatusCounts, setUserStatusCounts] = useState({});
 
     const userStatusMenuItems = Object.keys(userStatuses).map(
@@ -77,9 +78,8 @@ export default function UsersManager() {
         }
     );
 
-    const [viewingStatus, setViewingStatus] = useQueryState(
-        "status",
-        parseAsString.withDefault("applicationReceived")
+    const [viewingStatus, setViewingStatus] = useState(
+        "applicationReceived"
     );
 
     const navigateStatuses = (clickedItem) => {
@@ -116,13 +116,48 @@ export default function UsersManager() {
         loadUsers();
     }
 
+    const setArchiveStatusForUser = async (user, value) => {
+        setLoading(true);
+        await userRepo.save({id: user.id, archived: value});
+        closeReview();
+        setLoading(false);
+        loadUsers();
+    }
+
+    const getActions = (user) => {
+        const checkedIn = user.checkedIn;
+        const archived = user.archived;
+        const actions = [
+            <Button key="archive" type="primary" onClick={() => setArchiveStatusForUser(user, !archived)}>
+                {archived ? "Unarchive" : "Archive"}
+            </Button>
+        ];
+        if (user.submittedApplication) {
+            actions.push(<Button key="view" onClick={() => showReview(user)}>View Application</Button>);
+        }
+        if (user.applicationApproved) {
+            actions.push(
+                <Button key="checkin" disabled={checkedIn} type="primary" onClick={() => checkInUser(user)}>
+                    {checkedIn ? "Checked in" : "Check in"}
+                </Button>
+            );
+        }
+        // the antd Card component expects an array of "action" components to
+        // display at the bottom of the card. however, the way that they space
+        // out an array of e.g. three buttons sucks, so i'm adding a custom
+        // container to wrap them
+        return [<div style={{display: "flex", justifyContent: "space-evenly"}}>
+            {actions}
+        </div>];
+    }
+
     return <KHELayout>
         <Layout>
             <Sider width={300} theme="light">
                 <Menu title="User Statuses" mode="inline" onClick={navigateStatuses}
                     style={{ overflowY: "auto", height: "100%", width: "100%" }}
                     items={userStatusMenuItems}
-                    defaultSelectedKeys={[viewingStatus]} />
+                    selectedKeys={[viewingStatus]} />
             </Sider>
             <Layout>
                 <Content>
