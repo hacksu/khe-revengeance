@@ -4,6 +4,7 @@ import Contact from "./views/Contact.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import Schedule from "./views/Schedule.vue";
+import Guide from "./views/Guide.vue";
 //import localLogin from "./views/localLogin.vue";
 
 export const routerConfig = {
@@ -47,7 +48,17 @@ export const routerConfig = {
       path: '/schedule',
       name: 'schedule',
       component: Schedule
+    },
+    {
+      path: "/guide",
+      name: "guide", 
+      component: Guide
     }
+    // {
+    //   path: '/schedule',
+    //   name: 'schedule',
+    //   component: Schedule
+    // }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {

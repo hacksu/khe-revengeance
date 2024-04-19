@@ -104,7 +104,7 @@ export function validateMessageFields(message: TicketMessage) {
   if (message.text && message.text.trim().length > 0) {
     textResult = message.text;
   } else {
-    textResult = htmlResult.root().prop("innerText") || "";
+    textResult = convertToText(htmlResult.html()) || "";
   }
   return {
     ...message,
@@ -126,7 +126,7 @@ function addEmailIntro(introHTML: string, message: TicketMessage) {
   return {
     ...message,
     html: html.html(),
-    text: html.root().prop("innerText") || "",
+    text: convertToText(html.html()),
   };
 }
 

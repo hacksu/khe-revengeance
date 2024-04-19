@@ -4,9 +4,11 @@
             <div class="loginForm">
             <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
             <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
-            <span class="p-float-label p-input-icon-right">
-                <i class="pi pi-envelope" />
-                <InputText id="email" v-model="modal.email"/>
+            <span class="p-float-label">
+                <IconField iconPosition="right">
+                    <InputText id="email" v-model="modal.email" />
+                    <InputIcon class="pi pi-envelope"></InputIcon>
+                </IconField>
                 <label for="email">Email</label>
             </span>
             <span class="p-float-label">
@@ -28,14 +30,15 @@ import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
 import SelectButton from 'primevue/selectbutton';
 import InputText from 'primevue/inputtext';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import FloatLabel from 'primevue/floatlabel';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 
 import { user, loadUser } from '../state/user.js';
 
 import { isEmailRegex } from '../../../global-includes/email-address';
-
-console.log('not setup script is running')
 
 const accountOptions = ["Log In", "Create Account"];
 const LogIn = accountOptions[0];
@@ -75,7 +78,7 @@ export default {
                 });
         },
     },
-    components: { Dialog, SelectButton, InputText, Password, Button, Card },
+    components: { Dialog, SelectButton, InputText, Password, Button, Card, FloatLabel, InputIcon, IconField },
     data: () => ({
         //user: user,
         validLoginWarning: false,
