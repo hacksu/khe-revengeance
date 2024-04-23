@@ -72,7 +72,8 @@ const responsiveOptions = [
     opacity: 1!important;
     pointer-events: all!important;
 }
-.p-galleria-content {
+@media (min-width: 700px) {
+    .p-galleria-content {
     position: relative;
 }
 .p-galleria-thumbnail-wrapper {
@@ -82,10 +83,6 @@ const responsiveOptions = [
     transform: translateX(-50%);
     width: 100vw;
 }
-@media (max-width: 700px) {
-    .p-galleria-thumbnail-wrapper {
-        transform: translate(-50%, 100%);
-    }
 }
 .p-galleria-thumbnail-container {
     background: none;
