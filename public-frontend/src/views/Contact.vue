@@ -93,6 +93,10 @@ export default {
 @import "@/styles/global.scss";
 @import '@/styles/space.scss';
 
+::placeholder {
+  color: black;
+}
+
 #contact {
   @include bg-primary;
   text-align: left;
