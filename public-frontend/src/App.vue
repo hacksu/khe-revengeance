@@ -36,7 +36,6 @@
           Profile
         </p>
         <LoginButton v-else-if="!user && showLogin" />
-        <div class="padding" style="width: 50px"></div>
       </div>
     </div>
     <router-view />
