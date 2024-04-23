@@ -1,6 +1,6 @@
 <template>
 <div class="gallery-container" :style="{backgroundImage: `url(${imgBg})`}">
-    <Galleria :value="images" :numVisible="5" containerStyle="max-height: 100vh; max-width: 100vw" :circular="true"
+    <Galleria :value="images" :numVisible="8" containerStyle="max-height: 100vh; max-width: 100vw" :circular="true"
         :showItemNavigators="wide" :showThumbnailNavigators="!wide" :responsiveOptions="responsiveOptions"
         v-model:activeIndex="activeIndex" :nextButtonProps="{ disabled: false }" :prevButtonProps="{ disabled: false }">
         <template #item="slotProps">
@@ -80,6 +80,7 @@ const responsiveOptions = [
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    width: 100vw;
 }
 @media (max-width: 700px) {
     .p-galleria-thumbnail-wrapper {
