@@ -53,12 +53,12 @@ export const routerConfig = {
       path: "/guide",
       name: "guide", 
       component: Guide
+    },
+    {
+      path: '/schedule',
+      name: 'schedule',
+      component: Schedule
     }
-    // {
-    //   path: '/schedule',
-    //   name: 'schedule',
-    //   component: Schedule
-    // }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {

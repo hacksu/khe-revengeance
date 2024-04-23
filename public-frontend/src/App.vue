@@ -29,7 +29,7 @@
         <p class="banner-link" @click="navigateTo('/contact')">
           Contact
         </p>
-        <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
+        <p class="banner-link" @click="navigateTo('/schedule')">
           Schedule
         </p>
         <p class="banner-link" @click="navigateTo('/profile')" v-if="user && showLogin">
@@ -57,7 +57,6 @@ export default {
       showLogin: true,
       // registrationOpens: 'September 6th',
       showSponsors: true,
-      showSchedule: false,
       showPasswordReset: false,
       showMLH: true,
       expandMenu: false,

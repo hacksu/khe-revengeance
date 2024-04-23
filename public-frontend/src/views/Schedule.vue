@@ -1,32 +1,28 @@
 <template>
   <div id="schedule-container">
-    <h1>{{ scheduleName }}</h1>
-    <div id="schedule-cards">
-      <div v-for="section of Object.keys(sections).sort(dateSort)">
-        <div class="section">
-          <h2>{{ section }}</h2>
-          <div class="cards">
-            <div v-for="item of sections[section]">
-              <Card class="card">
-                <template #title>{{ item.name }}</template>
-                <template #subtitle>{{ item.description }}</template>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h1>{{ name }}</h1>
+    <template v-for="section in sections">
+      <h2>{{section.section}}</h2>
+      <DataTable :value="section.items">
+        <Column field="name" header="Event" />
+        <Column header="Time">
+          <template #body="slotProps">
+            {{ new Date(slotProps.data.date).toLocaleTimeString() }}
+          </template>
+        </Column>
+      </DataTable>
+    </template>
   </div>
 </template>
 
 <script setup>
-
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 import { ref, onMounted } from "vue";
 import { Schedule } from "../../../global-includes/schedule";
-import Card from "primevue/card";
 
 const name = ref("");
-const sections = ref({});
+const sections = ref([]);
 
 onMounted(async () => {
   const selected = await Schedule.getSelectedSchedule();
@@ -36,21 +32,30 @@ onMounted(async () => {
   selected.items.forEach(({ name, date, description })=> {
     const dateString = dateToString(new Date(date));
     const section = sectionsMap[dateString];
-    const item = { name, description };
+    const item = { name, date, description };
     if (section) sectionsMap[dateString].push(item);
     else sectionsMap[dateString] = [ item ];
-  })
-  sections.value = sectionsMap;
+  });
+
+  const sectionsArray = [];
+  for (const section of Object.keys(sectionsMap)) {
+    sectionsArray.push({
+      section,
+      items: sectionsMap[section].sort((i1, i2) => dateSort(i1.date, i2.date))
+    });
+  }
+  sectionsArray.sort(
+    (s1, s2) => dateSort(s1.items[0].date, s2.items[0].date)
+  );
+  sections.value = sectionsArray;
 });
 
 const dateToString = (date) => {
   return date.toLocaleString('en-US', 
-    { 
-      year: "numeric", 
-      month: "numeric", 
-      day: "numeric", 
-      hour: 'numeric', 
-      hour12: true 
+    {
+      weekday: "long", 
+      month: "long", 
+      day: "numeric"
     }
   );
 }
@@ -64,7 +69,7 @@ const dateSort = (d, d1) => new Date(d).getTime() - new Date(d1).getTime();
 @import '@/styles/space.scss';
 
 #schedule-container {
-  margin: 150px auto;
+  margin: 100px auto;
   display: flex;
   flex-direction: column;
   align-items: center;

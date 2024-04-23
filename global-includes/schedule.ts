@@ -27,9 +27,13 @@ export class Schedule {
 
     @BackendMethod({ allowed: [UserRole.Admin, UserRole.Staff] })
     static async selectSchedule(id: string) {
-        const repo = await remult.repo(Schedule);
+        const repo = remult.repo(Schedule);
         const schedules = await repo.find({ where: { selected: true }});
-        await Promise.all(schedules.map(schedule => repo.update(schedule.id, { selected: false })));
+        await Promise.all(
+            schedules.map(
+                schedule => repo.update(schedule.id, { selected: false })
+            )
+        );
         await repo.update(id, { selected: true });
     }
 

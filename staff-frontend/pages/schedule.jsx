@@ -212,14 +212,14 @@ export default function ScheduleManager() {
                                 <div style={{ display: "flex", gap: "10px" }}>
                                     <Button 
                                         onClick={() => saveSchedule(schedule.items.length)}
-                                        style={{ width: "15%", marginBottom: "10px" }}
+                                        style={{ marginBottom: "10px" }}
                                         type="primary">
                                             <ScheduleFilled /> Add schedule item
                                     </Button>
                                     <Button
                                         disabled={schedule.selected}
                                         onClick={() => selectSchedule(schedule.id)}
-                                        style={{ width: "15%", marginBottom: "10px" }}>
+                                        style={{ marginBottom: "10px" }}>
                                             <ScheduleFilled /> Set as selected schedule
                                     </Button>
                                 </div>
