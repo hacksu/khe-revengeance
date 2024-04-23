@@ -20,7 +20,7 @@ export default function KHEStaffLayout({ children }) {
         { icon: <ContactsOutlined />, key: "/emailLists", label: "Email Lists" },
         { icon: <MessageOutlined />, key: "/tickets", label: <span>Support Tickets <Badge count={unreadMail} /></span> },
         { icon: <LinkOutlined />, key: "/redirects", label: "Redirect Links" },
-        { icon: <FileImageOutlined />, key: "/imageLayout", label: "Layout Images" }
+        { icon: <FileImageOutlined />, key: "/gallery", label: "Image Gallery" }
     ].map(page => ({ ...page, label: (<Link href={page.key}>{page.label}</Link>) }));
 
     const user = useUser()[0];

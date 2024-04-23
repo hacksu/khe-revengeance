@@ -9,7 +9,6 @@ import { VerifyCallback } from "passport-oauth2";
 import { Strategy as LocalStrategy } from "passport-local";
 import { App as GitHubApp } from "octokit";
 import session from "express-session";
-import type { RemultServer } from "remult/server/expressBridge.js";
 import { remult } from "remult";
 import MongoStore from "connect-mongo";
 

@@ -1,9 +1,10 @@
 <template>
   <div id="landing-container" class="landing">
-    <div v-if="registrationOpen" id="full-size-logo-container">
+    <slot v-if="replace"></slot>
+    <div v-else-if="registrationOpen" id="full-size-logo-container">
         <SplashLanding id="splash-landing" ref="splashLanding" />
     </div>
-    <div v-if="!registrationOpen" id="landing-content-container">
+    <div v-else="!registrationOpen" id="landing-content-container">
       <div class="date-container">
         <p id="date">Blasting off this April</p>
       </div>
@@ -26,12 +27,17 @@
 <script>
 import SplashLanding from "@/assets/khe-eclipse-splash.svg?component";
 
-import { remult } from 'remult';
 import { Email } from 'includes/email-address';
 
 export default {
   name: "landing",
   components: {SplashLanding},
+  props: {
+    replace: {
+      type: Boolean,
+      required: false
+    }
+  },
   data: () => ({
     updatesEmail: "",
     updatesEmailSubmitted: false,
@@ -42,14 +48,16 @@ export default {
     registrationOpen: true
   }),
   mounted() {
-    const prevUpdatesEmail = localStorage.getItem("updatesEmail");
-    if (prevUpdatesEmail) {
-      this.updatesEmailPlaceholder = "Added: " + prevUpdatesEmail;
+    if (!this.replace) {
+      const prevUpdatesEmail = localStorage.getItem("updatesEmail");
+      if (prevUpdatesEmail) {
+        this.updatesEmailPlaceholder = "Added: " + prevUpdatesEmail;
+      }
+      this.$refs.splashLanding.$el.querySelector("a").addEventListener("click", (e) => {
+          e.preventDefault();
+          this.navigateTo("/login");
+      });
     }
-    this.$refs.splashLanding.$el.querySelector("a").addEventListener("click", (e) => {
-        e.preventDefault();
-        this.navigateTo("/login");
-    });
   },
   methods: {
     async submitEmail() {

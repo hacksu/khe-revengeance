@@ -15,7 +15,7 @@ import {
 import { User } from "../global-includes/users.ts";
 import { config } from "../server/config.ts";
 import { Redirect } from "../global-includes/redirect-link.ts";
-import { GridImage } from "../global-includes/image-grid.ts";
+import { Gallery } from "../global-includes/image-gallery.ts";
 
 let client: MongoClient | undefined;
 let db: Db | undefined;
@@ -53,7 +53,7 @@ export const remultConfig = remultExpress({
     RawEmail,
     TicketMessage,
     Redirect,
-    GridImage
+    Gallery
   ],
   controllers: [SupportTicketController],
 });

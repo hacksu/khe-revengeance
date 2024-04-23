@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <Landing></Landing>
+    <Landing :replace="true">
+      <Gallery />
+    </Landing>
     <About></About>
     <FAQ></FAQ>
     <div class="sponsors">
@@ -22,6 +24,7 @@ import FAQ from '@/components/faq.vue';
 import Map from '@/components/map.vue';
 import Footer from '@/components/footer.vue';
 import Sponsors from '@/components/sponsors.vue';
+import Gallery from '../components/gallery.vue';
 
 import { useHead } from '@unhead/vue';
 

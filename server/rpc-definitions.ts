@@ -14,7 +14,6 @@ import { RemoteProcedures } from "../global-includes/rpc-declarations.ts";
 import { config } from "./config.ts";
 import { TicketMessage } from "../global-includes/support-ticket.ts";
 import { Email, EmailTemplates, ImportedEmail } from "../global-includes/email-address.ts";
-import { gridImagePath } from "../server/file-upload.ts";
 import path from "path";
 
 const basicSend = mailer.send;
@@ -201,7 +200,7 @@ export function defineRemoteProcedures() {
       },
       replyTo: {
         name: message.ourName,
-        email: `ticket+${ticket.id}@${config.supportEmailHost}`,
+        email: `ticket+${ticket.id}@${config.incomingEmailHost}`,
       },
       headers: prevMessageID
         ? {
@@ -323,12 +322,6 @@ export function defineRemoteProcedures() {
       );
     }
     return { ...message, to: addresses.map(e => e.address) };
-  };
-
-  RemoteProcedures.deleteGridImages = async (files) => {
-    await Promise.all(
-      files.map((f) => fs.unlink(path.resolve(gridImagePath, f)))
-    );
   };
 
   const resumePath = path.join(".", "server", "uploads", "resumes");
