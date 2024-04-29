@@ -43,7 +43,7 @@ const UsersBarChart = () => {
     }, []);
 
     return (
-        <Skeleton loading={loading} active>
+        <Skeleton loading={loading} active style={{width: 500, height: 400}}>
             <BarChart width={500} height={400} data={chart}>
                 <CartesianGrid strokeDasharray="4 4" />
                 <XAxis dataKey="name" />
@@ -69,10 +69,11 @@ const UsersLineGraph = () => {
             const dataPoints = 20;
 
             const earliest = (await repo.findFirst()).createdAt;
-            const now = new Date();
-            const range = now.getTime() - earliest.getTime();
+            const latest = new Date("2024-05-01");
+            const range = latest.getTime() - earliest.getTime();
             const rangeBetweenPoints = range / (dataPoints - 1);
 
+            // TODO: move counting to backend method; this is slow
             const points = [{name: earliest.toLocaleDateString(), amount: 0}];
             for (let i = 1; i < dataPoints; ++i) {
                 const before = new Date(earliest.getTime() + i * rangeBetweenPoints);
@@ -92,7 +93,7 @@ const UsersLineGraph = () => {
     }, []);
 
     return (
-        <Skeleton loading={loading} active >
+        <Skeleton loading={loading} active style={{width: 500, height: 400}}>
             <LineChart width={500} height={400} data={chart}>
                 <CartesianGrid strokeDasharray="4 4" />
                 <XAxis dataKey="name" interval="preserveStartEnd" />
