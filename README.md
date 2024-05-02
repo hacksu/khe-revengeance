@@ -8,6 +8,10 @@ In /global-includes, there are database model classes that Remult can use to aut
 
 In /server, there is a server application that ties everything together. In dev mode, it creates Remult, Vite, and Next.js server middleware, and puts up the staff frontend at staff.localhost:3000 and the public frontend and Remult API at localhost:3000. Requests are routed seamlessly; the database API is globally available, but the sites are neatly separated.
 
+## Note:
+
+Registrations are currently disabled in the code since the event is over. To re-enable them, simply undo the changes in commit [4a929dd789dd1fa88620b5498d14acdd9a38c663](https://github.com/hacksu/khe-revengeance/commit/4a929dd789dd1fa88620b5498d14acdd9a38c663).
+
 # How Do I Use It?
 
 - [Install Node.js](https://nodejs.org/en), which will run our non-browser code.

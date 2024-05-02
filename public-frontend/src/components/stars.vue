@@ -3,6 +3,13 @@
 </template>
     
 <script>
+
+// This is an extremely complicated component that creates stars in the
+// background of the website that exhibit a parallax effect as you scroll
+// through them. it ended up being mostly unnoticable unless the stars were
+// really big and in-your-face. so it goes. this can be removed for future
+// themes.
+
 export default {
     name: 'Stars',
     data() {

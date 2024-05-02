@@ -13,21 +13,11 @@ export const routerConfig = {
       name: "home",
       component: Home,
     },
-    // {
-    //   path: '/register',
-    //   name: 'register',
-    //   component: Register,
-    // },
     {
       path: "/login",
       name: "login",
       component: Login,
     },
-    // {
-    //   path: '/apply',
-    //   name: 'apply',
-    //   component: Apply
-    // },
     {
       path: "/sponsor",
       name: "sponsor",
@@ -48,11 +38,6 @@ export const routerConfig = {
       name: "guide", 
       component: Guide
     }
-    // {
-    //   path: '/schedule',
-    //   name: 'schedule',
-    //   component: Schedule
-    // }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
