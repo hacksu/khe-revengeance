@@ -4,6 +4,11 @@
             <Card>
                 <template #title> Registration for KHE 2024 </template>
                 <template #content>
+                    <p style="color:red" v-if="registrationClosed">
+                        KHE registration is currently closed! Your profile is
+                        preserved below for archival purposes, but cannot be
+                        changed.
+                    </p>
                     <label v-if="submissionStatus == 'failed'" style="color: red">Please fill out marked items</label>
                     <div class="labeled-field">
                         <span>The email currently associated with your account is: {{ user.email }}</span>
@@ -219,11 +224,14 @@
                 </template>
                 <template #footer>
                     <div class="action-buttons">
-                        <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'" iconPos="right" @click="saveUser" />
-                        <Button :disabled="submissionStatus == 'success'" @click="submissionStatus != 'success' && submitForm()"
-                            icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'" iconPos="right"
-                            :style="(formComplete ? `color: #333; background-color: white;` : '')" />
-                        <Button v-if="submissionStatus == 'success'" label="Withdraw Application" @click="deregister" />
+                        <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'"
+                                iconPos="right" @click="saveUser" :disabled=registrationClosed />
+                        <Button :disabled="submissionStatus == 'success' || registrationClosed"
+                                @click="submissionStatus != 'success' && submitForm()"
+                                icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'"
+                                iconPos="right" :style="(formComplete ? `color: #333; background-color: white;` : '')" />
+                        <Button :disabled="registrationClosed" v-if="submissionStatus == 'success'" label="Withdraw Application"
+                                @click="deregister" />
                     </div>
                     <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
                         Could not update application! Make sure all fields are filled out.
@@ -273,6 +281,8 @@ import RadioButton from "primevue/radiobutton";
 import FileUpload from "primevue/fileupload";
 import failureLabel from "@/components/failureLabel.vue";
 
+// change to re-enable registration!
+const registrationClosed = true;
 
 const otherSexuality = ref(false);
 const otherRestriction = ref(false);

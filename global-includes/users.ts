@@ -195,10 +195,12 @@ export type Registration = z.infer<typeof FullRegistration>;
 const noUpdate = { allowApiUpdate: false };
 
 @Entity<User>("users", {
-  allowApiCrud: true,
-  apiPrefilter: () =>  (
-    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
-  ),
+  // TODO: uncomment this to allow user updates again:
+  // allowApiCrud: true,
+  // apiPrefilter: () =>  (
+  //   remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
+  // ),
+  ...noUpdate
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -380,6 +382,11 @@ export class User extends EntityBase {
 
   @BackendMethod({ allowed: true })
   static async submitRegistration() {
+    
+    // TODO: uncomment this to allow registrations to be submitted again
+    return;
+    
+    
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
@@ -396,6 +403,10 @@ export class User extends EntityBase {
 
   @BackendMethod({ allowed: true })
   static async withdrawRegistration() {
+
+    // TODO: change this to allow registrations to be withdrawn again.
+    return;
+
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
@@ -407,6 +418,11 @@ export class User extends EntityBase {
 
   @BackendMethod({allowed: true})
   static async uploadResume(base64Resume: string, filename: string) {
+    
+    // TODO: change this to allow resumes to be submitted again. but see
+    // also issue #45
+    return;
+
     const user = remult.user as User;
     if (!user) {
       throw "Not logged in";
