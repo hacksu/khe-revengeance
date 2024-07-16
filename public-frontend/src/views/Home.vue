@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <Landing :replace="true">
-      <Gallery />
+    <Landing :replace="false">
+      <Gallery/>
     </Landing>
     <About></About>
     <FAQ></FAQ>
