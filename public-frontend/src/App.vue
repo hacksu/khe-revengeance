@@ -4,7 +4,7 @@
     <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
         <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
-          Kent Hack Enough 2024: It Was Fun
+          Kent Hack Enough
         </p>
 
         <div id="hamburgMenu">

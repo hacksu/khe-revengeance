@@ -6,7 +6,7 @@
     </div>
     <div v-else="!registrationOpen" id="landing-content-container">
       <div class="date-container">
-        <p id="date">Blasting off this April</p>
+        <p id="date">KHE returns February 22-23, 2025</p>
       </div>
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
@@ -45,7 +45,7 @@ export default {
     updatesEmailPlaceholder: "",
     //the boolean below determines whether the page displays email input or a register button
     //TODO: automate this with a toggle on the staff page 
-    registrationOpen: true
+    registrationOpen: false
   }),
   mounted() {
     if (!this.replace) {
@@ -269,6 +269,7 @@ $text-color: #bdbdbd;
 
 #landing-content-container {
   margin-top: 40px;
+  padding-top: 400px;
   z-index: 11;
 }
 
