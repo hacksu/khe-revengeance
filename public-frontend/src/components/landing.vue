@@ -122,7 +122,7 @@ $text-color: #bdbdbd;
 }
 
 #landing-container {
-  min-height: 100vh;
+  min-height: 70vh;
   overflow: hidden;
   padding: 0px;
   margin: 0px;
@@ -269,7 +269,7 @@ $text-color: #bdbdbd;
 
 #landing-content-container {
   margin-top: 40px;
-  padding-top: 400px;
+  padding-top: 200px;
   z-index: 11;
 }
 
