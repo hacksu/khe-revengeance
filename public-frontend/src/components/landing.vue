@@ -6,7 +6,7 @@
     </div>
     <div v-else="!registrationOpen" id="landing-content-container">
       <div class="date-container">
-        <p id="date">KHE returns February 22-23, 2025</p>
+        <p id="date">KHE returns February 15-16, 2025</p>
       </div>
       <div id="email-input-container">
         <span id="email-input-label">Sign up to get registration information:</span>
