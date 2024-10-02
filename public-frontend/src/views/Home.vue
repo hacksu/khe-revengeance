@@ -1,10 +1,7 @@
 <template>
   <div class="home">
-    <Landing :replace="false">
-      <Gallery/>
-    </Landing>
-    <About></About>
-    <FAQ></FAQ>
+
+
     <div class="sponsors">
       <div class="container" id="sponsors-container">
         <h3><router-link to="/sponsor">Our Sponsors:</router-link></h3>
@@ -12,7 +9,6 @@
       </div>
     </div>
     <Map></Map>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -27,6 +23,11 @@ import Sponsors from '@/components/sponsors.vue';
 import Gallery from '../components/gallery.vue';
 
 import { useHead } from '@unhead/vue';
+
+let showRegister = false;
+let showGallery = false;
+let showAbout = false;
+let showFAQ = false;
 
 useHead({
   title: "Kent Hack Enough",

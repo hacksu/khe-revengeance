@@ -1,6 +1,6 @@
 <template>
   <div id="app-container">
-    <Stars />
+    <router-view />
     <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
         <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
@@ -38,19 +38,17 @@
         <LoginButton v-else-if="!user && showLogin" />
       </div>
     </div>
-    <router-view />
   </div>
 </template>
 
 <script>
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
-import Stars from "./components/stars.vue";
 import { user } from "./state/user.js";
 import LoginButton from "./components/login-button.vue";
 
 export default {
   name: "app",
-  components: { Stars, LoginButton },
+  components: { LoginButton },
   data() {
     return {
       showLogin: true,
