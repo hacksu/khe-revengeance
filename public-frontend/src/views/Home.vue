@@ -1,15 +1,20 @@
 <template>
   <div class="home">
-
-
-    <div class="sponsors">
-      <div class="container" id="sponsors-container">
-        <h3><router-link to="/sponsor">Our Sponsors:</router-link></h3>
-        <Sponsors :row="true" :item-width="200" :item-height="50" />
+    <div id="sponsorWindow" class="window" style="width: 600px;">
+      <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag">
+        <div class="title-bar-text">Sponsors</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+        <Sponsors></Sponsors>
       </div>
     </div>
-    <Map></Map>
   </div>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script setup>
@@ -23,6 +28,7 @@ import Sponsors from '@/components/sponsors.vue';
 import Gallery from '../components/gallery.vue';
 
 import { useHead } from '@unhead/vue';
+import { ref } from 'vue';
 
 let showRegister = false;
 let showGallery = false;
@@ -42,24 +48,47 @@ useHead({
     }
   ]
 });
+
+let isDragging = ref(false);
+let offset = { x: 0, y: 0 }; // To store the offset when dragging
+
+const startDrag = (event) => {
+  isDragging.value = true;
+  offset.x = event.clientX - event.target.closest('#sponsorWindow').getBoundingClientRect().left;
+  offset.y = event.clientY - event.target.closest('#sponsorWindow').getBoundingClientRect().top;
+
+  // Add mousemove and mouseup listeners
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', stopDrag);
+};
+
+const drag = (event) => {
+  if (!isDragging.value) return;
+  
+  const sponsorWindow = document.getElementById('sponsorWindow');
+  sponsorWindow.style.left = `${event.clientX - offset.x}px`;
+  sponsorWindow.style.top = `${event.clientY - offset.y}px`;
+};
+
+const stopDrag = () => {
+  isDragging.value = false;
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('mouseup', stopDrag);
+};
+
 </script>
 
 <style scoped lang="scss">
 @import '@/globalVars.scss';
 
-.sponsors {  
-  margin: 0px 10vw; 
-  @media only screen and (max-width: $md-bp) {
-    margin: 10px 5vw;
-  }
+#sponsorWindow {
+  position: absolute;
+  z-index: 9;
 }
 
-.sponsors .container {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: center;
+#sponsorWindowHeader {
+  cursor: move;
+  z-index: 10;
 }
 
 </style>

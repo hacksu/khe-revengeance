@@ -1,20 +1,10 @@
 <template>
   <div id="app-container">
-    <router-view />
-    <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
-      <div id="bannerL" class="bannerContainer" style="z-index: 100">
-        <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
-          Kent Hack Enough
-        </p>
-
-        <div id="hamburgMenu">
-          <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
-        </div>
-      </div>
-
-      <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
-        <p class="banner-link" @click="navigateTo('/')">
-          Home
+    <router-view/>
+    <div id="banner" class="title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
+      <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
+        <p class="banner-link start" @click="navigateTo('/')">
+            <img src="/favicon.ico" style="height: 100%" alt="Logo">
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
         <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
@@ -36,9 +26,16 @@
           Profile
         </p>
         <LoginButton v-else-if="!user && showLogin" />
+        <div id="hamburgMenu">
+          <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
+        </div>
+      </div>
+      <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
+
       </div>
     </div>
   </div>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script>
@@ -106,7 +103,7 @@ body {
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
   background-color: black;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   height: 100vh;
   padding: 0 !important;
@@ -141,27 +138,28 @@ body {
 
 #banner {
   position: fixed;
+  bottom: 0;
   width: 100%;
   transition: all 0.2s;
   display: flex;
   justify-content: space-between;
   z-index: 98;
-  padding: 0 10px;
+  padding: 0px;
 
   @include mobile {
     @include bg-primary;
   }
 
   @include display-not(mobile) {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 
     #bannerR {
-      padding-right: 10px;
+      padding-right: 0px;
     }
 
     #bannerL {
-      padding-left: 10px;
+      padding-left: 0px;
     }
   }
 }
@@ -171,20 +169,21 @@ body {
 
   @include display-not(mobile) {
     padding-top: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
   }
 }
 
 .banner-link {
-  padding: 10px 15px;
+  padding-right: 10px;
+  padding-left: 10px;
   margin: 0px;
   font-size: 18px;
   cursor: pointer;
-  @include grow('hover', 1.05, 0.2s);
 }
 
 .bannerContainer {
   display: flex;
+  height: 104%;
 }
 
 .bannerContainer {
@@ -231,8 +230,11 @@ body {
   }
 
   #bannerR {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    justify-content: flex-end;  /* Align buttons to the left */
+    align-items: right;          /* Center vertically */
+    padding-right: 10px;
+    padding-left: 20px;   
   }
 
   #bannerR:not(.hidden) {
@@ -260,9 +262,21 @@ body {
   }
 
   .banner-link {
-    margin-bottom: 0px;
-    padding-bottom: 10px;
-    text-align: left;
+    padding: 0px 0px;
+    margin: 0px;
+    font-size: 18px;
+    cursor: pointer;
+    @include grow('hover', 1.05, 0.2s);
   }
 }
+
+.start{
+  background: linear-gradient(180deg, #556b2f, #8fbc8f, #6b8e23);
+  box-shadow: inset 5px 5px 15px rgba(0, 0, 0, 0.5), inset -5px -5px 15px rgba(255, 255, 255, 0.2);
+  border-radius: 0px 8px 8px 0px;
+  height:auto;
+  display: fixed;
+  left: 0;
+}
+
 </style>
