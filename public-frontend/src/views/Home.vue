@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <div id="sponsorWindow" class="window" style="width: 600px;">
+    <div :hidden="!sponsors" id="sponsorWindow" class="window" style="width: 600px;">
       <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag">
         <div class="title-bar-text">Sponsors</div>
         <div class="title-bar-controls">
           <button aria-label="Minimize"></button>
-          <button aria-label="Maximize"></button>
-          <button aria-label="Close"></button>
+          <button aria-label="Maximize" @click="closeWindow"></button>
+          <button aria-label="Close" @click="closeWindow"></button>
         </div>
       </div>
       <div class="window-body" style="height: 600px; overflow-y: scroll;">
@@ -30,10 +30,11 @@ import Gallery from '../components/gallery.vue';
 import { useHead } from '@unhead/vue';
 import { ref } from 'vue';
 
-let showRegister = false;
-let showGallery = false;
-let showAbout = false;
-let showFAQ = false;
+defineProps(['faq', 'guide', 'sponsors', 'contact', 'login']);
+
+const closeWindow = () => {
+  sponsors.value = false;
+}
 
 useHead({
   title: "Kent Hack Enough",

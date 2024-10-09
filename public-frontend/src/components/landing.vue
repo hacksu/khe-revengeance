@@ -45,7 +45,7 @@ export default {
     updatesEmailPlaceholder: "",
     //the boolean below determines whether the page displays email input or a register button
     //TODO: automate this with a toggle on the staff page 
-    registrationOpen: false
+    registrationOpen: true
   }),
   mounted() {
     if (!this.replace) {

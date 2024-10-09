@@ -13,7 +13,7 @@
         <p class="banner-link" @click="navigateTo('/guide')">
           Guide
         </p>
-        <p v-if="showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
+        <p v-if="showSponsorsLink" class="banner-link" @click="this.sponsors = !this.sponsors; navigateTo('/')">
           Sponsors
         </p>
         <p class="banner-link" @click="navigateTo('/contact')">
@@ -42,6 +42,7 @@
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
 import { user } from "./state/user.js";
 import LoginButton from "./components/login-button.vue";
+import Home from "./views/Home.vue";
 
 export default {
   name: "app",
@@ -50,13 +51,15 @@ export default {
     return {
       showLogin: true,
       // registrationOpens: 'September 6th',
-      showSponsors: true,
+      showSponsorsLink: true,
       showSchedule: false,
       showPasswordReset: false,
       showMLH: true,
       expandMenu: false,
       shrinkBanner: false,
       hamburgerIcon,
+      //showing and hiding "windows"
+      sponsors: false,
     };
   },
   setup() {
@@ -77,7 +80,7 @@ export default {
     },
     navigateTo: function (page, el) {
       this.expandMenu = false;
-      this.$router.push({ path: page, hash: el });
+      this.$router.push({ path: page, query: {sponsors: this.sponsors} });
     },
   },
 };

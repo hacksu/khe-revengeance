@@ -12,6 +12,11 @@ export const routerConfig = {
       path: "/",
       name: "home",
       component: Home,
+      props: (route) => (
+        {
+          sponsors: route.query.sponsors === 'true',
+        }
+      )
     },
     {
       path: "/login",
