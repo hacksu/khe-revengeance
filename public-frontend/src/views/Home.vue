@@ -54,8 +54,8 @@ let offset = { x: 0, y: 0 }; // To store the offset when dragging
 
 const startDrag = (event) => {
   isDragging.value = true;
-  offset.x = event.clientX - event.target.closest('#sponsorWindow').getBoundingClientRect().left;
-  offset.y = event.clientY - event.target.closest('#sponsorWindow').getBoundingClientRect().top;
+  offset.x = event.clientX - event.target.closest('.window').getBoundingClientRect().left;
+  offset.y = event.clientY - event.target.closest('.window').getBoundingClientRect().top;
 
   // Add mousemove and mouseup listeners
   document.addEventListener('mousemove', drag);
@@ -81,12 +81,12 @@ const stopDrag = () => {
 <style scoped lang="scss">
 @import '@/globalVars.scss';
 
-#sponsorWindow {
+.window {
   position: absolute;
   z-index: 9;
 }
 
-#sponsorWindowHeader {
+.title-bar {
   cursor: move;
   z-index: 10;
 }

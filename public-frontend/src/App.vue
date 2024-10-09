@@ -131,11 +131,6 @@ body {
   transform-style: preserve-3d;
 }
 
-#bannerL, #bannerR {
-  background-color: #0003;
-  border-radius: 10px;
-}
-
 #banner {
   position: fixed;
   bottom: 0;
@@ -179,6 +174,11 @@ body {
   margin: 0px;
   font-size: 18px;
   cursor: pointer;
+  background: linear-gradient(180deg, #4977B4, #081BCB, #0062EA );
+}
+
+.banner-link:active{
+  background: linear-gradient(180deg, #081BCB, #4977B4, #0062EA);
 }
 
 .bannerContainer {
