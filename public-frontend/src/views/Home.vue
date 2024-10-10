@@ -1,18 +1,45 @@
 <template>
   <div class="home">
     <div :hidden="!sponsors" id="sponsorWindow" class="window" style="width: 600px;">
-      <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag">
+      <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag('sponsorWindow', $event)">
         <div class="title-bar-text">Sponsors</div>
         <div class="title-bar-controls">
-          <button aria-label="Minimize"></button>
-          <button aria-label="Maximize" @click="closeWindow"></button>
-          <button aria-label="Close" @click="closeWindow"></button>
+          <button aria-label="Minimize" @click="$emit('closeSponsors')"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeSponsors')"></button>
         </div>
       </div>
       <div class="window-body" style="height: 600px; overflow-y: scroll;">
         <Sponsors></Sponsors>
       </div>
     </div>
+    <div :hidden="!faq" id="faqWindow" class="window" style="width: 600px;">
+      <div id="faqWindowsHeader" class="title-bar" @mousedown="startDrag('faqWindow', $event)">
+        <div class="title-bar-text">FAQ</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize" @click="$emit('closeFAQ')"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeFAQ')"></button>
+        </div>
+      </div>
+      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+        <FAQ/>
+      </div>
+    </div>
+    <div :hidden="!guide" id="guideWindow" class="window" style="width: 600px;">
+      <div id="guideWindowHeader" class="title-bar" @mousedown="startDrag('guideWindow', $event)">
+        <div class="title-bar-text">Hackathon Guide</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize" @click="$emit('closeGuide')"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeGuide')"></button>
+        </div>
+      </div>
+      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+        <Guide/>
+      </div>
+    </div>
+    
   </div>
   <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
@@ -26,15 +53,14 @@ import Map from '@/components/map.vue';
 import Footer from '@/components/footer.vue';
 import Sponsors from '@/components/sponsors.vue';
 import Gallery from '../components/gallery.vue';
+import Guide from '../views/Guide.vue';
 
 import { useHead } from '@unhead/vue';
 import { ref } from 'vue';
 
 defineProps(['faq', 'guide', 'sponsors', 'contact', 'login']);
 
-const closeWindow = () => {
-  sponsors.value = false;
-}
+const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide']);
 
 useHead({
   title: "Kent Hack Enough",
@@ -52,11 +78,15 @@ useHead({
 
 let isDragging = ref(false);
 let offset = { x: 0, y: 0 }; // To store the offset when dragging
+let activeWindowId = ref(null);
 
-const startDrag = (event) => {
+const startDrag = (windowId, event) => {
   isDragging.value = true;
-  offset.x = event.clientX - event.target.closest('.window').getBoundingClientRect().left;
-  offset.y = event.clientY - event.target.closest('.window').getBoundingClientRect().top;
+  activeWindowId.value = windowId;
+
+  const windowElement = document.getElementById(windowId);
+  offset.x = event.clientX - windowElement.getBoundingClientRect().left;
+  offset.y = event.clientY - windowElement.getBoundingClientRect().top;
 
   // Add mousemove and mouseup listeners
   document.addEventListener('mousemove', drag);
@@ -66,13 +96,15 @@ const startDrag = (event) => {
 const drag = (event) => {
   if (!isDragging.value) return;
   
-  const sponsorWindow = document.getElementById('sponsorWindow');
-  sponsorWindow.style.left = `${event.clientX - offset.x}px`;
-  sponsorWindow.style.top = `${event.clientY - offset.y}px`;
+  const windowElement = document.getElementById(activeWindowId.value);
+  windowElement.style.position = 'absolute';
+  windowElement.style.left = `${event.clientX - offset.x}px`;
+  windowElement.style.top = `${event.clientY - offset.y}px`;
 };
 
 const stopDrag = () => {
   isDragging.value = false;
+  activeWindowId.value = null;
   document.removeEventListener('mousemove', drag);
   document.removeEventListener('mouseup', stopDrag);
 };

@@ -15,6 +15,8 @@ export const routerConfig = {
       props: (route) => (
         {
           sponsors: route.query.sponsors === 'true',
+          faq: route.query.faq === 'true',
+          guide: route.query.guide === 'true',
         }
       )
     },

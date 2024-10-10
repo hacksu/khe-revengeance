@@ -1,16 +1,20 @@
 <template>
   <div id="app-container">
-    <router-view/>
+    <router-view 
+      @closeSponsors="this.closeSponsors" 
+      @closeFAQ="this.closeFAQ"
+      @closeGuide="this.closeGuide" 
+    />
     <div id="banner" class="title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
         <p class="banner-link start" @click="navigateTo('/')">
             <img src="/favicon.ico" style="height: 100%" alt="Logo">
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
-        <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
+        <p class="banner-link" id="faq-scrollto" @click="this.faq = !this.faq; navigateTo('/')">
           FAQ
         </p>
-        <p class="banner-link" @click="navigateTo('/guide')">
+        <p class="banner-link" @click="this.guide = !this.guide; navigateTo('/')">
           Guide
         </p>
         <p v-if="showSponsorsLink" class="banner-link" @click="this.sponsors = !this.sponsors; navigateTo('/')">
@@ -46,7 +50,7 @@ import Home from "./views/Home.vue";
 
 export default {
   name: "app",
-  components: { LoginButton },
+  components: { LoginButton, Home },
   data() {
     return {
       showLogin: true,
@@ -60,6 +64,8 @@ export default {
       hamburgerIcon,
       //showing and hiding "windows"
       sponsors: false,
+      faq: false,
+      guide: false,
     };
   },
   setup() {
@@ -72,6 +78,18 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    closeSponsors() {
+      this.sponsors = false;
+      this.navigateTo('/');
+    },
+    closeFAQ() {
+      this.faq = false;
+      this.navigateTo('/');
+    },
+    closeGuide() {
+      this.guide = false;
+      this.navigateTo('/');
+    },
     handleScroll() {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
@@ -80,7 +98,11 @@ export default {
     },
     navigateTo: function (page, el) {
       this.expandMenu = false;
-      this.$router.push({ path: page, query: {sponsors: this.sponsors} });
+      this.$router.push({ path: page, query: {
+          sponsors: this.sponsors, 
+          faq: this.faq, 
+          guide: this.guide,
+      }});
     },
   },
 };
