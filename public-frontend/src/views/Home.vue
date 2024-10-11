@@ -39,7 +39,32 @@
         <Guide/>
       </div>
     </div>
-    
+    <div :hidden="!contact" id="contactWindow" class="window" style="width: 600px;">
+      <div id="contactWindowHeader" class="title-bar" @mousedown="startDrag('contactWindow', $event)">
+        <div class="title-bar-text">Contact</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize" @click="$emit('closeContact')"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeContact')"></button>
+        </div>
+      </div>
+      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+        <Contact/>
+      </div>
+    </div>
+    <div :hidden="!login" id="loginWindow" class="window" style="width: 600px;">
+      <div id="loginWindowHeader" class="title-bar" @mousedown="startDrag('loginWindow', $event)">
+        <div class="title-bar-text">Login</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize" @click="$emit('closeLogin')"></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeLogin')"></button>
+        </div>
+      </div>
+      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+        <Login></Login>
+      </div>
+    </div>
   </div>
   <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
@@ -54,13 +79,15 @@ import Footer from '@/components/footer.vue';
 import Sponsors from '@/components/sponsors.vue';
 import Gallery from '../components/gallery.vue';
 import Guide from '../views/Guide.vue';
+import Contact from '../views/Contact.vue';
+import Login from '../views/Login.vue';
 
 import { useHead } from '@unhead/vue';
 import { ref } from 'vue';
 
 defineProps(['faq', 'guide', 'sponsors', 'contact', 'login']);
 
-const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide']);
+const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide', 'closeContact', 'closeLogin']);
 
 useHead({
   title: "Kent Hack Enough",

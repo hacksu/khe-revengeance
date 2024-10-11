@@ -4,6 +4,8 @@
       @closeSponsors="this.closeSponsors" 
       @closeFAQ="this.closeFAQ"
       @closeGuide="this.closeGuide" 
+      @closeContact="this.closeContact"
+      @closeLogin="this.closeLogin"
     />
     <div id="banner" class="title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
@@ -20,7 +22,7 @@
         <p v-if="showSponsorsLink" class="banner-link" @click="this.sponsors = !this.sponsors; navigateTo('/')">
           Sponsors
         </p>
-        <p class="banner-link" @click="navigateTo('/contact')">
+        <p class="banner-link" @click="this.contact = !this.contact; navigateTo('/')">
           Contact
         </p>
         <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
@@ -29,7 +31,9 @@
         <p class="banner-link" @click="navigateTo('/profile')" v-if="user && showLogin">
           Profile
         </p>
-        <LoginButton v-else-if="!user && showLogin" />
+        <p class="banner-link" @click="this.login = !this.login; navigateTo('/')" v-else-if="!user && showLogin">
+          Login
+        </p>
         <div id="hamburgMenu">
           <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
         </div>
@@ -66,6 +70,8 @@ export default {
       sponsors: false,
       faq: false,
       guide: false,
+      contact: false,
+      login: false,
     };
   },
   setup() {
@@ -90,6 +96,14 @@ export default {
       this.guide = false;
       this.navigateTo('/');
     },
+    closeContact() {
+      this.contact = false;
+      this.navigateTo('/');
+    },
+    closeLogin() {
+      this.login = false;
+      this.navigateTo('/');
+    },
     handleScroll() {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
@@ -102,6 +116,8 @@ export default {
           sponsors: this.sponsors, 
           faq: this.faq, 
           guide: this.guide,
+          contact: this.contact,
+          login: this.login
       }});
     },
   },

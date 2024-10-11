@@ -17,6 +17,8 @@ export const routerConfig = {
           sponsors: route.query.sponsors === 'true',
           faq: route.query.faq === 'true',
           guide: route.query.guide === 'true',
+          contact: route.query.contact === 'true',
+          login: route.query.login === 'true',
         }
       )
     },
