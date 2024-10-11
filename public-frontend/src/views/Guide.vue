@@ -668,22 +668,24 @@ useHead({
 
 <style scoped lang="scss">
 .container {
-    width: 600px;
-    max-width: 96vw;
-    margin: 100px auto;
+    width: 750px;
+    max-width: 100vw;
+    margin: auto;
     line-height: 1.5;
+    color:  #003399;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
 }
 h1 {
     font-size: 2rem;
 }
 p {
     margin: 20px 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     &.large-text {
         font-size: 1.25rem;
     }
     &.small-text {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 }
 :deep(.p-carousel-item) {
@@ -700,12 +702,14 @@ p {
 // adjusting the positions and sizes of carousel control buttons by a couple
 // pixels at a time because i care so much it hurts
 :deep(button.p-carousel-next) {
+    color: black;
     transform: translateX(-2px);
     @media (max-width: 600px) {
         display: none;
     }
 }
 :deep(button.p-carousel-prev) {
+    color: black;
     transform: translateX(2px);
     @media (max-width: 600px) {
         display: none;
@@ -717,9 +721,7 @@ p {
 :deep(.p-carousel-prev-icon) {
     transform: scale(1.5) translateX(1px);
 }
-:deep(.p-accordion-content) > p:first-of-type {
-    margin-top: 0px;
-}
+
 .web-dev-grid {
     display: grid;
     width: 500px;

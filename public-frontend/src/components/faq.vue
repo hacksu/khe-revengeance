@@ -1,18 +1,11 @@
 <template>
   <div id="faq-container">
     <div id="faq">
-      <orbiter />
       <div class="info-container">
-        <h2 id="faqTitle">
-          FREQUENTLY ASKED QUESTIONS
-        </h2>
-
-        <Accordion :multiple="true">
-          <AccordionTab v-for="faq, i in faqs" :key="i" :header="faq.question">
-            <p class="faq-answer" v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
-          </AccordionTab>
-        </Accordion>
-
+        <fieldset v-for="faq, i in faqs" :key="i">
+          <legend>{{ faq.question }}</legend>
+          <p class="faq-answer" v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
+        </fieldset>
         <p class="faqModule">
           Still have questions?
           <router-link to="contact" id="contactLink">Let us know!</router-link>
@@ -20,15 +13,13 @@
       </div>
     </div>
   </div>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script>
-import orbiter from "./orbiter.vue";
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
 export default {
   name: "Main",
-  components: { orbiter, Accordion, AccordionTab },
+  components: {},
   data() {
     return {
       faqs: [
@@ -85,69 +76,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/globalVars.scss';
 
 .info-container {
-  padding: 20px;
-  width: 600px;
-  max-width: 97.5vw;
+  color: black;
+  font-size: 12pt;
 }
 
-:deep(.p-accordion .p-accordion-header) {
-    background-color: #1e1e1e!important;
-}
-
-:deep(.p-accordion) {
-    background-color: black;
-    border: 2px solid white;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-:deep(.p-accordion .p-accordion-tab.p-accordion-tab-active) {
-    margin-bottom: 0;
-}
-
-:deep(.p-accordion .p-accordion-content) {
-    background-color: #fff2;
-}
-
-#faq-container {
-  margin-top: 0px;
-  padding-top: 20px;
-  z-index: 1;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#faqTitle {
-  margin: 20px 10px;
-  color: white;
-}
-
-#faq {
-  color: white;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-.faqModule {
-  padding: 10px 20px 10px 20px;
-  margin-top: 20px;
-}
-
-.faq-answer {
-  margin: 15px 8px;
-
-  &:first-of-type {
-    margin-top: 5px;
-  }
-
-  &:last-of-type {
-    margin-bottom: 5px;
-  }
-}
 </style>

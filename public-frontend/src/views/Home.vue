@@ -26,7 +26,7 @@
         <FAQ/>
       </div>
     </div>
-    <div :hidden="!guide" id="guideWindow" class="window" style="width: 600px;">
+    <div :hidden="!guide" id="guideWindow" class="window" style="width: 800px;">
       <div id="guideWindowHeader" class="title-bar" @mousedown="startDrag('guideWindow', $event)">
         <div class="title-bar-text">Hackathon Guide</div>
         <div class="title-bar-controls">
