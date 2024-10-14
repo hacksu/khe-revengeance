@@ -35,7 +35,7 @@
           <button aria-label="Close" @click="$emit('closeGuide')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body" style="height: 800px; overflow-y: scroll;">
         <Guide/>
       </div>
     </div>
