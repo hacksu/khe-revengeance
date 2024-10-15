@@ -1,8 +1,8 @@
 <template>
   <div id="contact" class="widget">
     <div v-if="!submitted">
-      <h1 id="contactTitle">Contact</h1>
-      <p style="opacity: 0.5; margin-bottom: 40px;">
+      <h2 id="contactTitle">Contact</h2>
+      <p style="opacity: 0.5; margin-bottom: 10px; font-size: 12pt;">
         If you have any questions, concerns, or problems, please do not hesitate
         to contact us. One of our organizers will get back to you as soon as
         humanly possible.
@@ -97,27 +97,31 @@ export default {
   color: black;
 }
 
+p{
+  line-height: 20px;
+}
+
 #contact {
-  @include bg-primary;
   text-align: left;
   // padding: 2rem 6rem;
-  padding: 100px 6rem 100px 6rem;
+  padding: 0px 3rem 0px 3rem;
   font-size: 20px;
   line-height: 30px;
   // height: 100vh;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 700px;
+  // margin-left: auto;
+  // margin-right: auto;
+  color: black;
 }
 
 @media only screen and (max-width: 768px) {
   #contact {
-    padding: 2rem 1rem !important;
+    //padding: 2rem 1rem !important;
   }
 }
 
 #infoTitle {
-  font-size: 50px;
+  font-size: 24pt;
 }
 
 #subjectTitle {
@@ -130,7 +134,6 @@ export default {
 
   input,
   textarea {
-    @include input-primary;
     margin: 5px 0px;
   }
 }
@@ -153,32 +156,6 @@ textarea.contactTextField {
   max-width: 100%;
   min-width: 100%;
   box-sizing: border-box;
-}
-
-#contactButton {
-  margin-top: 10px;
-  @include large-btn-primary;
-  position: relative;
-  text-align: center;
-  display: inline-block;
-  width: 200px;
-  height: 50px;
-  font-size: 20px;
-  border: 2px solid white;
-
-  &.disabled {
-    outline: none;
-    border: none;
-    opacity: 0.5;
-  }
-}
-
-#contactButton:hover:not(.disabled) {
-  cursor: pointer;
-  position: relative;
-  // background-color: $gold;
-  // color: $dark-blue;
-  // transition: 0.5s;
 }
 
 .error {

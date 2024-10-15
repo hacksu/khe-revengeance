@@ -48,7 +48,7 @@
           <button aria-label="Close" @click="$emit('closeContact')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body" style="height: 610px; overflow-y: scroll;">
         <Contact/>
       </div>
     </div>

@@ -134,7 +134,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" id="tab-6" >
+        <article role="tabpanel" hidden id="tab-6" >
             <Project title="CWRU Full-Text Class Search (KHE 2019)"
                 :image="cwruClassesImage" link="https://devpost.com/software/cwru-full-text-class-search">
                 <p>
@@ -157,7 +157,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" id="tab-7" >
+        <article role="tabpanel" hidden id="tab-7" >
             <Project title="Safe-Roads (MakeUC 2023)"
                 link="https://devpost.com/software/safe-roads" :image="safeRoadsImage">
                 <p>
@@ -761,10 +761,10 @@ p {
     justify-content: center;
 }
 :deep(button.p-carousel-next), :deep(button.p-carousel-prev) {
-    background-color: #fff3!important;
+    background-color: #fff3;
 }
 :deep(.p-carousel-indicator.p-highlight) button {
-    background-color: white!important;
+    background-color: white;
 }
 // adjusting the positions and sizes of carousel control buttons by a couple
 // pixels at a time because i care so much it hurts
@@ -791,15 +791,15 @@ p {
 
 .web-dev-grid {
     display: grid;
-    width: 500px;
+    width: 800px;
     max-width: 100%;
     margin: 0 auto;
     grid-template-columns: repeat(2, 1fr);
     & > p, & > h3 {
         text-align: center;
+        background: rgba(0, 0, 0, 0.2);
         margin: 5px;
         padding: 5px;
-        background-color: #fff3;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
@@ -811,6 +811,7 @@ p {
         border-radius: 0;
     }
 }
+
 li {
     margin: 8px;
     font-size: 14pt;
