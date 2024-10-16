@@ -13,7 +13,6 @@
       </div>
     </div>
   </div>
-  <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script>

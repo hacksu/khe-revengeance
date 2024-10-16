@@ -2,26 +2,26 @@
     <Card>
         <template #content>
             <div class="loginForm">
-            <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
-            <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
-            <span class="p-float-label">
-                <IconField iconPosition="right">
-                    <InputText id="email" v-model="modal.email" />
-                    <InputIcon class="pi pi-envelope"></InputIcon>
-                </IconField>
-                <label for="email">Email</label>
-            </span>
-            <span class="p-float-label">
-                <Password id="password" v-model="modal.password" inputId="password" toggleMask :feedback="makingAccount" />
-                <label for="password">Password</label>
-            </span>
-            <span v-if="makingAccount" class="p-float-label">
-                <Password v-model="modal.confirmPassword" inputId="confirmPassword" toggleMask />
-                <label for="confirmPassword">Confirm Password</label>
-            </span>
-            <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
-        </div>
-    </template>
+                <SelectButton v-model="localAccountSwitch" :options="localAccountOptions" />
+                <label v-if="validLoginWarning" style="color: red; text-align: center">{{ loginWarningMessage }}</label>
+                <span class="p-float-label">
+                    <IconField iconPosition="right">
+                        <InputText id="email" v-model="modal.email" />
+                        <InputIcon class="pi pi-envelope"></InputIcon>
+                    </IconField>
+                    <label for="email">Email</label>
+                </span>
+                <span class="p-float-label">
+                    <Password id="password" v-model="modal.password" inputId="password" toggleMask :feedback="makingAccount" />
+                    <label for="password">Password</label>
+                </span>
+                <span v-if="makingAccount" class="p-float-label">
+                    <Password v-model="modal.confirmPassword" inputId="confirmPassword" toggleMask />
+                    <label for="confirmPassword">Confirm Password</label>
+                </span>
+                <Button @click="submit(makingAccount)" :disabled="!formValid" :label="makingAccount ? 'Make Account' : 'Log In'"/>
+            </div>
+        </template>
     </Card>
 </template>
 

@@ -8,31 +8,29 @@
         humanly possible.
       </p>
 
-      <div class="formField">
-        <span id="subjectTitle">Subject:</span>
-        <input type="text" placeholder="What do you need to talk about?" name="subject" class="contactTextField"
-          v-model="subject" />
+      <div class="field-row-stacked">
+        <label id="subjectTitle" for="subject">Subject:</label>
+        <input id="subject" type="text" placeholder="What do you need to talk about?" name="subject" class="contactTextField" v-model="subject" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked">
         <span id="subjectTitle">Name:</span>
         <input type="text" placeholder="What is your name?" name="name" class="contactTextField" v-model="name" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked">
         <span id="subjectTitle">Email:</span>
         <input type="text" placeholder="Where can we contact you?" name="email" class="contactTextField"
           v-model="email" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked">
         <span id="subjectTitle">Body:</span>
         <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content" />
       </div>
 
-      <div style="text-align: center;">
-        <button id="contactButton" class="apply-link" :class="{ disabled: !formFilledOut }"
-          @click="formFilledOut && submitTicket()">
+      <div style="text-align: center; margin-top: 10px;">
+        <button :disabled="!formFilledOut" @click="formFilledOut && submitTicket()">
           Send!
         </button>
       </div>
@@ -90,8 +88,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
-@import '@/styles/space.scss';
 
 ::placeholder {
   color: black;
@@ -125,7 +121,7 @@ p{
 }
 
 #subjectTitle {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .formField {
@@ -140,13 +136,9 @@ p{
 
 .contactTextField {
   display: block;
-  // color: white;
-  background: none;
+  color: black;
   // border: none;
   // outline: none;
-  font-size: 20px;
-  width: 100%;
-  box-sizing: border-box;
   // border-bottom: 2px solid white;
 }
 
@@ -161,4 +153,13 @@ textarea.contactTextField {
 .error {
   color: color('error');
 }
+
+button{
+  color: black;
+}
+
+button:disabled{
+  color: gray;
+}
+
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
   <div class="home">
     <div :hidden="!sponsors" id="sponsorWindow" class="window" style="width: 600px;">
       <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag('sponsorWindow', $event)">
@@ -48,11 +49,11 @@
           <button aria-label="Close" @click="$emit('closeContact')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 610px; overflow-y: scroll;">
+      <div class="window-body" style="height: 560px; overflow-y: scroll;">
         <Contact/>
       </div>
     </div>
-    <div :hidden="!login" id="loginWindow" class="window" style="width: 600px;">
+    <div :hidden="!login" id="loginWindow" class="window" style="width: 600px; background-color: white;">
       <div id="loginWindowHeader" class="title-bar" @mousedown="startDrag('loginWindow', $event)">
         <div class="title-bar-text">Login</div>
         <div class="title-bar-controls">
@@ -61,12 +62,11 @@
           <button aria-label="Close" @click="$emit('closeLogin')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body" style="height: 450px; overflow-y: scroll;">
         <Login></Login>
       </div>
     </div>
   </div>
-  <link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script setup>
