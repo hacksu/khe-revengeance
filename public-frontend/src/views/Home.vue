@@ -1,42 +1,42 @@
 <template>
-  <link rel="stylesheet" href="https://unpkg.com/xp.css">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/xp.css"> -->
   <div class="home">
-    <div :hidden="!sponsors" id="sponsorWindow" class="window" style="width: 600px;">
-      <div id="sponsorWindowHeader" class="title-bar" @mousedown="startDrag('sponsorWindow', $event)">
-        <div class="title-bar-text">Sponsors</div>
-        <div class="title-bar-controls">
+    <div :hidden="!sponsors" id="sponsorWindow" class="window xp" style="width: 600px;">
+      <div id="sponsorWindowHeader" class="title-bar xp" @mousedown="startDrag('sponsorWindow', $event)">
+        <div class="title-bar-text xp">Sponsors</div>
+        <div class="title-bar-controls xp">
           <button aria-label="Minimize" @click="$emit('closeSponsors')"></button>
           <button aria-label="Maximize"></button>
           <button aria-label="Close" @click="$emit('closeSponsors')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body xp" style="height: 600px; overflow-y: scroll;">
         <Sponsors></Sponsors>
       </div>
     </div>
-    <div :hidden="!faq" id="faqWindow" class="window" style="width: 600px;">
-      <div id="faqWindowsHeader" class="title-bar" @mousedown="startDrag('faqWindow', $event)">
-        <div class="title-bar-text">FAQ</div>
-        <div class="title-bar-controls">
+    <div :hidden="!faq" id="faqWindow" class="window xp" style="width: 600px;">
+      <div id="faqWindowsHeader" class="title-bar xp" @mousedown="startDrag('faqWindow', $event)">
+        <div class="title-bar-text xp">FAQ</div>
+        <div class="title-bar-controls xp">
           <button aria-label="Minimize" @click="$emit('closeFAQ')"></button>
           <button aria-label="Maximize"></button>
           <button aria-label="Close" @click="$emit('closeFAQ')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body xp" style="height: 600px; overflow-y: scroll;">
         <FAQ/>
       </div>
     </div>
-    <div :hidden="!guide" id="guideWindow" class="window" style="width: 800px;">
-      <div id="guideWindowHeader" class="title-bar" @mousedown="startDrag('guideWindow', $event)">
-        <div class="title-bar-text">Hackathon Guide</div>
-        <div class="title-bar-controls">
+    <div :hidden="!guide" id="guideWindow" class="window xp" style="width: 800px;">
+      <div id="guideWindowHeader" class="title-bar xp" @mousedown="startDrag('guideWindow', $event)">
+        <div class="title-bar-text xp">Hackathon Guide</div>
+        <div class="title-bar-controls xp">
           <button aria-label="Minimize" @click="$emit('closeGuide')"></button>
           <button aria-label="Maximize"></button>
           <button aria-label="Close" @click="$emit('closeGuide')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 800px; overflow-y: scroll;">
+      <div class="window-body xp" style="height: 800px; overflow-y: scroll;">
         <Guide/>
       </div>
     </div>

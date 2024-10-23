@@ -150,9 +150,9 @@ textarea.contactTextField {
   box-sizing: border-box;
 }
 
-.error {
-  color: color('error');
-}
+//.error {
+//  color: color('error');
+//}
 
 button{
   color: black;

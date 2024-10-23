@@ -2,7 +2,7 @@
   <div id="faq-container">
     <div id="faq">
       <div class="info-container">
-        <fieldset v-for="faq, i in faqs" :key="i">
+        <fieldset class="xp" v-for="faq, i in faqs" :key="i">
           <legend>{{ faq.question }}</legend>
           <p class="faq-answer" v-for="p, i in faq.answer.split('\n\n')" :key="i" v-html="p" />
         </fieldset>

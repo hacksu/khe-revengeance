@@ -15,17 +15,17 @@
 
     <h2 style="text-align: center; margin-bottom: 0">~ Previous Projects ~</h2>
         
-    <section class="tabs" style="max-width: 800px;">
-        <menu role="tablist" aria-label="Guide Tabs">
-            <button role="tab" aria-controls="tab-1" aria-selected="true">1</button>
-            <button role="tab" aria-controls="tab-2">2</button>
-            <button role="tab" aria-controls="tab-3">3</button>
-            <button role="tab" aria-controls="tab-4">4</button>
-            <button role="tab" aria-controls="tab-5">5</button>
-            <button role="tab" aria-controls="tab-6">6</button>
-            <button role="tab" aria-controls="tab-7">7</button>
+    <section class="tabs xp" style="max-width: 800px;">
+        <menu class="xp" role="tablist" aria-label="Guide Tabs">
+            <button class="xp" role="tab" aria-controls="tab-1" aria-selected="true">1</button>
+            <button class="xp" role="tab" aria-controls="tab-2">2</button>
+            <button class="xp" role="tab" aria-controls="tab-3">3</button>
+            <button class="xp" role="tab" aria-controls="tab-4">4</button>
+            <button class="xp" role="tab" aria-controls="tab-5">5</button>
+            <button class="xp" role="tab" aria-controls="tab-6">6</button>
+            <button class="xp" role="tab" aria-controls="tab-7">7</button>
         </menu>
-        <article role="tabpanel" id="tab-1">
+        <article class="xp" role="tabpanel" id="tab-1">
             <Project title="Escape Pursuit (HackPSU Spring 2024)"
                 link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
                 <p>
@@ -51,7 +51,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-2">
+        <article class="xp" role="tabpanel" hidden id="tab-2">
             <Project title="RTCL (KHE 2022)"
             :image="rtclImage" link="https://devpost.com/software/rtcl-article">
                 <p>
@@ -73,7 +73,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-3">
+        <article class="xp" role="tabpanel" hidden id="tab-3">
             <Project title="Single-Handed Typing (KHE 2022)"
                 link="https://devpost.com/software/singlehanded-typing-tech" :image="singlehandedImage">
                 <p>
@@ -96,7 +96,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-4">
+        <article class="xp" role="tabpanel" hidden id="tab-4">
             <Project title="FaunaFinder (MakeUC 2023)"
                 link="https://devpost.com/software/faunafinder-ai-powered-animal-breed-recognition" :image="faunaImage">
                 <p>
@@ -117,7 +117,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-5">
+        <article class="xp" role="tabpanel" hidden id="tab-5">
             <Project title="Subway Cheese Chase (MakeUC 2023)"
                 link="https://devpost.com/software/subway-cheese-chase" :image="subwayImage">
                 <p>
@@ -134,7 +134,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-6" >
+        <article class="xp" role="tabpanel" hidden id="tab-6" >
             <Project title="CWRU Full-Text Class Search (KHE 2019)"
                 :image="cwruClassesImage" link="https://devpost.com/software/cwru-full-text-class-search">
                 <p>
@@ -157,7 +157,7 @@
                 </p>
             </Project>
         </article>
-        <article role="tabpanel" hidden id="tab-7" >
+        <article class="xp" role="tabpanel" hidden id="tab-7" >
             <Project title="Safe-Roads (MakeUC 2023)"
                 link="https://devpost.com/software/safe-roads" :image="safeRoadsImage">
                 <p>
@@ -654,7 +654,6 @@
     </p>
 
 </div>
-<link rel="stylesheet" href="https://unpkg.com/xp.css">
 </template>
 
 <script>
@@ -669,14 +668,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function changeTabs(e) {
         // stolen from MDN web docs
-        // uses querySelector to change the attributes of tabs when they are clicked
-        // the attributes are changed in such a way that the tabpanels and selected tabs
-        // are hidden and shown at the appropriate times
-        // for whatever reason the XP.css documentation does not mention that you're on 
-        // your own when it comes to JavaScript for tabs, which honestly makes sense
-        // now that I think about that fact that XP.css is a CSS library and not
-        // a JavaScript Library. It's just frustrating that they include a working 
-        // example of tabs without the JavaScript included. 
 
         const targetTab = e.target;
         const tabList = targetTab.parentNode;
@@ -702,6 +693,7 @@ window.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script setup>
+
 import { useHead } from '@unhead/vue';
 
 import Project from '../components/project.vue';
@@ -734,6 +726,7 @@ useHead({
 </script>
 
 <style scoped lang="scss">
+
 .container {
     width: 750px;
     max-width: 100vw;

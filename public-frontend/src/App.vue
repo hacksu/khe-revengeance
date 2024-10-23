@@ -7,7 +7,7 @@
       @closeContact="this.closeContact"
       @closeLogin="this.closeLogin"
     />
-    <div id="banner" class="title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
+    <div id="banner" class="xp title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
         <p class="banner-link start" @click="navigateTo('/')">
             <img src="/favicon.ico" style="height: 100%" alt="Logo">
