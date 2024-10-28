@@ -1,6 +1,5 @@
 <template>
   <div id="app-container">
-    <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:3%;top:1.25%;width:5%" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=black" target="_blank"><img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-black.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%"></a>
     <Stars />
     <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer" style="z-index: 100">
@@ -12,6 +11,8 @@
           <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
         </div>
       </div>
+
+      <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:3%;top:1.25%;width:5%" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=black" target="_blank"><img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-black.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%"></a>
 
       <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
         <p class="banner-link" @click="navigateTo('/')">
