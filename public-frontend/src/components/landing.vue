@@ -8,16 +8,10 @@
       <div class="date-container">
         <p id="date">KHE returns February 15-16, 2025</p>
       </div>
-      <div id="email-input-container">
-        <span id="email-input-label">Sign up to get registration information:</span>
-        <div id="email-input">
-          <span id="thank-you-message" v-if="updatesEmailSubmitted">Thank you 💖</span>
-          <input @keyup.enter="submitEmail" type="email" :disabled="updatesEmailSubmitted"
-            :placeholder="updatesEmailPlaceholder || 'sic-itur@astra.com'" v-model="updatesEmail" />
-          <button @click="submitEmail" :disabled="updatesEmailSubmitted">
-            <span :class="{ rocketing: updatesEmailSubmitted }">🚀</span>
-          </button>
-        </div>
+      <div id="register-container">
+        <a id="register-input" href="https://forms.gle/gmfLRrDMnvbSk9dZA" target="_blank">
+          But you can apply now 🚀
+        </a>
         <span v-if="updatesEmailError" style="font-size: small; color: red">{{ updatesEmailError }}</span>
       </div>
     </div>
@@ -40,7 +34,7 @@ export default {
   },
   data: () => ({
     updatesEmail: "",
-    updatesEmailSubmitted: false,
+    updatesRegistrationSubmitted: false,
     updatesEmailError: "",
     updatesEmailPlaceholder: "",
     //the boolean below determines whether the page displays email input or a register button
@@ -169,7 +163,7 @@ $text-color: #bdbdbd;
   animation-duration: 0.5s;
 }
 
-#email-input-container {
+#register-container {
   & * {
     box-sizing: border-box;
   }
@@ -182,63 +176,26 @@ $text-color: #bdbdbd;
   margin: 1.5vh auto;
   font-size: 1.25em;
 
-  #email-input-label {
-    display: block;
-    margin: 14px 8px;
-    color: $text-color;
-    font-size: 1.2em;
-  }
-
-  #email-input {
+  #register-input {
     display: flex;
     height: 40px;
     border-radius: 5px;
     overflow: clip;
     position: relative;
+    justify-content: center;
+    align-items: center;
 
-    #thank-you-message {
-      position: absolute;
-      left: 0;
-      top: 0;
-      font-size: 20px;
-      padding: 5px;
-      color: $text-color;
-      height: 40px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    color: black;
+    text-decoration: none;
+    transition: background-color 0.25s;
+    background-color: lightgray;
 
-    input {
-      width: 100%;
-      height: 100%;
-      border-radius: 0;
-      border: none;
-      font-size: 20px;
-      padding: 5px;
+    &:disabled {
       background-color: white;
-      color: black;
-
-      &:disabled {
-        color: white;
-        @include fadeOutInput;
-      }
+      @include fadeOutInput;
     }
 
-    button {
-      width: 45px;
-      height: 100%;
-      border-radius: 0;
-      border: none;
-      transition: background-color 0.25s;
-      background-color: lightgray;
 
-      &:disabled {
-        background-color: white;
-        @include fadeOutInput;
-      }
-    }
   }
 }
 
