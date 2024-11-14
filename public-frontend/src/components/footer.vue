@@ -50,7 +50,6 @@ export default {
 
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 
@@ -78,8 +77,11 @@ export default {
 }
 
 .glow {
-  position: relative;
-  overflow: hidden;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
 
   #horizon {
     width: 100%;
@@ -120,8 +122,8 @@ h3 {
   }
 
   #powered-by-mlh {
-    width: 45px;
-    height: auto;
+    width: 100%;
+    height: 65px;
     margin-top: 0;
   }
 
