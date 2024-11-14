@@ -52,6 +52,7 @@ export default {
     return {
       scrollPos: 0,
       prevented: false,
+      mlh: true,
     };
   },
   methods: {
