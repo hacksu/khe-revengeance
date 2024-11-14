@@ -8,10 +8,10 @@
       <img style="opacity: 0.5" id="powered-by-hacksu" src="@/assets/2019-hacksu-color.svg" />
     </a>
 
-    <!--<a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-if="mlh">
+    <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
       <img style="opacity: 0.5" id="powered-by-mlh" src="@/assets/mlh-logo.svg" />
       <span id="code-of-conduct-text">Code of Conduct</span>
-    </a>-->
+    </a>
 
     <div class="glow">
       <picture>
