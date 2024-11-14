@@ -1,5 +1,11 @@
 <template>
   <div id="powered-by">
+    <!-- Code of Conduct section -->
+    <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
+      <img style="opacity: 0.5" id="powered-by-mlh" src="@/assets/mlh-logo.svg" />
+      <span id="code-of-conduct-text">Code of Conduct</span>
+    </a>
+    
     <p id="powered-by-text">
       POWERED BY
     </p>
