@@ -132,10 +132,5 @@ h3 {
   }
 }
 
-//Testing Border Debug
-#powered-by, #small-hacksu-logo, #small-mlh-logo, .glow {
-  border: 1px solid red; // This will help identify layout issues
-}
-
 </style>
 
