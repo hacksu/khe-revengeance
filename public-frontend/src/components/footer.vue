@@ -50,6 +50,7 @@ export default {
 
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 
@@ -77,11 +78,8 @@ export default {
 }
 
 .glow {
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  z-index: -1;
+  position: relative;
+  overflow: hidden;
 
   #horizon {
     width: 100%;
@@ -122,8 +120,8 @@ h3 {
   }
 
   #powered-by-mlh {
-    width: 100%;
-    height: 65px;
+    width: 45px;
+    height: auto;
     margin-top: 0;
   }
 
@@ -131,5 +129,11 @@ h3 {
     width: 90px;
   }
 }
+
+//Testing Border Debug
+#powered-by, #small-hacksu-logo, #small-mlh-logo, .glow {
+  border: 1px solid red; // This will help identify layout issues
+}
+
 </style>
 
