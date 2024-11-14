@@ -40,6 +40,7 @@ export default {
 @import "@/styles/global.scss";
 
 #powered-by {
+  position: relative; // Add this line
   @include bg-secondary;
   z-index: 100;
   padding: 10px 20px;
