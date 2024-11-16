@@ -8,10 +8,9 @@
       <img style="opacity: 0.5" id="powered-by-hacksu" src="@/assets/2019-hacksu-color.svg" />
     </a>
 
-    <!--<a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
+    <!-- <a id="small-mlh-logo" href="https://mlh.io" v-if="mlh">
       <img style="opacity: 0.5" id="powered-by-mlh" src="@/assets/mlh-logo.svg" />
-      <span id="code-of-conduct-text">Code of Conduct</span>
-    </a>-->
+    </a> -->
 
     <div class="glow">
       <picture>
@@ -41,7 +40,6 @@ export default {
 @import "@/styles/global.scss";
 
 #powered-by {
-  position: relative; // Add this line
   @include bg-secondary;
   z-index: 100;
   padding: 10px 20px;
@@ -131,6 +129,5 @@ h3 {
     width: 90px;
   }
 }
-
 </style>
 
