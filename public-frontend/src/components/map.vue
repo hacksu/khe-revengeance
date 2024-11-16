@@ -30,7 +30,11 @@
 
         <iframe id="mapIframe" src="https://map.concept3d.com/?id=568&tbh&sbh#!m/613809?lh/?ct/44418,5603" scrolling="no"
           frameborder="0" style="border: 0" @load="reset"></iframe>
+
       </div>
+      <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
+          <span id="code-of-conduct-text">MLH Code of Conduct</span>
+      </a>
     </div>
   </div>
 </template>
@@ -47,6 +51,7 @@ export default {
     return {
       scrollPos: 0,
       prevented: false,
+      mlh: true,
     };
   },
   methods: {
@@ -94,6 +99,18 @@ export default {
 #address {
   margin: 10px 0;
   text-decoration: underline;
+}
+
+#small-mlh-logo {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  width: 100%; // Makes sure it spans the full width below the iframe and Panel
+}
+
+#powered-by-mlh {
+  max-width: 150px; // Adjust size as needed
+  margin-bottom: 5px;
 }
 
 .info-container {
