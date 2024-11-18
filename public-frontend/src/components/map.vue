@@ -33,7 +33,7 @@
 
       </div>
       <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
-          <span id="code-of-conduct-text">MLH Code of Conduct</span>
+          <span id="code-of-conduct-text">MLH Code of Conduct</span> 
       </a>
     </div>
   </div>
