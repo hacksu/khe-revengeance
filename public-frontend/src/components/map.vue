@@ -32,7 +32,7 @@
           frameborder="0" style="border: 0" @load="reset"></iframe>
       </div>
       <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" style="text-align: center;">
-          <span id="code-of-conduct-text">MLH Code of Conduct</span>
+          <span id="code-of-conduct-text" style="text-align: center;">MLH Code of Conduct</span>
       </a>
     </div>
   </div>
