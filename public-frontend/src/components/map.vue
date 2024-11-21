@@ -31,7 +31,7 @@
         <iframe id="mapIframe" src="https://map.concept3d.com/?id=568&tbh&sbh#!m/613809?lh/?ct/44418,5603" scrolling="no"
           frameborder="0" style="border: 0" @load="reset"></iframe>
       </div>
-      <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" v-show="mlh">
+      <a id="small-mlh-logo" href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" style="text-align: center;">
           <span id="code-of-conduct-text">MLH Code of Conduct</span>
       </a>
     </div>
