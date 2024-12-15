@@ -40,10 +40,10 @@
         <Guide/>
       </div>
     </div>
-    <div :hidden="!contact" id="contactWindow" class="window" style="width: 600px;">
-      <div id="contactWindowHeader" class="title-bar" @mousedown="startDrag('contactWindow', $event)">
-        <div class="title-bar-text">Contact</div>
-        <div class="title-bar-controls">
+    <div :hidden="!contact" id="contactWindow" class="window xp" style="width: 600px;">
+      <div id="contactWindowHeader" class="title-bar xp" @mousedown="startDrag('contactWindow', $event)">
+        <div class="title-bar-text xp">Contact</div>
+        <div class="title-bar-controls xp">
           <button aria-label="Minimize" @click="$emit('closeContact')"></button>
           <button aria-label="Maximize"></button>
           <button aria-label="Close" @click="$emit('closeContact')"></button>
@@ -53,16 +53,16 @@
         <Contact/>
       </div>
     </div>
-    <div :hidden="!login" id="loginWindow" class="window" style="width: 600px; background-color: white;">
-      <div id="loginWindowHeader" class="title-bar" @mousedown="startDrag('loginWindow', $event)">
-        <div class="title-bar-text">Login</div>
-        <div class="title-bar-controls">
+    <div :hidden="!login" id="loginWindow" class="window xp" style="width: 600px; background-color: white;">
+      <div id="loginWindowHeader" class="title-bar xp" @mousedown="startDrag('loginWindow', $event)">
+        <div class="title-bar-text xp">Login</div>
+        <div class="title-bar-controls xp">
           <button aria-label="Minimize" @click="$emit('closeLogin')"></button>
           <button aria-label="Maximize"></button>
           <button aria-label="Close" @click="$emit('closeLogin')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 450px; overflow-y: scroll;">
+      <div class="window-body" style="height: 325px; overflow-y: scroll;">
         <Login></Login>
       </div>
     </div>

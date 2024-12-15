@@ -17,13 +17,13 @@
         
     <section class="tabs xp" style="max-width: 800px;">
         <menu class="xp" role="tablist" aria-label="Guide Tabs">
-            <button class="xp" role="tab" aria-controls="tab-1" aria-selected="true">1</button>
-            <button class="xp" role="tab" aria-controls="tab-2">2</button>
-            <button class="xp" role="tab" aria-controls="tab-3">3</button>
-            <button class="xp" role="tab" aria-controls="tab-4">4</button>
-            <button class="xp" role="tab" aria-controls="tab-5">5</button>
-            <button class="xp" role="tab" aria-controls="tab-6">6</button>
-            <button class="xp" role="tab" aria-controls="tab-7">7</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-1" aria-selected="true">1</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-2">2</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-3">3</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-4">4</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-5">5</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-6">6</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-7">7</button>
         </menu>
         <article class="xp" role="tabpanel" id="tab-1">
             <Project title="Escape Pursuit (HackPSU Spring 2024)"
@@ -808,5 +808,31 @@ p {
 li {
     margin: 8px;
     font-size: 14pt;
+}
+
+.xp-tab-button {
+    background: linear-gradient(to bottom, #f4f9ff 0%, #a9c3e2 100%); /* Light blue XP gradient */
+    border: 1px solid #4a6fa3;
+    color: #2e3a47;
+    font-size: 14px;
+    padding: 5px 15px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0; /* Rounded top corners */
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-right: 1px; /* Adds spacing between tabs */
+}
+
+.xp-tab-button:hover {
+    background: #e1e7f1;
+    box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.xp-tab-button.active {
+    background: #e3e7f5;  /* Lighter XP-like background for active tab */
+    border-bottom: 1px solid #fff; /* Ensures no border overlap with content area */
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15); /* Adds a lift effect */
 }
 </style>

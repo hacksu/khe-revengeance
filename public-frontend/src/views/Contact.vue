@@ -1,5 +1,5 @@
 <template>
-  <div id="contact" class="widget">
+  <div id="contact" class="widget xp">
     <div v-if="!submitted">
       <h2 id="contactTitle">Contact</h2>
       <p style="opacity: 0.5; margin-bottom: 10px; font-size: 12pt;">
@@ -24,13 +24,13 @@
           v-model="email" />
       </div>
 
-      <div class="field-row-stacked">
+      <div class="field-row-stacked xp">
         <span id="subjectTitle">Body:</span>
-        <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content" />
+        <textarea placeholder="Tell us more!" name="body" class="contactTextField" style="background: white; border: 1px solid rgb(127,157,185);" v-model="content" />
       </div>
 
       <div style="text-align: center; margin-top: 10px;">
-        <button :disabled="!formFilledOut" @click="formFilledOut && submitTicket()">
+        <button class="xp" style="background: white, color: black" :disabled="!formFilledOut" @click="formFilledOut && submitTicket()">
           Send!
         </button>
       </div>
@@ -137,6 +137,7 @@ p{
 .contactTextField {
   display: block;
   color: black;
+  width: 100%
   // border: none;
   // outline: none;
   // border-bottom: 2px solid white;
@@ -156,10 +157,12 @@ textarea.contactTextField {
 
 button{
   color: black;
+  background-color: white !important;
 }
 
 button:disabled{
-  color: gray;
+  background-color: white !important;
+  color: grey !important;
 }
 
 </style>
