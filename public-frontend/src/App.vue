@@ -34,9 +34,9 @@
         <p class="banner-link" @click="this.login = !this.login; navigateTo('/')" v-else-if="!user && showLogin">
           Login
         </p>
-        <div id="hamburgMenu">
+        <!-- <div id="hamburgMenu">
           <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
-        </div>
+        </div> -->
       </div>
       <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
 
@@ -142,7 +142,10 @@ body {
   perspective: 150px;
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
-  background-color: black;
+  background-image: url('../public/Background_withdate.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   overflow-y: hidden;
   overflow-x: hidden;
   height: 100vh;
@@ -180,10 +183,11 @@ body {
   justify-content: space-between;
   z-index: 98;
   padding: 0px;
+  height: 30px;
 
-  @include mobile {
-    @include bg-primary;
-  }
+  // @include mobile {
+  //   @include bg-primary;
+  // }
 
   @include display-not(mobile) {
     padding-top: 0px;
@@ -209,6 +213,9 @@ body {
 }
 
 .banner-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding-right: 10px;
   padding-left: 10px;
   margin: 0px;
@@ -262,53 +269,53 @@ body {
   }
 }
 
-@media only screen and (max-width: 850px) {
-  #bannerL {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+// @media only screen and (max-width: 850px) {
+//   #bannerL {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//   }
 
-  #bannerR {
-    display: flex;
-    justify-content: flex-end;  /* Align buttons to the left */
-    align-items: right;          /* Center vertically */
-    padding-right: 10px;
-    padding-left: 20px;   
-  }
+//   #bannerR {
+//     display: flex;
+//     justify-content: flex-end;  /* Align buttons to the left */
+//     align-items: right;          /* Center vertically */
+//     padding-right: 10px;
+//     padding-left: 20px;   
+//   }
 
-  #bannerR:not(.hidden) {
-    display: none;
-  }
+//   #bannerR:not(.hidden) {
+//     display: none;
+//   }
 
-  #banner {
-    flex-direction: column;
-  }
+//   #banner {
+//     flex-direction: column;
+//   }
 
-  #hamburgMenu {
-    display: block;
-    cursor: pointer;
-  }
+//   #hamburgMenu {
+//     display: block;
+//     cursor: pointer;
+//   }
 
-  #hamburgIcon {
-    filter: invert(100%);
-    width: 40px;
-    height: 40px;
-    padding: 5px;
-  }
+//   #hamburgIcon {
+//     filter: invert(100%);
+//     width: 40px;
+//     height: 40px;
+//     padding: 5px;
+//   }
 
-  #bannerLMobile {
-    display: block;
-  }
+//   #bannerLMobile {
+//     display: block;
+//   }
 
-  .banner-link {
-    padding: 0px 0px;
-    margin: 0px;
-    font-size: 18px;
-    cursor: pointer;
-    @include grow('hover', 1.05, 0.2s);
-  }
-}
+//   .banner-link {
+//     padding: 0px 0px;
+//     margin: 0px;
+//     font-size: 18px;
+//     cursor: pointer;
+//     @include grow('hover', 1.05, 0.2s);
+//   }
+// }
 
 .start{
   background: linear-gradient(180deg, #556b2f, #8fbc8f, #6b8e23);
