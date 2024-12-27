@@ -1,6 +1,20 @@
 <template>
-  <!-- <link rel="stylesheet" href="https://unpkg.com/xp.css"> -->
+  <link rel="stylesheet" href="https://unpkg.com/xp.css">
   <div class="home">
+    <div class="shortcuts-container">
+      <div class="shortcut" @click="console.log('')">
+        <img src="" alt="">
+        <p>KHE 2025 Devpost</p>
+      </div>
+      <div class="shortcut" @click="openSponsorWindow">
+        <img src="" alt="" />
+        <p>Registration</p>
+      </div>
+      <div class="shortcut" @click="openFAQWindow">
+        <img src="" alt="" />
+        <p>MLH Code of Conduct</p>
+      </div>
+    </div>
     <div :hidden="!sponsors" id="sponsorWindow" class="window xp" style="width: 600px;">
       <div id="sponsorWindowHeader" class="title-bar xp" @mousedown="startDrag('sponsorWindow', $event)">
         <div class="title-bar-text xp">Sponsors</div>
@@ -49,11 +63,11 @@
           <button aria-label="Close" @click="$emit('closeContact')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 560px; overflow-y: scroll;">
+      <div class="window-body xp" style="height: 560px; overflow-y: scroll;">
         <Contact/>
       </div>
     </div>
-    <div :hidden="!login" id="loginWindow" class="window xp" style="width: 600px; background-color: white;">
+    <div :hidden="!login" id="loginWindow" class="window xp" style="width: 600px;">
       <div id="loginWindowHeader" class="title-bar xp" @mousedown="startDrag('loginWindow', $event)">
         <div class="title-bar-text xp">Login</div>
         <div class="title-bar-controls xp">
@@ -62,8 +76,21 @@
           <button aria-label="Close" @click="$emit('closeLogin')"></button>
         </div>
       </div>
-      <div class="window-body" style="height: 325px; overflow-y: scroll;">
+      <div class="window-body xp" style="height: 375px; overflow-y: scroll;">
         <Login></Login>
+      </div>
+    </div>
+    <div :hidden="!profile" id="profileWindow" class="window xp" style="width: 600px;">
+      <div id="profileWindowHeader" class="title-bar xp" @mousedown="startDrag('profileWindow', $event)">
+        <div class="title-bar-text xp">Profile</div>
+        <div class="title-bar-controls xp">
+          <button aria-label="Minimize" @click="$emit('closeProfile')" ></button>
+          <button aria-label="Maximize"></button>
+          <button aria-label="Close" @click="$emit('closeProfile')"></button>
+        </div>
+      </div>
+      <div class="window-body xp" style="height: 600px; overflow-y: scroll;">
+        <Profile></Profile>
       </div>
     </div>
   </div>
@@ -81,13 +108,14 @@ import Gallery from '../components/gallery.vue';
 import Guide from '../views/Guide.vue';
 import Contact from '../views/Contact.vue';
 import Login from '../views/Login.vue';
+import Profile from '../views/Profile.vue'
 
 import { useHead } from '@unhead/vue';
 import { ref } from 'vue';
 
-defineProps(['faq', 'guide', 'sponsors', 'contact', 'login']);
+defineProps(['faq', 'guide', 'sponsors', 'contact', 'login', 'profile']);
 
-const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide', 'closeContact', 'closeLogin']);
+const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide', 'closeContact', 'closeLogin', 'closeProfile']);
 
 useHead({
   title: "Kent Hack Enough",
@@ -149,6 +177,38 @@ const stopDrag = () => {
 .title-bar {
   cursor: move;
   z-index: 10;
+}
+
+.shortcuts-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 20px;
+}
+
+.shortcut {
+  background: #0000;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.shortcut img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.shortcut p {
+  margin: 0;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px #000;
 }
 
 </style>

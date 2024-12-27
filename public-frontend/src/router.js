@@ -19,6 +19,7 @@ export const routerConfig = {
           guide: route.query.guide === 'true',
           contact: route.query.contact === 'true',
           login: route.query.login === 'true',
+          profile: route.query.profile === 'true',
         }
       )
     },
@@ -37,10 +38,20 @@ export const routerConfig = {
       name: "contact",
       component: Contact,
     },
-    {
+    { //modify this such that it redirects to Home with the profile window showing
       path: "/profile",
       name: "profile",
-      component: Profile,
+      component: Home,
+      props: (route) => (
+        {
+          sponsors: route.query.sponsors === 'true',
+          faq: route.query.faq === 'true',
+          guide: route.query.guide === 'true',
+          contact: route.query.contact === 'true',
+          login: route.query.login === 'true',
+          profile: true,
+        }
+      )
     },
     {
       path: "/guide",

@@ -15,12 +15,13 @@ export enum AuthMethod {
 const AuthMethodEnum = z.nativeEnum(AuthMethod);
 
 export const schoolStatus = [
-  "High School",
-  "Freshman",
-  "Sophmore",
-  "Junior",
-  "Senior",
-  "Graduate Student"
+  "Undergraduate University (2 year - community college or similar)",
+  "Undergraduate University (3+ year)",
+  "Graduate University (Masters, Professional, Doctoral, etc)",
+  "Other Vocational / Trade Program or Apprenticeship",
+  "Post Doctorate",
+  "Other",
+  "I'm not currently s student",
 ] as const;
 
 export const genders = [
@@ -93,7 +94,8 @@ export const shirtSize = [
 // ] as const;
 
 export const HackathonRegistrationDraft = z.object({
-  name: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   school: z.string(),
   phone: z.string(),
   email: z.string(),
@@ -123,7 +125,8 @@ export const HackathonRegistrationDraft = z.object({
 export type RegistrationDraft = z.infer<typeof HackathonRegistrationDraft>;
 
 const defaultRegistration: RegistrationDraft = {
-  name: '',
+  firstName: "",
+  lastName: "",
   school: "",
   phone: "",
   email: "",
@@ -151,7 +154,8 @@ const defaultRegistration: RegistrationDraft = {
 };
 
 export const FullRegistration = HackathonRegistrationDraft.extend({
-  name: z.string().nonempty(),
+  firstName: z.string().nonempty(),
+  lastname: z.string().nonempty(),
   school: z.string().nonempty(),
   phone: z.string().nonempty(),
   schoolStatus: z.enum(schoolStatus),

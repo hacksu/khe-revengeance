@@ -6,6 +6,7 @@
       @closeGuide="this.closeGuide" 
       @closeContact="this.closeContact"
       @closeLogin="this.closeLogin"
+      @closeProfile="this.closeProfile"
     />
     <div id="banner" class="xp title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
@@ -28,7 +29,7 @@
         <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
           Schedule
         </p>
-        <p class="banner-link" @click="navigateTo('/profile')" v-if="user && showLogin">
+        <p class="banner-link" @click="this.profile = !this.profile; navigateTo('/')" v-if="user && showLogin">
           Profile
         </p>
         <p class="banner-link" @click="this.login = !this.login; navigateTo('/')" v-else-if="!user && showLogin">
@@ -103,6 +104,10 @@ export default {
       this.login = false;
       this.navigateTo('/');
     },
+    closeProfile() {
+      this.profile = false;
+      this.navigateTo('/');
+    },
     handleScroll() {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
@@ -116,7 +121,8 @@ export default {
           faq: this.faq, 
           guide: this.guide,
           contact: this.contact,
-          login: this.login
+          login: this.login,
+          profile: this.profile
       }});
     },
   },

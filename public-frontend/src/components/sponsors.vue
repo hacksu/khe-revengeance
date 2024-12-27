@@ -8,17 +8,21 @@
         <a href="https://enbasis.com/" target="_blank" title="Enbasis">
             <Enbasis class="item" />
         </a>
-        <a href="https://ybi.org" target="_blank" title="Youngstown Business Incubator">
-            <img src="@/assets/ybi.png" class="item" style="object-fit: cover;" />
-        </a>
         <a href="https://www.bawls.com/" target="_blank" title="BAWLS">
             <img src="@/assets/bawls.webp" class="item"  style="object-fit: cover;" />
         </a>
         <a href="https://www.wolframalpha.com/" target="_blank" title="Wolfram Alpha">
             <WolframAlpha class="item" />
         </a>
-        <a href="https://www.kentdisplays.com/" target="_blank" title="Kent Displays">
-            <img src="@/assets/kentdisplays.webp" class="item"  style="object-fit: cover;" />
+        <!-- TODO add VoiceFlow, Board and Bevy, 1Password -->
+        <a href="">
+            <img src="voiceflow.svg" alt="">
+        </a>
+        <a href="">
+            <img src="" alt="">
+        </a>
+        <a href="">
+            <img src="" alt="">
         </a>
         <div v-if="showAd" class="item" id="extra-item">
             And You?
@@ -61,7 +65,7 @@ const props = defineProps({
     },
     showAd: {
         type: Boolean,
-        default: false,
+        default: true,
         required: false
     }
 });
@@ -102,5 +106,7 @@ a:has(.item) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
+    text-align: center;
 }
 </style>

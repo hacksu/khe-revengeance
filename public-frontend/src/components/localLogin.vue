@@ -7,21 +7,21 @@
         <label v-if="validLoginWarning" class="warning-label">{{ loginWarningMessage }}</label>
         
         <!-- Email Input -->
-        <fieldset class="xp-fieldset">
-            <legend class="xp-legend">Email</legend>
+        <fieldset>
+            <legend>Email</legend>
             <input type="email" id="email" v-model="modal.email" class="xp-input" />
         </fieldset>
 
         <!-- Password Input -->
-        <fieldset class="xp-fieldset">
-            <legend class="xp-legend">Password</legend>
+        <fieldset>
+            <legend>Password</legend>
             <input type="password" id="password" v-model="modal.password" class="xp-input" inputId="password" toggleMask :feedback="makingAccount" />
         </fieldset>
         
         <!-- Confirm Password (only for account creation) -->
         <div v-if="makingAccount">
-            <fieldset class="xp-fieldset">
-                <legend class="xp-legend">Confirm Password</legend>
+            <fieldset>
+                <legend>Confirm Password</legend>
                 <input type="password" v-model="modal.confirmPassword" class="xp-input" inputId="confirmPassword" toggleMask />
             </fieldset>
         </div>
@@ -104,7 +104,7 @@ export default {
 
 <style lang="scss" scoped>
 .xp-input {
-    background: #e0ebf5; /* Lighter gradient blue background */
+    background: white; /* Lighter gradient blue background */
     border: 1px solid #7a98d1;
     padding: 5px 10px;
     font-size: 14px;
@@ -143,10 +143,6 @@ export default {
     }
 }
 
-.xp-legend {
-    color: black;
-}
-
 .warning-label {
     color: red;
     text-align: center;
@@ -168,4 +164,9 @@ export default {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+fieldset{
+    background-color: transparent;
+}
+
 </style>
