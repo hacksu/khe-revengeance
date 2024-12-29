@@ -101,11 +101,11 @@ export default {
       this.navigateTo('/');
     },
     closeLogin() {
-      this.login = false;
+      this.login = !this.login;
       this.navigateTo('/');
     },
     closeProfile() {
-      this.profile = false;
+      this.profile = !this.profile;
       this.navigateTo('/');
     },
     handleScroll() {

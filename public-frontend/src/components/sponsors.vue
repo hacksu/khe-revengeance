@@ -14,15 +14,21 @@
         <a href="https://www.wolframalpha.com/" target="_blank" title="Wolfram Alpha">
             <WolframAlpha class="item" />
         </a>
-        <!-- TODO add VoiceFlow, Board and Bevy, 1Password -->
-        <a href="">
-            <img src="voiceflow.svg" alt="">
+        <div class="item" style="
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+            <a href="https://voiceflow.com"  target="_blank" title="Voiceflow">
+                <img style="width: 300px; max-width: 300px; height: auto;" src="../assets/voiceflow.svg" alt="">
+            </a>
+        </div>
+        <a href="https://boardandbevy.com" target="_blank" class="item" style="display: flex; align-items: center; justify-content: center;">
+            <img style="max-width: 100%; height: auto;" src="../assets/boardandbevy.png" alt="">
         </a>
-        <a href="">
-            <img src="" alt="">
-        </a>
-        <a href="">
-            <img src="" alt="">
+        <a href="https://onepassword.com" target="_blank" class="item" style="display: flex; justify-content: center;">
+            <img style="max-width: 100%; height: auto; max-height: 100%;" src="../assets/1password.webp" alt="">
         </a>
         <div v-if="showAd" class="item" id="extra-item">
             And You?

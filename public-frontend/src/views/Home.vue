@@ -2,17 +2,21 @@
   <link rel="stylesheet" href="https://unpkg.com/xp.css">
   <div class="home">
     <div class="shortcuts-container">
-      <div class="shortcut" @click="console.log('')">
-        <img src="" alt="">
-        <p>KHE 2025 Devpost</p>
-      </div>
-      <div class="shortcut" @click="openSponsorWindow">
-        <img src="" alt="" />
+      <div class="shortcut" @click="openRegistration()">
+        <img src="/favicon.ico" alt="" />
         <p>Registration</p>
       </div>
-      <div class="shortcut" @click="openFAQWindow">
-        <img src="" alt="" />
-        <p>MLH Code of Conduct</p>
+      <div class="shortcut">
+        <a href="https://kent-hack-enough-2025.devpost.com/" style="text-decoration: none">
+          <img src="../assets/devpost.jpg" alt="">
+          <p>KHE 2025 Devpost</p>
+        </a>
+      </div>
+      <div class="shortcut">
+        <a href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" style="text-decoration: none">
+          <img src="../assets/mlh-logo-color.png" alt="" />
+          <p>MLH Code of Conduct</p>
+        </a>
       </div>
     </div>
     <div :hidden="!sponsors" id="sponsorWindow" class="window xp" style="width: 600px;">
@@ -93,6 +97,9 @@
         <Profile></Profile>
       </div>
     </div>
+    <div>
+      <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:50px;top:0;width:10%;z-index:10000" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=yellow" target="_blank"><img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-yellow.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%"></a>
+    </div>
   </div>
 </template>
 
@@ -110,6 +117,7 @@ import Contact from '../views/Contact.vue';
 import Login from '../views/Login.vue';
 import Profile from '../views/Profile.vue'
 
+import { user } from '../state/user.js';
 import { useHead } from '@unhead/vue';
 import { ref } from 'vue';
 
@@ -163,6 +171,14 @@ const stopDrag = () => {
   document.removeEventListener('mousemove', drag);
   document.removeEventListener('mouseup', stopDrag);
 };
+
+const openRegistration = () => {
+  if (!user) {
+    emit('closeLogin');
+  } else {
+    emit('closeProfile');
+  }
+}
 
 </script>
 

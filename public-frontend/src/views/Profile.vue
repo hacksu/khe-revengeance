@@ -254,7 +254,7 @@ const saveUser = async () => {
         .then(() => {
             saveStatus.value = "saved";
         }).catch(err => {
-            console.error(err);
+            console.error(err.message);
             // saving should only fail if there is something really, really
             // weird with the data that violates the HackathonRegistrationDraft
             // type check or if the application was previously submitted and is

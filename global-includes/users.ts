@@ -69,14 +69,14 @@ export const ethnicities = [
   "Other Pacific Islander",
   "European",
   "Prefer not to answer", 
-  "Other"
+  "Other",
 ] as const;
 
 export const shirtSize = [
   "S", 
   "M",
   "L",
-  "XL"
+  "XL",
 ] as const;
 
 // TODO: this could be an array of enums
@@ -111,7 +111,7 @@ export const HackathonRegistrationDraft = z.object({
   optionalExtraPronouns: z.string(),
   ethnicity: z.enum(ethnicities).nullable(),
   optionalExtraEthnicity: z.string(),
-  sexuality: z.string(),
+  sexuality: z.string().nullable(),
   optionalExtraSexuality: z.string(),
   shirtSize: z.enum(shirtSize).nullable(),
   country: z.string(),
@@ -142,7 +142,7 @@ const defaultRegistration: RegistrationDraft = {
   optionalExtraPronouns: "",
   ethnicity: null,
   optionalExtraEthnicity: "",
-  sexuality: "",
+  sexuality: null,
   optionalExtraSexuality: "",
   shirtSize: null,
   country: "",
@@ -163,11 +163,11 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   age: z.number().gte(13).lte(130),
   gender: z.enum(genders),
   major: z.string().nonempty(),
-  sexuality: z.string().nonempty(),
+  sexuality: z.string().nullable(),
   attendedKhe: z.boolean(),
   pronouns: z.enum(userPronouns),
-  ethnicity: z.enum(ethnicities),
-  shirtSize: z.enum(shirtSize),
+  ethnicity: z.enum(ethnicities).nullable(),
+  shirtSize: z.enum(shirtSize).nullable(),
   country: z.string().nonempty(),
   state: z.string().nonempty(),
   mlhConduct: z.literal(true),
