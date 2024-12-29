@@ -15,148 +15,171 @@
 
     <h2 style="text-align: center; margin-bottom: 0">~ Previous Projects ~</h2>
         
-    <ProjectCarousel :numVisible="1" :numScroll="1">
-        <Project title="Escape Pursuit (HackPSU Spring 2024)"
-            link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
-            <p>
-                This online game adds an online component to hide-and-seek: both
-                the hider and the seekers bring up the game on their phones, and
-                then when the hider hides, the seekers are shown a
-                randomly-placed circle on the map that the hider is
-                <em>somewhere</em> within. The hider can explore a wide range of
-                possible hiding spots, across a whole college campus, for
-                example, but the game stays fair.
-            </p>
-            <p>
-                This simple enhancement to an age-old pastime shows how
-                technology can be integrated with the real world in a new way to
-                create something fun.
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                Angular as the framework for creating the game's web interface <br />
-                MongoDB to store users' data while playing <br />
-                Google Maps to provide maps <br />
-                Cloudflare Workers to host the site
-            </p>
-        </Project>
-        <Project title="RTCL (KHE 2022)"
+    <section class="tabs xp" style="max-width: 800px;">
+        <menu class="xp" role="tablist" aria-label="Guide Tabs">
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-1" aria-selected="true">1</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-2">2</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-3">3</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-4">4</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-5">5</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-6">6</button>
+            <button class="xp xp-tab-button" role="tab" aria-controls="tab-7">7</button>
+        </menu>
+        <article class="xp" role="tabpanel" id="tab-1">
+            <Project title="Escape Pursuit (HackPSU Spring 2024)"
+                link="https://devpost.com/software/escape-pursuit" :image="escapeImage">
+                <p>
+                    This online game adds an online component to hide-and-seek: both
+                    the hider and the seekers bring up the game on their phones, and
+                    then when the hider hides, the seekers are shown a
+                    randomly-placed circle on the map that the hider is
+                    <em>somewhere</em> within. The hider can explore a wide range of
+                    possible hiding spots, across a whole college campus, for
+                    example, but the game stays fair.
+                </p>
+                <p>
+                    This simple enhancement to an age-old pastime shows how
+                    technology can be integrated with the real world in a new way to
+                    create something fun.
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    Angular as the framework for creating the game's web interface <br />
+                    MongoDB to store users' data while playing <br />
+                    Google Maps to provide maps <br />
+                    Cloudflare Workers to host the site
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-2">
+            <Project title="RTCL (KHE 2022)"
             :image="rtclImage" link="https://devpost.com/software/rtcl-article">
-            <p>
-                This was a Python program that read PDFs and, with the help of a
-                language model, created PowerPoint slides that summarized their
-                contents.
-            </p>
-            <p>
-                These days, everyone knows AI can do this kind of thing, but back in
-                October 2022, before ChatGPT, <strong>this blew people's minds.</strong>
-                This project found an application of technology that people
-                weren't used to yet.
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                pdfminer (a Python library) to get text from PDFs <br />
-                Cohere NLP to generate bullet points <br />
-                pptx (a Python library) to put them in PowerPoints
-            </p>
-        </Project>
-        <Project title="Single-Handed Typing (KHE 2022)"
-            link="https://devpost.com/software/singlehanded-typing-tech" :image="singlehandedImage">
-            <p>
-                This was a project created by someone who once broke their arm
-                and wasn't able to type with one of their hands. To improve this
-                kind of situation for everyone, they decided to try to implement
-                an old idea for a dynamic one-handed keyboard layout they found.
-            </p>
-            <p>
-                This project wasn't completely original, but it did iterate on a
-                forgotten concept that then only existed in old Linux config
-                files. Sometimes you just need someone to actually make the
-                thing.
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                keyboard, a Python library that can detect and modify keyboard input <br />
-                PyQt, a Python library used to display stuff in a window <br />
-                Vue and Nuxt to create the website that demoed the project
-            </p>
-        </Project>
-        <Project title="FaunaFinder (MakeUC 2023)"
-            link="https://devpost.com/software/faunafinder-ai-powered-animal-breed-recognition" :image="faunaImage">
-            <p>
-                This AI-based application recognizes pictures of animals, brings
-                up information about the species of those animals, and tells you
-                about related animals that you might also want to know about.
-            </p>
-            <p>
-                There is still a lot of untapped potential within the world of
-                AI, probably, and this project used it to connect people with
-                animals.
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                Flask, a Python library, to create a web server for the web interface <br />
-                Google Cloud Vision to recognize animals with AI <br />
-                APIs for Wikipedia and animal databases
-            </p>
-        </Project>
-        <Project title="Subway Cheese Chase (MakeUC 2023)"
-            link="https://devpost.com/software/subway-cheese-chase" :image="subwayImage">
-            <p>
-                This is simply a horror game about being in a dark Subway
-                (restaurant) looking for your car keys.
-            </p>
-            <p>
-                Not every hackathon project has to be super serious!
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                Godot, a popular free game engine <br />
-                Blender, a program for creating 3D art
-            </p>
-        </Project>
-        <Project title="CWRU Full-Text Class Search (KHE 2019)"
-            :image="cwruClassesImage" link="https://devpost.com/software/cwru-full-text-class-search">
-            <p>
-                This was a project developed by students from Case Western
-                Reserve University who disapproved of their university's portal
-                for class searches. So, they scraped the content of the portal
-                and made their own website out of it.
-            </p>
-            <p>
-                This project <strong>identified a part of our built environment
-                that sucks</strong> and <strong>decided to try to fix
-                it.</strong>
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                Scrapy, a Python library designed to turn web pages into data <br />
-                MongoDB to store the scraped data <br />
-                Elasticsearch to rapidly search the scraped text <br />
-                Google Cloud to host the resulting website
-            </p>
-        </Project>
-        <Project title="Safe-Roads (MakeUC 2023)"
-            link="https://devpost.com/software/safe-roads" :image="safeRoadsImage">
-            <p>
-                This project uses publicly-available maps and data to visualize how
-                dangerous any given segment of road is. I imagine this is perfect for
-                anyone who's already anxious about driving.
-            </p>
-            <p>
-                This project shows how useful public datasets from websites like
-                <a href="http://kaggle.com/">Kaggle</a> can be if given the right frame.
-                The Internet has a ton of information on it that just needs a little bit
-                of data science done to it to become relevant and accessible in people's
-                lives.
-            </p>
-            <p class="small-text">
-                <strong>Technologies used: </strong><br />
-                The Google Maps API, to get maps <br />
-                Streamlit, a Python framework for visualizing data, to visualize data
-            </p>
-        </Project>
-    </ProjectCarousel>
+                <p>
+                    This was a Python program that read PDFs and, with the help of a
+                    language model, created PowerPoint slides that summarized their
+                    contents.
+                </p>
+                <p>
+                    These days, everyone knows AI can do this kind of thing, but back in
+                    October 2022, before ChatGPT, <strong>this blew people's minds.</strong>
+                    This project found an application of technology that people
+                    weren't used to yet.
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    pdfminer (a Python library) to get text from PDFs <br />
+                    Cohere NLP to generate bullet points <br />
+                    pptx (a Python library) to put them in PowerPoints
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-3">
+            <Project title="Single-Handed Typing (KHE 2022)"
+                link="https://devpost.com/software/singlehanded-typing-tech" :image="singlehandedImage">
+                <p>
+                    This was a project created by someone who once broke their arm
+                    and wasn't able to type with one of their hands. To improve this
+                    kind of situation for everyone, they decided to try to implement
+                    an old idea for a dynamic one-handed keyboard layout they found.
+                </p>
+                <p>
+                    This project wasn't completely original, but it did iterate on a
+                    forgotten concept that then only existed in old Linux config
+                    files. Sometimes you just need someone to actually make the
+                    thing.
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    keyboard, a Python library that can detect and modify keyboard input <br />
+                    PyQt, a Python library used to display stuff in a window <br />
+                    Vue and Nuxt to create the website that demoed the project
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-4">
+            <Project title="FaunaFinder (MakeUC 2023)"
+                link="https://devpost.com/software/faunafinder-ai-powered-animal-breed-recognition" :image="faunaImage">
+                <p>
+                    This AI-based application recognizes pictures of animals, brings
+                    up information about the species of those animals, and tells you
+                    about related animals that you might also want to know about.
+                </p>
+                <p>
+                    There is still a lot of untapped potential within the world of
+                    AI, probably, and this project used it to connect people with
+                    animals.
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    Flask, a Python library, to create a web server for the web interface <br />
+                    Google Cloud Vision to recognize animals with AI <br />
+                    APIs for Wikipedia and animal databases
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-5">
+            <Project title="Subway Cheese Chase (MakeUC 2023)"
+                link="https://devpost.com/software/subway-cheese-chase" :image="subwayImage">
+                <p>
+                    This is simply a horror game about being in a dark Subway
+                    (restaurant) looking for your car keys.
+                </p>
+                <p>
+                    Not every hackathon project has to be super serious!
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    Godot, a popular free game engine <br />
+                    Blender, a program for creating 3D art
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-6" >
+            <Project title="CWRU Full-Text Class Search (KHE 2019)"
+                :image="cwruClassesImage" link="https://devpost.com/software/cwru-full-text-class-search">
+                <p>
+                    This was a project developed by students from Case Western
+                    Reserve University who disapproved of their university's portal
+                    for class searches. So, they scraped the content of the portal
+                    and made their own website out of it.
+                </p>
+                <p>
+                    This project <strong>identified a part of our built environment
+                    that sucks</strong> and <strong>decided to try to fix
+                    it.</strong>
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    Scrapy, a Python library designed to turn web pages into data <br />
+                    MongoDB to store the scraped data <br />
+                    Elasticsearch to rapidly search the scraped text <br />
+                    Google Cloud to host the resulting website
+                </p>
+            </Project>
+        </article>
+        <article class="xp" role="tabpanel" hidden id="tab-7" >
+            <Project title="Safe-Roads (MakeUC 2023)"
+                link="https://devpost.com/software/safe-roads" :image="safeRoadsImage">
+                <p>
+                    This project uses publicly-available maps and data to visualize how
+                    dangerous any given segment of road is. I imagine this is perfect for
+                    anyone who's already anxious about driving.
+                </p>
+                <p>
+                    This project shows how useful public datasets from websites like
+                    <a href="http://kaggle.com/">Kaggle</a> can be if given the right frame.
+                    The Internet has a ton of information on it that just needs a little bit
+                    of data science done to it to become relevant and accessible in people's
+                    lives.
+                </p>
+                <p class="small-text">
+                    <strong>Technologies used: </strong><br />
+                    The Google Maps API, to get maps <br />
+                    Streamlit, a Python framework for visualizing data, to visualize data
+                </p>
+            </Project>
+        </article>
+    </section>
 
     <!--
         more projects that could be added:
@@ -175,7 +198,7 @@
             Keep the scope of your project narrow - if you have an idea, try to
             just implement the core of it.
         </li>
-        <li style="font-size: 110%">
+        <li>
             <strong>Put a little hot sauce on that bad boy.</strong>
         </li>
         <li>
@@ -633,7 +656,44 @@
 </div>
 </template>
 
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+    const tabList = document.querySelector('[role="tablist"]');
+    const tabs = tabList.querySelectorAll(':scope > [role="tab"]');
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", changeTabs);
+    });
+
+    function changeTabs(e) {
+        // stolen from MDN web docs
+
+        const targetTab = e.target;
+        const tabList = targetTab.parentNode;
+        const tabGroup = tabList.parentNode;
+
+        tabList
+            .querySelectorAll(':scope > [aria-selected="true"]')
+            .forEach((t) => t.setAttribute("aria-selected", "false"));
+
+        targetTab.setAttribute('aria-selected', true);
+
+        tabGroup
+            .querySelectorAll(':scope > [role="tabpanel"]')
+            .forEach((p) => p.setAttribute("hidden", true));
+
+        tabGroup
+            .querySelector(`#${targetTab.getAttribute("aria-controls")}`)
+            .removeAttribute("hidden");
+
+    }
+
+});
+</script>
+
 <script setup>
+
 import { useHead } from '@unhead/vue';
 
 import Project from '../components/project.vue';
@@ -663,27 +723,29 @@ useHead({
     },
   ],
 });
-
 </script>
 
 <style scoped lang="scss">
+
 .container {
-    width: 600px;
-    max-width: 96vw;
-    margin: 100px auto;
+    width: 750px;
+    max-width: 100vw;
+    margin: auto;
     line-height: 1.5;
+    color:  #003399;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
 }
 h1 {
     font-size: 2rem;
 }
 p {
     margin: 20px 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     &.large-text {
         font-size: 1.25rem;
     }
     &.small-text {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 }
 :deep(.p-carousel-item) {
@@ -692,20 +754,22 @@ p {
     justify-content: center;
 }
 :deep(button.p-carousel-next), :deep(button.p-carousel-prev) {
-    background-color: #fff3!important;
+    background-color: #fff3;
 }
 :deep(.p-carousel-indicator.p-highlight) button {
-    background-color: white!important;
+    background-color: white;
 }
 // adjusting the positions and sizes of carousel control buttons by a couple
 // pixels at a time because i care so much it hurts
 :deep(button.p-carousel-next) {
+    color: black;
     transform: translateX(-2px);
     @media (max-width: 600px) {
         display: none;
     }
 }
 :deep(button.p-carousel-prev) {
+    color: black;
     transform: translateX(2px);
     @media (max-width: 600px) {
         display: none;
@@ -717,20 +781,18 @@ p {
 :deep(.p-carousel-prev-icon) {
     transform: scale(1.5) translateX(1px);
 }
-:deep(.p-accordion-content) > p:first-of-type {
-    margin-top: 0px;
-}
+
 .web-dev-grid {
     display: grid;
-    width: 500px;
+    width: 800px;
     max-width: 100%;
     margin: 0 auto;
     grid-template-columns: repeat(2, 1fr);
     & > p, & > h3 {
         text-align: center;
+        background: rgba(0, 0, 0, 0.2);
         margin: 5px;
         padding: 5px;
-        background-color: #fff3;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
@@ -742,7 +804,35 @@ p {
         border-radius: 0;
     }
 }
+
 li {
     margin: 8px;
+    font-size: 14pt;
+}
+
+.xp-tab-button {
+    background: linear-gradient(to bottom, #f4f9ff 0%, #a9c3e2 100%); /* Light blue XP gradient */
+    border: 1px solid #4a6fa3;
+    color: #2e3a47;
+    font-size: 14px;
+    padding: 5px 15px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0; /* Rounded top corners */
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-right: 1px; /* Adds spacing between tabs */
+}
+
+.xp-tab-button:hover {
+    background: #e1e7f1;
+    box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.xp-tab-button.active {
+    background: #e3e7f5;  /* Lighter XP-like background for active tab */
+    border-bottom: 1px solid #fff; /* Ensures no border overlap with content area */
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15); /* Adds a lift effect */
 }
 </style>

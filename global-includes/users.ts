@@ -15,12 +15,13 @@ export enum AuthMethod {
 const AuthMethodEnum = z.nativeEnum(AuthMethod);
 
 export const schoolStatus = [
-  "High School",
-  "Freshman",
-  "Sophmore",
-  "Junior",
-  "Senior",
-  "Graduate Student"
+  "Undergraduate University (2 year - community college or similar)",
+  "Undergraduate University (3+ year)",
+  "Graduate University (Masters, Professional, Doctoral, etc)",
+  "Other Vocational / Trade Program or Apprenticeship",
+  "Post Doctorate",
+  "Other",
+  "I'm not currently s student",
 ] as const;
 
 export const genders = [
@@ -68,14 +69,14 @@ export const ethnicities = [
   "Other Pacific Islander",
   "European",
   "Prefer not to answer", 
-  "Other"
+  "Other",
 ] as const;
 
 export const shirtSize = [
   "S", 
   "M",
   "L",
-  "XL"
+  "XL",
 ] as const;
 
 // TODO: this could be an array of enums
@@ -93,7 +94,8 @@ export const shirtSize = [
 // ] as const;
 
 export const HackathonRegistrationDraft = z.object({
-  name: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   school: z.string(),
   phone: z.string(),
   email: z.string(),
@@ -109,7 +111,7 @@ export const HackathonRegistrationDraft = z.object({
   optionalExtraPronouns: z.string(),
   ethnicity: z.enum(ethnicities).nullable(),
   optionalExtraEthnicity: z.string(),
-  sexuality: z.string(),
+  sexuality: z.string().nullable(),
   optionalExtraSexuality: z.string(),
   shirtSize: z.enum(shirtSize).nullable(),
   country: z.string(),
@@ -123,7 +125,8 @@ export const HackathonRegistrationDraft = z.object({
 export type RegistrationDraft = z.infer<typeof HackathonRegistrationDraft>;
 
 const defaultRegistration: RegistrationDraft = {
-  name: '',
+  firstName: "",
+  lastName: "",
   school: "",
   phone: "",
   email: "",
@@ -139,7 +142,7 @@ const defaultRegistration: RegistrationDraft = {
   optionalExtraPronouns: "",
   ethnicity: null,
   optionalExtraEthnicity: "",
-  sexuality: "",
+  sexuality: null,
   optionalExtraSexuality: "",
   shirtSize: null,
   country: "",
@@ -151,7 +154,8 @@ const defaultRegistration: RegistrationDraft = {
 };
 
 export const FullRegistration = HackathonRegistrationDraft.extend({
-  name: z.string().nonempty(),
+  firstName: z.string().nonempty(),
+  lastname: z.string().nonempty(),
   school: z.string().nonempty(),
   phone: z.string().nonempty(),
   schoolStatus: z.enum(schoolStatus),
@@ -159,11 +163,11 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   age: z.number().gte(13).lte(130),
   gender: z.enum(genders),
   major: z.string().nonempty(),
-  sexuality: z.string().nonempty(),
+  sexuality: z.string().nullable(),
   attendedKhe: z.boolean(),
   pronouns: z.enum(userPronouns),
-  ethnicity: z.enum(ethnicities),
-  shirtSize: z.enum(shirtSize),
+  ethnicity: z.enum(ethnicities).nullable(),
+  shirtSize: z.enum(shirtSize).nullable(),
   country: z.string().nonempty(),
   state: z.string().nonempty(),
   mlhConduct: z.literal(true),
