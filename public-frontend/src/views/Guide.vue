@@ -656,44 +656,9 @@
 </div>
 </template>
 
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-
-    const tabList = document.querySelector('[role="tablist"]');
-    const tabs = tabList.querySelectorAll(':scope > [role="tab"]');
-
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", changeTabs);
-    });
-
-    function changeTabs(e) {
-        // stolen from MDN web docs
-
-        const targetTab = e.target;
-        const tabList = targetTab.parentNode;
-        const tabGroup = tabList.parentNode;
-
-        tabList
-            .querySelectorAll(':scope > [aria-selected="true"]')
-            .forEach((t) => t.setAttribute("aria-selected", "false"));
-
-        targetTab.setAttribute('aria-selected', true);
-
-        tabGroup
-            .querySelectorAll(':scope > [role="tabpanel"]')
-            .forEach((p) => p.setAttribute("hidden", true));
-
-        tabGroup
-            .querySelector(`#${targetTab.getAttribute("aria-controls")}`)
-            .removeAttribute("hidden");
-
-    }
-
-});
-</script>
-
 <script setup>
 
+import { onMounted } from 'vue';
 import { useHead } from '@unhead/vue';
 
 import Project from '../components/project.vue';
@@ -712,6 +677,35 @@ import wwwGif from "@/assets/technology_guide/www.gif";
 import aiImage from "@/assets/technology_guide/ai.jpg";
 import apiImage from "@/assets/technology_guide/api.jpg";
 import appImage from "@/assets/technology_guide/app.png";
+
+onMounted(() => {
+    const tabList = document.querySelector('[role="tablist"]');
+    const tabs = tabList.querySelectorAll(':scope > [role="tab"]');
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", changeTabs);
+    });
+
+    function changeTabs(e) {
+        const targetTab = e.target;
+        const tabList = targetTab.parentNode;
+        const tabGroup = tabList.parentNode;
+
+        tabList
+            .querySelectorAll(':scope > [aria-selected="true"]')
+            .forEach((t) => t.setAttribute("aria-selected", "false"));
+
+        targetTab.setAttribute('aria-selected', true);
+
+        tabGroup
+            .querySelectorAll(':scope > [role="tabpanel"]')
+            .forEach((p) => p.setAttribute("hidden", true));
+
+        tabGroup
+            .querySelector(`#${targetTab.getAttribute("aria-controls")}`)
+            .removeAttribute("hidden");
+    }
+});
 
 useHead({
   title: "KHE's Guide to Hackathons",
