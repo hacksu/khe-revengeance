@@ -1,12 +1,12 @@
 <template>
   <div id="app-container">
     <router-view 
-      @closeSponsors="this.closeSponsors" 
-      @closeFAQ="this.closeFAQ"
-      @closeGuide="this.closeGuide" 
-      @closeContact="this.closeContact"
-      @closeLogin="this.closeLogin"
-      @closeProfile="this.closeProfile"
+      @closeSponsors="closeSponsors" 
+      @closeFAQ="closeFAQ"
+      @closeGuide="closeGuide" 
+      @closeContact="closeContact"
+      @closeLogin="closeLogin"
+      @closeProfile="closeProfile"
     />
     <div id="banner" class="xp title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
       <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
