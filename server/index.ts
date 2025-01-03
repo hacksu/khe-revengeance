@@ -6,6 +6,7 @@ import { exec } from "child_process";
 
 // dependencies installed from npm
 import express from "express";
+import cors from 'cors';
 import fileServer from "serve-static";
 import { createServer as createViteServer } from "vite";
 import next from "next";
@@ -71,13 +72,15 @@ async function createServer() {
   registerAuthMiddleware(app, remultConfig);
   // create api routes for database stuff
   app.use(remultConfig);
+  //enable cors
+  app.use(cors());
   // for sanity checks
   app.get("/api/exists", (_req, res, _next) => res.end("yes"));
   app.get("/meta/log/:logtype", (req, res) => {
     if (req.user?.roles?.includes(UserRole.Admin)) {
       res.sendFile(`/opt/pm2/logs/khe-revengeance-${req.params.logtype}.log`);
     } else {
-      res.sendStatus(403);
+      res.sendStatus(403);  
     }
   });
   defineRemoteProcedures();

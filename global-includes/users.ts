@@ -109,11 +109,11 @@ export const HackathonRegistrationDraft = z.object({
   attendedKhe: z.boolean().nullable(),
   pronouns: z.enum(userPronouns).nullable(),
   optionalExtraPronouns: z.string(),
-  ethnicity: z.enum(ethnicities).nullable(),
+  //ethnicity: z.enum(ethnicities).nullable(),
   optionalExtraEthnicity: z.string(),
-  sexuality: z.string().nullable(),
+  //sexuality: z.string().nullable(),
   optionalExtraSexuality: z.string(),
-  shirtSize: z.enum(shirtSize).nullable(),
+  //shirtSize: z.enum(shirtSize).nullable(),
   country: z.string(),
   state: z.string(),
   mlhConduct: z.boolean().nullable(),
@@ -140,11 +140,11 @@ const defaultRegistration: RegistrationDraft = {
   attendedKhe: null,
   pronouns: null,
   optionalExtraPronouns: "",
-  ethnicity: null,
+  //ethnicity: null,
   optionalExtraEthnicity: "",
-  sexuality: null,
+  //sexuality: null,
   optionalExtraSexuality: "",
-  shirtSize: null,
+  //shirtSize: null,
   country: "",
   state: "",
   mlhConduct: false,
@@ -155,7 +155,7 @@ const defaultRegistration: RegistrationDraft = {
 
 export const FullRegistration = HackathonRegistrationDraft.extend({
   firstName: z.string().nonempty(),
-  lastname: z.string().nonempty(),
+  lastName: z.string().nonempty(),
   school: z.string().nonempty(),
   phone: z.string().nonempty(),
   schoolStatus: z.enum(schoolStatus),
@@ -163,11 +163,11 @@ export const FullRegistration = HackathonRegistrationDraft.extend({
   age: z.number().gte(13).lte(130),
   gender: z.enum(genders),
   major: z.string().nonempty(),
-  sexuality: z.string().nullable(),
+  //sexuality: z.string().nullable(),
   attendedKhe: z.boolean(),
   pronouns: z.enum(userPronouns),
-  ethnicity: z.enum(ethnicities).nullable(),
-  shirtSize: z.enum(shirtSize).nullable(),
+  //ethnicity: z.enum(ethnicities).nullable(),
+  //shirtSize: z.enum(shirtSize).nullable(),
   country: z.string().nonempty(),
   state: z.string().nonempty(),
   mlhConduct: z.literal(true),
@@ -200,11 +200,10 @@ const noUpdate = { allowApiUpdate: false };
 
 @Entity<User>("users", {
   // TODO: uncomment this to allow user updates again:
-  // allowApiCrud: true,
-  // apiPrefilter: () =>  (
-  //   remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
-  // ),
-  ...noUpdate
+  allowApiCrud: true,
+  apiPrefilter: () =>  (
+    remult.isAllowed([UserRole.Admin, UserRole.Staff]) ? {} : { id: remult.user?.id }
+  ),
 })
 export class User extends EntityBase {
   @Fields.uuid()
@@ -388,7 +387,7 @@ export class User extends EntityBase {
   static async submitRegistration() {
     
     // TODO: uncomment this to allow registrations to be submitted again
-    return;
+    //return;
     
     
     const user = remult.user as User;
@@ -409,7 +408,7 @@ export class User extends EntityBase {
   static async withdrawRegistration() {
 
     // TODO: change this to allow registrations to be withdrawn again.
-    return;
+    //return;
 
     const user = remult.user as User;
     if (!user) {
@@ -425,7 +424,7 @@ export class User extends EntityBase {
     
     // TODO: change this to allow resumes to be submitted again. but see
     // also issue #45
-    return;
+    //return;
 
     const user = remult.user as User;
     if (!user) {

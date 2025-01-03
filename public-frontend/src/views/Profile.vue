@@ -29,7 +29,7 @@
             </div>
             <div class="field-row-stacked">
                 <label for="age">Age <failureLabel v-if="submissionStatus == 'failed' && ((user.registration.age == undefined)||(user.registration.age == ''))"/></label>
-                <input type="text" id="age" v-model="user.registration.age">
+                <input class="number" type="number" id="age" v-model="user.registration.age">
             </div>
             <div class="field-row-stacked">
                 <label for="school">School <failureLabel v-if="submissionStatus == 'failed' && ((user.registration.school == undefined)||(user.registration.school == ''))" /></label>
@@ -152,7 +152,7 @@
             <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
                 Could not update application! Make sure all fields are filled out.
             </p>
-            <p v-if="saveStatus == 'saved'" style="text-align: left; color: lightgreen;">
+            <p v-if="saveStatus == 'saved'" style="text-align: left; color: darkgreen;">
                 Saved application!
             </p>
             <p v-if="submissionStatus == 'success'" style="text-align: left">
@@ -178,7 +178,7 @@
     </div>
 </template>
 <script setup>
-import { User, schoolStatus, FullRegistration, genders, userPronouns, ethnicities, shirtSize, sexualities} from "includes/users.ts"
+import { User, schoolStatus, FullRegistration, genders, userPronouns} from "includes/users.ts"
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted } from "vue";
 import { remult } from "remult";
@@ -254,7 +254,7 @@ const saveUser = async () => {
         .then(() => {
             saveStatus.value = "saved";
         }).catch(err => {
-            console.error(err.message);
+            console.error(err);
             // saving should only fail if there is something really, really
             // weird with the data that violates the HackathonRegistrationDraft
             // type check or if the application was previously submitted and is
@@ -328,6 +328,23 @@ input, select{
 
 button{
     color: black;
+}
+
+.number {
+    background-color: white !important;
+    padding: 3px 4px;
+    border: solid #7f9db9 1px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    height: 21px;
+    line-height: 2;
+}
+
+.number:focus{
+    outline: none;
 }
 
 </style>
