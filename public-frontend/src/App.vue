@@ -1,69 +1,77 @@
 <template>
   <div id="app-container">
-    <Stars />
-    <div id="banner" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
-      <div id="bannerL" class="bannerContainer" style="z-index: 100">
-        <p class="banner-link khe-link" id="kheTitle" @click="navigateTo('/')">
-          Kent Hack Enough
-        </p>
-
-        <div id="hamburgMenu">
-          <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
-        </div>
-      </div>
-
-      <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:3%;top:1.25%;width:5%" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=black" target="_blank"><img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-black.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%"></a>
-
-      <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
-        <p class="banner-link" @click="navigateTo('/')">
-          Home
+    <router-view 
+      @closeSponsors="closeSponsors" 
+      @closeFAQ="closeFAQ"
+      @closeGuide="closeGuide" 
+      @closeContact="closeContact"
+      @closeLogin="closeLogin"
+      @closeProfile="closeProfile"
+    />
+    <div id="banner" class="xp title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
+      <div id="bannerL" class="bannerContainer"  :class="{ hidden: expandMenu }" style="z-index: 100">
+        <p class="banner-link start" @click="navigateTo('/')">
+            <img src="/favicon.ico" style="height: 100%" alt="Logo">
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
-        <p class="banner-link" id="faq-scrollto" @click="navigateTo('/', '#faq')">
+        <p class="banner-link" id="faq-scrollto" @click="this.faq = !this.faq; navigateTo('/')">
           FAQ
         </p>
-        <p class="banner-link" @click="navigateTo('/guide')">
+        <p class="banner-link" @click="this.guide = !this.guide; navigateTo('/')">
           Guide
         </p>
-        <p v-if="showSponsors" class="banner-link" @click="navigateTo('/sponsor')">
+        <p v-if="showSponsorsLink" class="banner-link" @click="this.sponsors = !this.sponsors; navigateTo('/')">
           Sponsors
         </p>
-        <p class="banner-link" @click="navigateTo('/contact')">
+        <p class="banner-link" @click="this.contact = !this.contact; navigateTo('/')">
           Contact
         </p>
         <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
           Schedule
         </p>
-        <p class="banner-link" @click="navigateTo('/profile')" v-if="user && showLogin">
+        <p class="banner-link" @click="this.profile = !this.profile; navigateTo('/')" v-if="user && showLogin">
           Profile
         </p>
-        <LoginButton v-else-if="!user && showLogin" />
+        <p class="banner-link" @click="this.login = !this.login; navigateTo('/')" v-else-if="!user && showLogin">
+          Login
+        </p>
+        <!-- <div id="hamburgMenu">
+          <img id="hamburgIcon" :src="hamburgerIcon" width="50" @click="togMenu()" />
+        </div> -->
+      </div>
+      <div id="bannerR" class="bannerContainer" :class="{ hidden: expandMenu }" style="z-index: 100">
+
       </div>
     </div>
-    <router-view />
   </div>
 </template>
 
 <script>
 import hamburgerIcon from '@/assets/Hamburger_icon.svg.png'
-import Stars from "./components/stars.vue";
 import { user } from "./state/user.js";
 import LoginButton from "./components/login-button.vue";
+import Home from "./views/Home.vue";
 
 export default {
   name: "app",
-  components: { Stars, LoginButton },
+  components: { LoginButton, Home },
   data() {
     return {
       showLogin: true,
       // registrationOpens: 'September 6th',
-      showSponsors: true,
+      showSponsorsLink: true,
       showSchedule: false,
       showPasswordReset: false,
       showMLH: true,
       expandMenu: false,
       shrinkBanner: false,
       hamburgerIcon,
+      //showing and hiding "windows"
+      sponsors: false,
+      faq: false,
+      guide: false,
+      contact: false,
+      login: false,
     };
   },
   setup() {
@@ -76,6 +84,30 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    closeSponsors() {
+      this.sponsors = false;
+      this.navigateTo('/');
+    },
+    closeFAQ() {
+      this.faq = false;
+      this.navigateTo('/');
+    },
+    closeGuide() {
+      this.guide = false;
+      this.navigateTo('/');
+    },
+    closeContact() {
+      this.contact = false;
+      this.navigateTo('/');
+    },
+    closeLogin() {
+      this.login = !this.login;
+      this.navigateTo('/');
+    },
+    closeProfile() {
+      this.profile = !this.profile;
+      this.navigateTo('/');
+    },
     handleScroll() {
       this.shrinkBanner = document.documentElement.scrollTop > 0;
     },
@@ -84,7 +116,14 @@ export default {
     },
     navigateTo: function (page, el) {
       this.expandMenu = false;
-      this.$router.push({ path: page, hash: el });
+      this.$router.push({ path: page, query: {
+          sponsors: this.sponsors, 
+          faq: this.faq, 
+          guide: this.guide,
+          contact: this.contact,
+          login: this.login,
+          profile: this.profile
+      }});
     },
   },
 };
@@ -109,8 +148,11 @@ body {
   perspective: 150px;
   transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
-  background-color: black;
-  overflow-y: auto;
+  background-image: url('../public/Background_withdate.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow-y: hidden;
   overflow-x: hidden;
   height: 100vh;
   padding: 0 !important;
@@ -138,34 +180,31 @@ body {
   transform-style: preserve-3d;
 }
 
-#bannerL, #bannerR {
-  background-color: #0003;
-  border-radius: 10px;
-}
-
 #banner {
   position: fixed;
+  bottom: 0;
   width: 100%;
   transition: all 0.2s;
   display: flex;
   justify-content: space-between;
   z-index: 98;
-  padding: 0 10px;
+  padding: 0px;
+  height: 30px;
 
-  @include mobile {
-    @include bg-primary;
-  }
+  // @include mobile {
+  //   @include bg-primary;
+  // }
 
   @include display-not(mobile) {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 
     #bannerR {
-      padding-right: 10px;
+      padding-right: 0px;
     }
 
     #bannerL {
-      padding-left: 10px;
+      padding-left: 0px;
     }
   }
 }
@@ -175,20 +214,29 @@ body {
 
   @include display-not(mobile) {
     padding-top: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
   }
 }
 
 .banner-link {
-  padding: 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 10px;
   margin: 0px;
   font-size: 18px;
   cursor: pointer;
-  @include grow('hover', 1.05, 0.2s);
+  background: linear-gradient(180deg, #4977B4, #081BCB, #0062EA );
+}
+
+.banner-link:active{
+  background: linear-gradient(180deg, #081BCB, #4977B4, #0062EA);
 }
 
 .bannerContainer {
   display: flex;
+  height: 104%;
 }
 
 .bannerContainer {
@@ -227,46 +275,61 @@ body {
   }
 }
 
-@media only screen and (max-width: 850px) {
-  #bannerL {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+// @media only screen and (max-width: 850px) {
+//   #bannerL {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//   }
 
-  #bannerR {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+//   #bannerR {
+//     display: flex;
+//     justify-content: flex-end;  /* Align buttons to the left */
+//     align-items: right;          /* Center vertically */
+//     padding-right: 10px;
+//     padding-left: 20px;   
+//   }
 
-  #bannerR:not(.hidden) {
-    display: none;
-  }
+//   #bannerR:not(.hidden) {
+//     display: none;
+//   }
 
-  #banner {
-    flex-direction: column;
-  }
+//   #banner {
+//     flex-direction: column;
+//   }
 
-  #hamburgMenu {
-    display: block;
-    cursor: pointer;
-  }
+//   #hamburgMenu {
+//     display: block;
+//     cursor: pointer;
+//   }
 
-  #hamburgIcon {
-    filter: invert(100%);
-    width: 40px;
-    height: 40px;
-    padding: 5px;
-  }
+//   #hamburgIcon {
+//     filter: invert(100%);
+//     width: 40px;
+//     height: 40px;
+//     padding: 5px;
+//   }
 
-  #bannerLMobile {
-    display: block;
-  }
+//   #bannerLMobile {
+//     display: block;
+//   }
 
-  .banner-link {
-    margin-bottom: 0px;
-    padding-bottom: 10px;
-    text-align: left;
-  }
+//   .banner-link {
+//     padding: 0px 0px;
+//     margin: 0px;
+//     font-size: 18px;
+//     cursor: pointer;
+//     @include grow('hover', 1.05, 0.2s);
+//   }
+// }
+
+.start{
+  background: linear-gradient(180deg, #556b2f, #8fbc8f, #6b8e23);
+  box-shadow: inset 5px 5px 15px rgba(0, 0, 0, 0.5), inset -5px -5px 15px rgba(255, 255, 255, 0.2);
+  border-radius: 0px 8px 8px 0px;
+  height:auto;
+  display: fixed;
+  left: 0;
 }
+
 </style>

@@ -1,38 +1,36 @@
 <template>
-  <div id="contact" class="widget">
+  <div id="contact" class="widget xp">
     <div v-if="!submitted">
-      <h1 id="contactTitle">Contact</h1>
-      <p style="opacity: 0.5; margin-bottom: 40px;">
+      <h2 id="contactTitle">Contact</h2>
+      <p style="opacity: 0.5; margin-bottom: 10px; font-size: 12pt;">
         If you have any questions, concerns, or problems, please do not hesitate
         to contact us. One of our organizers will get back to you as soon as
         humanly possible.
       </p>
 
-      <div class="formField">
-        <span id="subjectTitle">Subject:</span>
-        <input type="text" placeholder="What do you need to talk about?" name="subject" class="contactTextField"
-          v-model="subject" />
+      <div class="field-row-stacked">
+        <label id="subjectTitle" for="subject">Subject:</label>
+        <input id="subject" type="text" placeholder="What do you need to talk about?" name="subject" class="contactTextField" v-model="subject" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked">
         <span id="subjectTitle">Name:</span>
         <input type="text" placeholder="What is your name?" name="name" class="contactTextField" v-model="name" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked">
         <span id="subjectTitle">Email:</span>
         <input type="text" placeholder="Where can we contact you?" name="email" class="contactTextField"
           v-model="email" />
       </div>
 
-      <div class="formField">
+      <div class="field-row-stacked xp">
         <span id="subjectTitle">Body:</span>
-        <textarea placeholder="Tell us more!" name="body" class="contactTextField" v-model="content" />
+        <textarea placeholder="Tell us more!" name="body" class="contactTextField" style="background: white; border: 1px solid rgb(127,157,185);" v-model="content" />
       </div>
 
-      <div style="text-align: center;">
-        <button id="contactButton" class="apply-link" :class="{ disabled: !formFilledOut }"
-          @click="formFilledOut && submitTicket()">
+      <div style="text-align: center; margin-top: 10px;">
+        <button class="xp" style="background: white, color: black" :disabled="!formFilledOut" @click="formFilledOut && submitTicket()">
           Send!
         </button>
       </div>
@@ -90,38 +88,40 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
-@import '@/styles/space.scss';
 
 ::placeholder {
   color: black;
 }
 
+p{
+  line-height: 20px;
+}
+
 #contact {
-  @include bg-primary;
   text-align: left;
   // padding: 2rem 6rem;
-  padding: 100px 6rem 100px 6rem;
+  padding: 0px 3rem 0px 3rem;
   font-size: 20px;
   line-height: 30px;
   // height: 100vh;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 700px;
+  // margin-left: auto;
+  // margin-right: auto;
+  color: black;
 }
 
 @media only screen and (max-width: 768px) {
   #contact {
-    padding: 2rem 1rem !important;
+    //padding: 2rem 1rem !important;
   }
 }
 
 #infoTitle {
-  font-size: 50px;
+  font-size: 24pt;
 }
 
 #subjectTitle {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .formField {
@@ -130,20 +130,16 @@ export default {
 
   input,
   textarea {
-    @include input-primary;
     margin: 5px 0px;
   }
 }
 
 .contactTextField {
   display: block;
-  // color: white;
-  background: none;
+  color: black;
+  width: 100%
   // border: none;
   // outline: none;
-  font-size: 20px;
-  width: 100%;
-  box-sizing: border-box;
   // border-bottom: 2px solid white;
 }
 
@@ -155,33 +151,18 @@ textarea.contactTextField {
   box-sizing: border-box;
 }
 
-#contactButton {
-  margin-top: 10px;
-  @include large-btn-primary;
-  position: relative;
-  text-align: center;
-  display: inline-block;
-  width: 200px;
-  height: 50px;
-  font-size: 20px;
-  border: 2px solid white;
+//.error {
+//  color: color('error');
+//}
 
-  &.disabled {
-    outline: none;
-    border: none;
-    opacity: 0.5;
-  }
+button{
+  color: black;
+  background-color: white !important;
 }
 
-#contactButton:hover:not(.disabled) {
-  cursor: pointer;
-  position: relative;
-  // background-color: $gold;
-  // color: $dark-blue;
-  // transition: 0.5s;
+button:disabled{
+  background-color: white !important;
+  color: grey !important;
 }
 
-.error {
-  color: color('error');
-}
 </style>

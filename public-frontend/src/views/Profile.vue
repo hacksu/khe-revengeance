@@ -1,308 +1,221 @@
 <template>
-    <div id="profile" class="widget">
-        <template v-if="user">
-            <Card>
-                <template #title> Registration for KHE 2024 </template>
-                <template #content>
-                    <p style="color:red" v-if="registrationClosed">
-                        KHE registration is currently closed! Your profile is
-                        preserved below for archival purposes, but cannot be
-                        changed.
-                    </p>
-                    <label v-if="submissionStatus == 'failed'" style="color: red">Please fill out marked items</label>
-                    <div class="labeled-field">
-                        <span>The email currently associated with your account is: {{ user.email }}</span>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" @change="alternateEmail = !alternateEmail"/>
-                            <label for="email">I would like to change my contact email!</label>
-                        </div>
-                        <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                            v-if="alternateEmail">
-                            <svg height="50" width="100%" viewBox="10 0 100 100">
-                                <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                                <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            </svg>
-                            <InputText style="width:100%" id="optionalAlternateEmail" placeholder="email"
-                                v-model="alternateEmailValue" />
-                        </div>
-                    </div>
-                    <div class="labeled-field">
-                        <label for="name">Name <failureLabel v-if="submissionStatus == 'failed' && user.registration.name == ''"/></label>
-                        <InputText id="name" v-model="user.registration.name" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="school">School <failureLabel v-if="submissionStatus == 'failed' && user.registration.school == ''"/></label>
-                        <InputText id="school" v-model="user.registration.school" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="country">Country of Residence <failureLabel v-if="submissionStatus == 'failed' && user.registration.country == ''"/></label>
-                        <InputText id="country" v-model="user.registration.country" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="state">State/Province of Residence <failureLabel v-if="submissionStatus == 'failed' && user.registration.state == ''"/></label>
-                        <InputText id="state" v-model="user.registration.state" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="major">Major (if in high school enter "NA") <failureLabel v-if="submissionStatus == 'failed' && user.registration.major == ''"/></label>
-                        <InputText id="major" v-model="user.registration.major" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="phone">Phone Number <failureLabel v-if="submissionStatus == 'failed' && user.registration.phone == ''"/></label>
-                        <InputText id="phone" v-model="user.registration.phone" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="age">Age <failureLabel v-if="submissionStatus == 'failed' && user.registration.age == undefined"/>
-                            <span v-else-if="submissionStatus == 'failed' && user.registration.age < 13 || user.registration.age > 130">You are either too old or too young!</span>
-                        </label>
-                        <InputNumber id="age" v-model="user.registration.age" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="gender">Gender <failureLabel v-if="submissionStatus == 'failed' && user.registration.gender == undefined"/></label>
-                        <Dropdown id="gender" v-model="user.registration.gender" :options="genders" append-to="self" />
-                    </div>
-                    <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="user.registration.gender == 'Other'">
-                        <svg height="50" width="auto" viewBox="10 0 100 100">
-                            <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <InputText style="width:100%" id="optionalExtraGender" placeholder="Optional: Enter gender info..."
-                            v-model="user.registration.optionalExtraGender" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="pronouns">Pronouns <failureLabel v-if="submissionStatus == 'failed' && user.registration.pronouns == undefined"/></label>
-                        <Dropdown is="pronouns" v-model="user.registration.pronouns" :options="userPronouns" append-to="self" />
-                    </div>
-                    <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="user.registration.pronouns == 'Other'">
-                        <svg height="50" width="auto" viewBox="10 0 100 100">
-                            <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <InputText style="width:100%" id="optionalExtraPronouns" placeholder="Optional: Enter pronouns here..."
-                            v-model="user.registration.optionalExtraPronouns" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="ethnicity">Ethnicity <failureLabel v-if="submissionStatus == 'failed' && user.registration.ethnicity == undefined"/></label>
-                        <Dropdown is="ethnicity" v-model="user.registration.ethnicity" :options="ethnicities" append-to="self" />
-                    </div>
-                    <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="user.registration.ethnicity == 'Other'">
-                        <svg height="50" width="auto" viewBox="10 0 100 100">
-                            <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <InputText style="width:100%" id="optionalExtraEthnicity" placeholder="Optional: Enter ethnicity here..."
-                            v-model="user.registration.optionalExtraEthnicity" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="sexuality">Do you identify as any of the following? <failureLabel v-if="submissionStatus == 'failed' && user.registration.sexuality == undefined "/></label>
-                        <Dropdown append-to="self" is="sexuality" v-model="user.registration.sexuality" :options="sexualities"></Dropdown>
-                    </div>
-                    <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="user.registration.sexuality == 'Other'">
-                        <svg height="50" width="100%" viewBox="10 0 100 100">
-                            <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <InputText style="width:100%" id="optionalExtraSexuality" placeholder="Optional: Enter info here..."
-                            v-model="user.registration.optionalExtraSexuality" />
-                    </div>
-                    <div class="labeled-field">
-                        <label>Do you have any of the following dietary restriction? </label>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="vegetarian" value="Vegetarian" v-model="user.registration.dietaryRestrictions" />
-                            <label for="vegetarian">Vegetarian</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="vegan" value="Vegan" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="vegan">Vegan</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="halal" value="Halal" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="halal">Halal</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="celiac" value="Celiac Disease" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="celiac">Celiac Disease</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="peanut" value="Peanut Allergy" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="peanut">Peanut Allergy</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="nut" value="Other Nut Allergy" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="nut">Other Nut Allergy</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="wheat" value="Wheat" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="wheat">Wheat</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="soy" value="Soy" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="soy">Soy</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="lactose" value="Lactose Intolerant" v-model="user.registration.dietaryRestrictions"/>
-                            <label for="lactose">Lactose Intolerant</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <input type="checkbox" id="other" value="Other" v-model="user.registration.dietaryRestrictions" @change="otherRestriction = !otherRestriction"/>
-                            <label for="other">Other</label>
-                        </div>
-                    </div>
-                    <div class="horizontal-labeled-field" style="margin-top: 10px;"
-                        v-if="otherRestriction">
-                        <svg height="50" width="100%" viewBox="10 0 100 100">
-                            <line x1="50" y1="0" x2="50" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                            <line x1="50" y1="50" x2="100" y2="50" stroke="gray" stroke-width="3" stroke-linecap="round" />
-                        </svg>
-                        <InputText style="width:100%" id="optionalExtraRestriction" placeholder="Optional: Enter info here..."
-                            v-model="user.registration.optionalExtraRestriction" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="size">T-Shirt Size <failureLabel v-if="submissionStatus == 'failed' && user.registration.shirtSize == undefined"/></label>
-                        <Dropdown append-to="self" id="size" v-model="user.registration.shirtSize" :options="shirtSize" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="schoolStatus">Education Status <failureLabel v-if="submissionStatus == 'failed' && user.registration.schoolStatus == undefined"/></label>
-                        <Dropdown append-to="self" id="schoolStatus" v-model="user.registration.schoolStatus" :options="schoolStatus" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="resume">Upload your resume (optional):</label>
-                        <p style="display:flex;align-items:center;gap:5px" v-if="existingResume">You have previously uploaded: <strong>{{ existingResume }}.</strong>
-                            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Remove" @click="removeResume" />
-                        </p>
-                        <FileUpload v-else mode="basic" name="resume" url="/api/upload" accept="application/pdf" :show-upload-button="false" @select="filesChosen" />
-                    </div>
-                    <div class="labeled-field">
-                        <label for="link">Link to your website or profile (optional):</label>
-                        <InputText id="link" v-model="user.registration.link" />
-                    </div>
-                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstHackathon == undefined"/>
-                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
-                        Is this your first hackathon?
-                        <div class="horizontal-labeled-field">
-                            <RadioButton v-model="user.registration.firstHackathon" inputId="isFirst" :value="true" />
-                            <label for="isFirst" class="ml-2">Yes</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <RadioButton v-model="user.registration.firstHackathon" inputId="isNotFirst" :value="false" />
-                            <label for="isNotFirst" class="ml-2">No</label>
-                        </div>
-                    </div>
-                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.attendedKhe == null"/>
-                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
-                        Is this your first time attending Kent Hack Enough?
-                        <div class="horizontal-labeled-field">
-                            <RadioButton v-model="user.registration.attendedKhe" inputId="isFirstKhe" :value="true" />
-                            <label for="isFirstKhe" class="ml-2">Yes</label>
-                        </div>
-                        <div class="horizontal-labeled-field">
-                            <RadioButton v-model="user.registration.attendedKhe" inputId="isNotFirstKhe" :value="false" />
-                            <label for="isNotFirstKhe" class="ml-2">No</label>
-                        </div>
-                    </div>
-                    
-                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhConduct == false"/>
-                    <div class="horizontal-labeled-field" style="margin-bottom: 10px">
-                        <Checkbox id="mlhConduct" v-model="user.registration.mlhConduct" :binary="true" />
-                        <label for="mlhConduct">
-                            I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>.
-                        </label>
-                    </div>
-                    <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhShare == false"/>
-                    <div class="horizontal-labeled-field">
-                        <Checkbox id="mlhShare" v-model="user.registration.mlhShare" :binary="true" />
-                        <label for="mlhShare">
-                            I authorize you to share my application/registration information with Major League Hacking for event administration, 
-                            ranking, and MLH administration in-line with the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>. I further agree to the 
-                            terms of both the <a href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md">>MLH Contest Terms and Conditions</a> and 
-                            the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>.
-                        </label>
-                    </div>
-                </template>
-                <template #footer>
-                    <div class="action-buttons">
-                        <Button icon="pi pi-check" :label="submissionStatus == 'success' ? 'Revise' : 'Save Draft'"
-                                iconPos="right" @click="saveUser" :disabled=registrationClosed />
-                        <Button :disabled="submissionStatus == 'success' || registrationClosed"
-                                @click="submissionStatus != 'success' && submitForm()"
-                                icon="pi pi-envelope" :label="submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'"
-                                iconPos="right" :style="(formComplete ? `color: #333; background-color: white;` : '')" />
-                        <Button :disabled="registrationClosed" v-if="submissionStatus == 'success'" label="Withdraw Application"
-                                @click="deregister" />
-                    </div>
-                    <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
-                        Could not update application! Make sure all fields are filled out.
-                    </p>
-                    <p v-if="saveStatus == 'saved'" style="text-align: left; color: lightgreen;">
-                        Saved application!
-                    </p>
-                    <p v-if="submissionStatus == 'success'" style="text-align: left">
-                        Thanks for submitting your application to Kent Hack Enough! You
-                        will receive an email when your application is accepted or
-                        rejected.
-
-                        You are free to make changes to your application and save them,
-                        but please note that this will put your application back at the
-                        end of the line.
-                    </p>
-                </template>
-            </Card>
-
-            <div class="horizontal-labeled-field">
-                <label for="receiveMail">Receive Emails from KHE</label>
-                <Checkbox id="receiveMail" v-model="user.receivingEmails" :binary="true" />
-            </div>
-
-            <a v-if="user?.id" class="largeButton" style="width: 200px" href="/logout">Log Out</a>
-            <p v-if="isStaff">You are authenticated as: {{ user?.externalRole }}.
-                Feel free to visit the <a :href="staffSite">staff site.</a>
+    <div class="profileContainer">
+        <div v-if="user">
+            <p style="color:red" v-if="registrationClosed">
+                KHE registration is currently closed! Your profile is preserved below or archival purposes, 
+                but cannot be changed.
             </p>
-        </template>
-        <p v-else>Please log in</p>
+            <label v-if="submissionStatus == 'failed'" style="color: red">Place fill out marked items</label><br>
+            <span>The email currently associated with your account is: {{ user.email }}</span><br><br>
+            <div class="field-row">
+                <input type="checkbox" id="alternateEmailCheckbox" @change="alternateEmail = !alternateEmail"/>
+                <label for="alternateEmailCheckbox">I would like to change my contact email!</label>
+            </div>
+            <div class="field-row" v-if="alternateEmail">
+                <label for="alternateEmail">Email:</label>
+                <input id="alternateEmail" type="text" v-model="alternateEmailValue"/>
+            </div>
+            <div class="field-row-stacked">
+                <label for="firstName">First Name <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstName == ''"/></label>
+                <input type="text" id="firstName" v-model="user.registration.firstName">
+            </div>
+            <div class="field-row-stacked">
+                <label for="lastname">Last Name <failureLabel v-if="submissionStatus == 'failed' && user.registration.lastName == ''"/></label>
+                <input type="text" id="lastName" v-model="user.registration.lastName">
+            </div>
+            <div class="field-row-stacked">
+                <label for="phone">Phone Number <failureLabel v-if="submissionStatus == 'failed' && user.registration.phone == ''"/></label>
+                <input type="text" id="phone" v-model="user.registration.phone">
+            </div>
+            <div class="field-row-stacked">
+                <label for="age">Age <failureLabel v-if="submissionStatus == 'failed' && ((user.registration.age == undefined)||(user.registration.age == ''))"/></label>
+                <input class="number" type="number" id="age" v-model="user.registration.age">
+            </div>
+            <div class="field-row-stacked">
+                <label for="school">School <failureLabel v-if="submissionStatus == 'failed' && ((user.registration.school == undefined)||(user.registration.school == ''))" /></label>
+                <select id="school" v-model="user.registration.school">
+                    <option v-for="(school, index) in schools" :key="index">{{school}}</option>
+                </select>
+            </div>
+            <div class="field-row-stacked">
+                <label for="classStanding">Class Standing / Level of Current Study <failureLabel v-if="submissionStatus == 'failed' && user.registration.schoolStatus == undefined"/></label>
+                <select id="classStanding" v-model="user.registration.schoolStatus">
+                    <option v-for="(status, index) in schoolStatus" :key="index">{{status}}</option>
+                </select>
+            </div>
+            <div class="field-row-stacked">
+                <label for="country">County of Residence <failureLabel v-if="submissionStatus == 'failed' && user.registration.country == ''"/></label>
+                <select id="country" v-model="user.registration.country">
+                    <option v-for="(country, index) in countries" :key="index">{{country}}</option>
+                </select>
+            </div>
+            <div class="field-row-stacked">
+                <label for="state">State / Province <failureLabel v-if="submissionStatus == 'failed' && user.registration.state == ''"/></label>
+                <input id="state" type="text" v-model="user.registration.state">
+            </div>
+            <div class="field-row-stacked">
+                <label for="gender">Gender <failureLabel v-if="submissionStatus == 'failed' && user.registration.gender == undefined"/></label>
+                <select id="gender" v-model="user.registration.gender">
+                    <option v-for="(gender, index) in genders" :key="index">{{gender}}</option>
+                </select>
+            </div>
+            <div class="field-row" v-if="user.registration.gender == 'Other'">
+                <label for="optionalGender">Gender:</label>
+                <input type="text" id="optionalGender" v-model="user.registration.optionalExtraGender">
+            </div>
+            <div class="field-row-stacked">
+                <label for="pronouns">Pronouns <failureLabel v-if="submissionStatus == 'failed' && user.registration.pronouns == undefined"/></label>
+                <select id="pronouns" v-model="user.registration.pronouns">
+                    <option v-for="(pronoun, index) in userPronouns" :key="index">{{pronoun}}</option>
+                </select>
+            </div>
+            <div class="field-row" v-if="user.registration.pronouns == 'Other'">
+                <label for="optionalPronouns">Pronouns: </label>
+                <input type="text" id="optionalPronouns" v-model="user.registration.optionalExtraPronouns">
+            </div>
+            <div class="field-row-stacked">
+                <label for="major">Major <failureLabel v-if="submissionStatus == 'failed' && user.registration.major == ''"/></label>
+                <input type="text" id="major" v-model="user.registration.major">
+            </div>
+            <div class="checkbox-group">
+                <br><span>Do you have any of the following dietary restrictions?</span><br><br>
+                <div class="field-row">
+                    <input type="checkbox" id="vegetarian" value="vegetarian" v-model="user.registration.dietaryRestrictions">
+                    <label for="vegetarian">Vegetarian</label>
+                </div>
+                <div class="field-row">
+                    <input type="checkbox" id="vegan" value="vegan" v-model="user.registration.dietaryRestrictions">
+                    <label for="vegan">Vegan</label>
+                </div>
+                <div class="field-row">
+                    <input type="checkbox" id="kosher" value="kosher" v-model="user.registration.dietaryRestrictions">
+                    <label for="kosher">Kosher</label>
+                </div>
+                <div class="field-row">
+                    <input type="checkbox" id="halal" value="halal" v-model="user.registration.dietaryRestrictions">
+                    <label for="halal">Halal</label>
+                </div>
+                <div class="field-row">
+                    <input type="checkbox" id="gluten-free" value="gluten-free" v-model="user.registration.dietaryRestrictions">
+                    <label for="gluten-free">Gluten Free</label>
+                </div>
+            </div><br>
+            <div class="field-row-stacked">
+                <label for="link">Link (GitHub, LinkedIn, etc)<failureLabel v-if="submissionStatus == 'failed' && user.registration.link == ''"/></label>
+                <input type="text" id="link" v-model="user.registration.link">
+            </div><br>
+            <div class="field-row-stacked">
+                <button v-if="existingResume" @click="removeResume">Remove Resume</button><strong v-if="existingResume">{{existingResume}}</strong>
+                <input v-else type="file" url="/api/upload" accept="application/pdf" @select="fileChosen">
+            </div><br>
+            <div class="radio-group">
+                <span>Is this your first hackathon?</span>
+                <failureLabel v-if="submissionStatus == 'failed' && user.registration.firstHackathon == undefined"/>
+                <div class="field-row">
+                    <input type="radio" id="firstHackathonYes" v-model="user.registration.firstHackathon" :value="true">
+                    <label for="firstHackathonYes">Yes</label>
+                </div>
+                <div class="field-row">
+                    <input type="radio" id="firstHackathonNo" v-model="user.registration.firstHackathon" :value="false">
+                    <label for="firstHackathonNo">No</label>
+                </div>
+            </div><br>
+            <div class="radio-group">
+                <span>Is this your first time attending Kent Hack Enough?</span>
+                <failureLabel v-if="submissionStatus == 'failed' && user.registration.attendedKhe == undefined"/>
+                <div class="field-row">
+                    <input type="radio" id="firstKheYes" v-model="user.registration.attendedKhe" :value="false">
+                    <label for="firstKheYes">Yes</label>
+                </div>
+                <div class="field-row">
+                    <input type="radio" id="firstKheNo" v-model="user.registration.attendedKhe" :value="true">
+                    <label for="firstKheNo">No</label>
+                </div>
+            </div><br>
+            <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhConduct != true"/>
+            <div class="field-row">
+                <input type="checkbox" id="mlhConduct" v-model="user.registration.mlhConduct" :binary="true">
+                <label for="mlhConduct" style="display: block">
+                    I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>.
+                </label>
+            </div>
+            <failureLabel v-if="submissionStatus == 'failed' && user.registration.mlhShare != true"/>
+            <div class="field-row">
+                <input type="checkbox" id="mlhShare" v-model="user.registration.mlhShare" :binary="true">
+                <label for="mlhShare" style="display: block;">
+                    I authorize you to share my application/registration information with Major League Hacking for event administration, 
+                    ranking, and MLH administration in-line with the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>. I further agree to the 
+                    terms of both the <a href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md">>MLH Contest Terms and Conditions</a> and 
+                    the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>.
+                </label>
+            </div><br>
+            <p v-if="saveStatus == 'failed'" style="text-align: left; color: red;">
+                Could not update application! Make sure all fields are filled out.
+            </p>
+            <p v-if="saveStatus == 'saved'" style="text-align: left; color: darkgreen;">
+                Saved application!
+            </p>
+            <p v-if="submissionStatus == 'success'" style="text-align: left">
+                Thanks for submitting your application to Kent Hack Enough! You
+                will receive an email when your application is accepted or
+                rejected.
+
+                You are free to make changes to your application and save them,
+                but please note that this will put your application back at the
+                end of the line.
+            </p>
+            <div class="action-buttons">
+                <button @click="saveUser" :disabled="registrationClosed">
+                    {{ submissionStatus === 'success' ? 'Revise' : 'Save Draft' }}
+                </button>
+                <button @click="submissionStatus != 'success' && submitForm()" :disabled="submissionStatus == 'success' || registrationClosed">
+                    {{ submissionStatus == 'success' ? 'Application Submitted!' : 'Submit'}}
+                </button>
+                <button :disabled="registrationClosed" v-if="submissionStatus == 'success'">Withdraw Application</button>
+            </div>
+        </div>
+        <p v-else>please log in`</p>
     </div>
 </template>
-
 <script setup>
-import { User, schoolStatus, FullRegistration, genders, userPronouns, ethnicities, shirtSize, sexualities} from "includes/users.ts";
+import { User, schoolStatus, FullRegistration, genders, userPronouns} from "includes/users.ts"
 import { UserRole } from "includes/common.ts";
 import { ref, computed, onMounted } from "vue";
 import { remult } from "remult";
 import { user, loadUser } from "../state/user.js";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
-import Card from "primevue/card";
-import Button from "primevue/button";
-import Checkbox from 'primevue/checkbox';
-import InputNumber from "primevue/inputnumber";
-import RadioButton from "primevue/radiobutton";
-import FileUpload from "primevue/fileupload";
 import failureLabel from "@/components/failureLabel.vue";
 
-// change to re-enable registration!
-const registrationClosed = true;
+const schools = ref([]);
+const countries = ref([]);
+
+// change to re-disable registration!
+// TODO: this should be controlled from the admin console
+const registrationClosed = false;
 
 const otherSexuality = ref(false);
 const otherRestriction = ref(false);
+
+//TODO: I'm not sure why I made these two separate variables
 const alternateEmail = ref(false);
 const alternateEmailValue = ref("");
 
-// this is basically an enum: either "success", "failed", or "pending"
-const submissionStatus = ref('pending');
+//basically an enum: "success", "failed", "pending"
+const submissionStatus = ref("pending");
 
 const saveStatus = ref("");
 
 const receivingEmails = ref(true);
+//TODO: why does this have two onMounted calls? weird.
 onMounted(() => {
     loadUser().then(() => {
         if (user.value) {
-            if (user.value.submittedApplication == true) {submissionStatus.value = 'success'}
-            receivingEmails.value = user.value.receivingEmails;
-            localStorage.setItem("lastIDProvider", user.value.method);
+             if (user.value.submittedApplication == true) {submissionStatus.value = 'success'}
+             receivingEmails.value = user.value.receivingEmails;
+             localStorage.setItem("lastIDProvider", user.value.method);
+             console.log(user.value.registration);
         }
     });
+    getSchools(); //TODO: this should not be called this because it gets more than just schools
 });
 const existingResume = ref("");
 onMounted(() => {
@@ -311,29 +224,29 @@ onMounted(() => {
     });
 });
 let resumeFiles = null;
-const filesChosen = (event) => {
-    console.log("upload event:", event);
+const fileChoose = (event) => {
+    //console.log('upload event:', event); 
     resumeFiles = event.files;
 };
 const removeResume = () => {
-    resumeFiles = null;
+    removeFiles = null;
     existingResume.value = "";
-    User.uploadResume("", "");
-}
-const fileToBase64 = file => {
+    User.uploadResume("","");
+};
+const file2Base64 = file => {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = function () {
+        const render = new FileRender();
+        render.onloadend = function () {
             // The result property contains the base64 string
-            const base64String = reader.result.split(',')[1];
+            const base64String = render.result.split(',')[1];
             resolve(base64String);
         }
-        reader.readAsDataURL(file);
+        render.reasAsDataURL(file);
     });
-}
+};
 const saveUser = async () => {
     if (alternateEmail.value) {user.value.registration.email = alternateEmailValue.value}
-    if (resumeFiles){
+    if (resumeFiles) {
         const file = resumeFiles[0];
         await User.uploadResume(await fileToBase64(file), file.name || "untitled.pdf");
     }
@@ -341,17 +254,18 @@ const saveUser = async () => {
         .then(() => {
             saveStatus.value = "saved";
         }).catch(err => {
-            const specific = JSON.parse(err.modelState.registration);
-            console.error(specific);
+            console.error(err);
             // saving should only fail if there is something really, really
             // weird with the data that violates the HackathonRegistrationDraft
             // type check or if the application was previously submitted and is
             // thus validated with the FullRegistration type check.
-            saveStatus.value = 'failed';
-    });
+            saveStatus.value = "failed";
+            submissionStatus.value = 'failed';
+            console.log(user.value);
+        });
 };
 const isStaff = computed(() => {
-    return (
+    return(
         user.value?.roles?.includes(UserRole.Staff) ||
         user.value?.roles?.includes(UserRole.Admin)
     );
@@ -365,8 +279,8 @@ const formComplete = computed(() => FullRegistration.safeParse(user.registration
 const submitForm = async () => {
     await saveUser();
     try {
-       await User.submitRegistration();
-       submissionStatus.value = 'success';
+        await User.submitRegistration();
+        submissionStatus.value = 'success';
     } catch (e) {
         console.log(e.message);
         console.log(JSON.parse(e.message));
@@ -376,72 +290,61 @@ const submitForm = async () => {
 
 const deregister = async () => {
     await User.withdrawRegistration();
-    submissionStatus.value = "pending";
+}
+
+const getSchools = async () => {
+    const response = await fetch('/obtainSchools', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const result = await response.json();
+    let schoolList = result.schools;
+    let countryList = result.countries;
+    console.log(result);
+    schools.value = schoolList;
+    countries.value = countryList;
 }
 
 </script>
+<style scoped>
 
-<style scoped lang="scss">
-@import "@/styles/global.scss";
-@import '@/styles/space.scss';
-
-#profile {
-    @include bg-primary;
-    text-align: left;
-    padding: 100px 1em;
-    font-size: 20px;
-    line-height: 30px;
-    width: 600px;
-    max-width: 97vw;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.labeled-field {
+.profileContainer{
+    color: black;
+    font-size: 12pt;
+    margin: 12px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin: 10px 0;
 }
 
-.horizontal-labeled-field {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    // margin: 2px 0;
+label{
+    font-size: 11pt;
 }
 
-#options {
-    h4 {
-        margin: 5px 0;
-    }
-
-    input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-    }
-
-    border-radius: 5px;
-    padding: 10px 15px;
-    border: 1px solid white;
+input, select{
+    color: black;
 }
 
-:deep(.p-card-footer) {
-    text-align: right;
+button{
+    color: black;
 }
 
-:deep(.p-card .p-card-body) {
-    border: 1px solid white;
-    border-radius: 5px;
+.number {
+    background-color: white !important;
+    padding: 3px 4px;
+    border: solid #7f9db9 1px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    height: 21px;
+    line-height: 2;
 }
 
-.action-buttons {
-    display: flex;
-    gap: 0.5rem;
-    @media (max-width: 700px) {
-        flex-direction: column;
-        align-items: center;
-    }
+.number:focus{
+    outline: none;
 }
+
 </style>

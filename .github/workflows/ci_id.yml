@@ -39,4 +39,4 @@ jobs:
       - name: Pull & Build for Dev
         if: github.ref == 'refs/heads/dev-main'
         run: |
-          ssh oracle_dev 'cd /var/www/khe-revengeance/ && git fetch && git checkout dev-main && git pull && yarn install && pm2 restart khe-revengeance'
+          ssh oracle_dev 'cd /var/www/khe-revengeance/ && git fetch && git checkout dev-main && git stash && git pull && yarn install && pm2 restart khe-revengeance'

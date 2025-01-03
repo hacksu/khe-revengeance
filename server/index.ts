@@ -6,6 +6,7 @@ import { exec } from "child_process";
 
 // dependencies installed from npm
 import express from "express";
+import cors from 'cors';
 import fileServer from "serve-static";
 import { createServer as createViteServer } from "vite";
 import next from "next";
@@ -20,6 +21,7 @@ import enableMail from "./receive-mail.ts";
 import { remult } from "remult";
 import { Redirect } from "../global-includes/redirect-link.ts";
 import addUploads from "./file-upload.ts";
+import getSchools from "./get-schools.ts";
 
 // checking environment variable to see if we're in production or development
 // mode; this variable NODE_ENV should be set on the command line by the tool
@@ -70,18 +72,21 @@ async function createServer() {
   registerAuthMiddleware(app, remultConfig);
   // create api routes for database stuff
   app.use(remultConfig);
+  //enable cors
+  app.use(cors());
   // for sanity checks
   app.get("/api/exists", (_req, res, _next) => res.end("yes"));
   app.get("/meta/log/:logtype", (req, res) => {
     if (req.user?.roles?.includes(UserRole.Admin)) {
       res.sendFile(`/opt/pm2/logs/khe-revengeance-${req.params.logtype}.log`);
     } else {
-      res.sendStatus(403);
+      res.sendStatus(403);  
     }
   });
   defineRemoteProcedures();
   enableMail(app, remultConfig);
   addUploads(app);
+  getSchools(app);
   app.get("*", remultConfig.withRemult, async (req, res, next) => {
     const redirect = await remult.repo(Redirect)
       .findFirst({href: req.originalUrl.slice(1)});  // remove leading slash

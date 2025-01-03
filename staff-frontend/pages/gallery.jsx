@@ -1,5 +1,5 @@
-import RUG from 'react-upload-gallery'
-import 'react-upload-gallery/dist/style.css'
+//import RUG from 'react-upload-gallery'
+//import 'react-upload-gallery/dist/style.css'
 import { remult } from 'remult';
 
 import KHEStaffLayout from '../layouts/layout';
@@ -41,7 +41,7 @@ export default function GalleryEditor() {
 
   // TODO: add <EditableMenu /> for multiple galleries?
   return <KHEStaffLayout >
-    {initialStateLoaded ?
+    {/* {initialStateLoaded ?
       <div style={{overflowY: "auto", overflowX: "hidden", height: "100%"}}>
         <RUG
           action="/newimage"
@@ -71,6 +71,6 @@ export default function GalleryEditor() {
               console.error("could not delete image:", image);
             });
           }}
-        /></div> : "loading."}
+        /></div> : "loading."} */}
   </KHEStaffLayout>;
 }
