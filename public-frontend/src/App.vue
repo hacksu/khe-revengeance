@@ -5,7 +5,7 @@
       @closeFAQ="closeFAQ"
       @closeGuide="closeGuide" 
       @closeContact="closeContact"
-      @closeLogin="closeLogin"
+      @toggleLogin="toggleLogin"
       @closeProfile="closeProfile"
     />
     <div id="banner" class="xp title-bar" style="z-index: 100" :class="{ scrolled: shrinkBanner }">
@@ -100,7 +100,7 @@ export default {
       this.contact = false;
       this.navigateTo('/');
     },
-    closeLogin() {
+    toggleLogin() {
       this.login = !this.login;
       this.navigateTo('/');
     },

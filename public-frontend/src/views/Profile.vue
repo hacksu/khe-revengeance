@@ -174,7 +174,9 @@
                 <button :disabled="registrationClosed" v-if="submissionStatus == 'success'">Withdraw Application</button>
             </div>
         </div>
-        <p v-else>please log in`</p>
+        <div v-else>
+            <p>Please log in</p>
+        </div>
     </div>
 </template>
 <script setup>
@@ -198,7 +200,6 @@ const otherRestriction = ref(false);
 //TODO: I'm not sure why I made these two separate variables
 const alternateEmail = ref(false);
 const alternateEmailValue = ref("");
-
 //basically an enum: "success", "failed", "pending"
 const submissionStatus = ref("pending");
 

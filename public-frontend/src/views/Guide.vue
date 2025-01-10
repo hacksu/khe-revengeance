@@ -706,17 +706,6 @@ onMounted(() => {
             .removeAttribute("hidden");
     }
 });
-
-useHead({
-  title: "KHE's Guide to Hackathons",
-  meta: [
-    {
-      name: "description",
-      content: "Our guide to hackathons, with examples of projects, a roadmap " +
-                "of technologies, and more.",
-    },
-  ],
-});
 </script>
 
 <style scoped lang="scss">
