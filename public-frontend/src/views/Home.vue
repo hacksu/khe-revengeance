@@ -7,13 +7,13 @@
         <p>Registration</p>
       </div>
       <div class="shortcut">
-        <a href="https://kent-hack-enough-2025.devpost.com/" style="text-decoration: none">
+        <a href="https://kent-hack-enough-2025.devpost.com/" style="text-decoration: none" target="_blank">
           <img src="../assets/devpost.jpg" alt="">
           <p>KHE 2025 Devpost</p>
         </a>
       </div>
       <div class="shortcut">
-        <a href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" style="text-decoration: none">
+        <a href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md" style="text-decoration: none" target="_blank">
           <img src="../assets/mlh-logo-color.png" alt="" />
           <p>MLH Code of Conduct</p>
         </a>
@@ -75,9 +75,9 @@
       <div id="loginWindowHeader" class="title-bar xp" @mousedown="startDrag('loginWindow', $event)">
         <div class="title-bar-text xp">Login</div>
         <div class="title-bar-controls xp">
-          <button aria-label="Minimize" @click="$emit('closeLogin')"></button>
+          <button aria-label="Minimize" @click="$emit('toggleLogin')"></button>
           <button aria-label="Maximize"></button>
-          <button aria-label="Close" @click="$emit('closeLogin')"></button>
+          <button aria-label="Close" @click="$emit('toggleLogin')"></button>
         </div>
       </div>
       <div class="window-body xp" style="height: 375px; overflow-y: scroll;">
@@ -123,7 +123,7 @@ import { ref } from 'vue';
 
 defineProps(['faq', 'guide', 'sponsors', 'contact', 'login', 'profile']);
 
-const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide', 'closeContact', 'closeLogin', 'closeProfile']);
+const emit = defineEmits(['closeSponsors', 'closeFAQ', 'closeGuide', 'closeContact', 'toggleLogin', 'closeProfile']);
 
 useHead({
   title: "Kent Hack Enough",
@@ -173,8 +173,8 @@ const stopDrag = () => {
 };
 
 const openRegistration = () => {
-  if (!user) {
-    emit('closeLogin');
+  if (!user || (typeof user.value == "undefined")) {
+    emit('toggleLogin');
   } else {
     emit('closeProfile');
   }
