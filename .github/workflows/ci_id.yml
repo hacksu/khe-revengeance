@@ -34,9 +34,9 @@ jobs:
       - name: Pull & Build for Production
         if: github.ref == 'refs/heads/production'
         run: |
-          ssh oracle_prod 'sudo su && cd /var/www/khe-revengeance/ && git fetch && git checkout production && git pull && yarn install && pm2 restart khe-revengeance'
+          ssh oracle_prod 'cd /var/www/khe-revengeance/ && git fetch && git checkout production && git pull && yarn install && pm2 restart khe-revengeance'
 
       - name: Pull & Build for Dev
         if: github.ref == 'refs/heads/dev-main'
         run: |
-          ssh oracle_dev 'sudo su && cd /var/www/khe-revengeance/ && git fetch && git checkout dev-main && git stash && git pull && yarn install && pm2 restart khe-revengeance'
+          ssh oracle_dev 'cd /var/www/khe-revengeance/ && git fetch && git checkout dev-main && git stash && git pull && yarn install && pm2 restart khe-revengeance'
