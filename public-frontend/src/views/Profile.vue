@@ -44,7 +44,7 @@
                 </select>
             </div>
             <div class="field-row-stacked">
-                <label for="country">County of Residence <failureLabel v-if="submissionStatus == 'failed' && user.registration.country == ''"/></label>
+                <label for="country">Country of Residence <failureLabel v-if="submissionStatus == 'failed' && user.registration.country == ''"/></label>
                 <select id="country" v-model="user.registration.country">
                     <option v-for="(country, index) in countries" :key="index">{{country}}</option>
                 </select>
@@ -105,8 +105,9 @@
                 <input type="text" id="link" v-model="user.registration.link">
             </div><br>
             <div class="field-row-stacked">
+                <label for="resumeUpload">Upload Resume</label>
                 <button v-if="existingResume" @click="removeResume">Remove Resume</button><strong v-if="existingResume">{{existingResume}}</strong>
-                <input v-else type="file" url="/api/upload" accept="application/pdf" @select="fileChosen">
+                <input id="resumeUpload" v-else type="file" url="/api/upload" accept="application/pdf" @select="fileChosen">
             </div><br>
             <div class="radio-group">
                 <span>Is this your first hackathon?</span>
@@ -174,7 +175,9 @@
                 <button :disabled="registrationClosed" v-if="submissionStatus == 'success'">Withdraw Application</button>
             </div>
         </div>
-        <p v-else>please log in`</p>
+        <div v-else>
+            <p>Please log in</p>
+        </div>
     </div>
 </template>
 <script setup>
@@ -198,7 +201,6 @@ const otherRestriction = ref(false);
 //TODO: I'm not sure why I made these two separate variables
 const alternateEmail = ref(false);
 const alternateEmailValue = ref("");
-
 //basically an enum: "success", "failed", "pending"
 const submissionStatus = ref("pending");
 
