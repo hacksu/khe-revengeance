@@ -207,14 +207,16 @@ export default function UsersManager() {
                     <div className={style.mainList}>
                         {users.map((user, i) =>
                             <Card
-                                key={i}
-                                title={registration.name}
-                                extra={<small>{user.roles.join(", ")}</small>}
-                                actions={getActions(user)}
-                                style={cardStyle}>
-                                {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
-                                <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
-                            </Card>
+                            key={i}
+                            title={user.name} // Use the computed 'name' property
+                            extra={<small>{user.roles.join(", ")}</small>}
+                            actions={getActions(user)}
+                            style={cardStyle}>
+                            {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
+                            <p>
+                              This account is registered with <strong>{user.method}</strong>. It was created on <strong>{new Date(user.createdAt).toLocaleDateString()}</strong>.
+                            </p>
+                          </Card>
                         )}
                     </div>
                 </Content>
@@ -226,7 +228,7 @@ export default function UsersManager() {
         */}
         <Modal
             width="800px"
-            title={<p>Application for <strong>{viewing?.registration.name}</strong></p>}
+            title={<p>Application for <strong>{viewing?.name}</strong></p>}
             open={viewing !== null}
             onCancel={closeReview}
             onOk={() => approveUser(viewing)}
