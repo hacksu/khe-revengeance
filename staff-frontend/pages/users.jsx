@@ -208,7 +208,7 @@ export default function UsersManager() {
                         {users.map((user, i) =>
                             <Card
                                 key={i}
-                                title={user.name}
+                                title={registration.name}
                                 extra={<small>{user.roles.join(", ")}</small>}
                                 actions={getActions(user)}
                                 style={cardStyle}>
