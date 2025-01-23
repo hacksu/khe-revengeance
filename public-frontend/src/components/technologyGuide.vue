@@ -25,11 +25,18 @@ defineProps({
 
 <style scoped lang="scss">
 :deep(.p-accordion-header-link) {
-    background: #1e1e1e!important;
+    color: black!important;
+    background: white!important;
     &:hover {
-        background: #222!important;
+        background: lightblue!important;
     }
 }
+
+:deep(.p-accordion-content) {
+    background: white!important;
+    color: black!important;
+}
+
 :deep(.p-accordion-toggle-icon) {
     flex-shrink: 0;
 }

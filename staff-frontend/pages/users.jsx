@@ -8,6 +8,7 @@ import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Menu } from "a
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content, Sider } = Layout;
 
+<<<<<<< HEAD
 function UserModalContent({ registration }) {
     if (!registration) {
         return <p>No registration data available.</p>;
@@ -16,6 +17,16 @@ function UserModalContent({ registration }) {
     const dietaryRestrictions = registration.dietaryRestrictions.map(
         r => r === "Other" ?
             `Other (${registration.optionalExtraRestriction || "not specified"})` :
+=======
+function UserModalContent({ user, registration }) {
+    if (!registration || !user) {
+        return <p>No user or registration data available.</p>;
+    }
+
+    const dietaryRestrictions = registration.dietaryRestrictions.map(
+        r => r === "Other" ? 
+            `Other (${registration.optionalExtraRestriction || "not specified"})` : 
+>>>>>>> 81aa99988a3bffcfa30218234de5aafca390ea1d
             r
     ).join(", ") || "This user has no dietary restrictions.";
 
@@ -23,6 +34,12 @@ function UserModalContent({ registration }) {
         <>
             <Divider orientation="left" plain>Personal</Divider>
             <Row gutter={16}>
+<<<<<<< HEAD
+=======
+                <Col span={8}>
+                    <strong>Email:</strong> {user.email || "No Email Provided"}
+                </Col>
+>>>>>>> 81aa99988a3bffcfa30218234de5aafca390ea1d
                 <Col span={8}><strong>Age:</strong> {registration.age}</Col>
                 <Col span={8}><strong>School:</strong> {registration.school}</Col>
                 <Col span={8}><strong>Phone:</strong> {registration.phone}</Col>
@@ -44,7 +61,10 @@ function UserModalContent({ registration }) {
                 <Col span={8}><strong>Shirt Size:</strong> {registration.shirtSize}</Col>
                 <Col span={8}><strong>State:</strong> {registration.state}</Col>
                 <Col span={8}><strong>Country:</strong> {registration.country}</Col>
+<<<<<<< HEAD
                 <Col span={8}><strong>Email:</strong> {registration.email}</Col>
+=======
+>>>>>>> 81aa99988a3bffcfa30218234de5aafca390ea1d
             </Row>
             <Divider orientation="left" plain>Dietary Restrictions</Divider>
             <Row gutter={16}>
@@ -141,16 +161,23 @@ export default function UsersManager() {
         setViewingStatus(clickedItem.key);
     };
 
-    const loadUsers = () => {
-        userRepo
-            .find({where: userStatuses[viewingStatus].filter})
-            .then(setUsers);
-        for (const status of Object.keys(userStatuses)){
-            userRepo
-                .count(userStatuses[status].filter)
-                .then(count => setUserStatusCounts(c => ({...c, [status]: count})));
+    const loadUsers = async () => {
+        try {
+            const fetchedUsers = await userRepo.find({
+                where: userStatuses[viewingStatus].filter,
+            });
+    
+            const users = fetchedUsers.map(data => Object.assign(new User(), data));
+            setUsers(users);
+    
+            for (const status of Object.keys(userStatuses)) {
+                const count = await userRepo.count(userStatuses[status].filter);
+                setUserStatusCounts(c => ({ ...c, [status]: count }));
+            }
+        } catch (error) {
+            console.error("Error loading users:", error);
         }
-    }
+    };
 
     useEffect(loadUsers, [viewingStatus]);
 
@@ -219,14 +246,16 @@ export default function UsersManager() {
                     <div className={style.mainList}>
                         {users.map((user, i) =>
                             <Card
-                                key={i}
-                                title={user.email}
-                                extra={<small>{user.roles.join(", ")}</small>}
-                                actions={getActions(user)}
-                                style={cardStyle}>
-                                {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
-                                <p>This account is registered with <strong>{user.method}</strong>. It was created on <strong>{user.createdAt.toLocaleDateString()}</strong>.</p>
-                            </Card>
+                            key={i}
+                            title={user.name} // Use the computed 'name' property
+                            extra={<small>{user.roles.join(", ")}</small>}
+                            actions={getActions(user)}
+                            style={cardStyle}>
+                            {user.submittedApplication && !user.applicationApproved && <strong>This user is awaiting approval!</strong>}
+                            <p>
+                              This account is registered with <strong>{user.method}</strong>. It was created on <strong>{new Date(user.createdAt).toLocaleDateString()}</strong>.
+                            </p>
+                          </Card>
                         )}
                     </div>
                 </Content>
@@ -238,14 +267,14 @@ export default function UsersManager() {
         */}
         <Modal
             width="800px"
-            title={<p>Application for <strong>{viewing?.registration.name}</strong></p>}
+            title={<p>Application for <strong>{viewing?.name || "No Name Provided"}</strong></p>}
             open={viewing !== null}
             onCancel={closeReview}
             onOk={() => approveUser(viewing)}
             okButtonProps={viewing?.applicationApproved ? { disabled: true } : { loading }}
             okText="Approve"
         >
-            {viewing && <UserModalContent registration={viewing.registration} />}
+            {viewing && <UserModalContent user={viewing} registration={viewing.registration} />}
         </Modal>
     </KHELayout>
 }

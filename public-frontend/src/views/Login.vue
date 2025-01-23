@@ -1,18 +1,16 @@
 <template>
-    <div id="options-container" style="padding: 0 10px">
-        <a class="loginBar loginBox" href="/login/github">
-            <img src="@/assets/auth_assets/github-mark-white.svg" />
-            <span>Login with GitHub</span>
-        </a>
-        <a class="loginBar loginBox" href="/login/discord">
-            <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
-            <span>Login with Discord</span>
-        </a>
-        <a class="loginBar loginBox noHover">
-            <img id="khe-mark" src="/favicon.ico" />
-            <span>Login with KHE account:</span>
-        </a>
-        <LocalLogin/>
+    <div id="options-container" style="padding: 0 10px;">
+        <LocalLogin style="width: 75%; height: 100%;"/>
+        <div id="alt-login-container">
+            <a class="loginBar loginBox" href="/login/github">
+                <img src="@/assets/auth_assets/github-mark-white.svg" />
+                <span>Login with GitHub</span>
+            </a>
+            <a class="loginBar loginBox" href="/login/discord">
+                <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
+                <span>Login with Discord</span>
+            </a>
+        </div>
     </div>
 </template>
 
@@ -37,47 +35,53 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
-@import '@/styles/space.scss';
 
 #options-container {
-    margin: 150px auto;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+
+#alt-login-container {
+    margin: auto;
     display: flex;
     flex-direction: column;
-    align-items: center ;
+    justify-content: center;
     gap: 10px;
-    max-width: 500px;
-
+    height: 100%;
 }
 
 .loginBox {
     padding: 6px 10px;
-    border-radius: 5px;
-    border: 3px solid rgb(169, 169, 169);
-    background-color: rgb(22, 36, 36);
+    background: linear-gradient(to bottom, rgb(46, 75, 75), rgb(30, 50, 50));
+    height: 100%;
+    width: 100%;
+}
+
+.loginBox:active{
+    background: linear-gradient(to bottom, rgb(30, 50, 50), rgb(46, 75, 75));
 }
 
 .loginBar {
     display: flex;
-
     gap: 10px;
-    width: 250px;
-    height: 40px;
+    width: 100%;
+    height: 50%;
     &:not(.noHover) {
         cursor: pointer;
     }
     // margin: 15px auto;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 24pt;
     transition: background-color 0.2s;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     color: white;
     text-decoration: none;
-
-    &:hover:not(.noHover) {
-        background-color: rgb(46, 75, 75);
-    }
 
     img {
         height: 1.4em;

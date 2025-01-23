@@ -8,17 +8,27 @@
         <a href="https://enbasis.com/" target="_blank" title="Enbasis">
             <Enbasis class="item" />
         </a>
-        <a href="https://ybi.org" target="_blank" title="Youngstown Business Incubator">
-            <img src="@/assets/ybi.png" class="item" style="object-fit: cover;" />
-        </a>
         <a href="https://www.bawls.com/" target="_blank" title="BAWLS">
             <img src="@/assets/bawls.webp" class="item"  style="object-fit: cover;" />
         </a>
         <a href="https://www.wolframalpha.com/" target="_blank" title="Wolfram Alpha">
             <WolframAlpha class="item" />
         </a>
-        <a href="https://www.kentdisplays.com/" target="_blank" title="Kent Displays">
-            <img src="@/assets/kentdisplays.webp" class="item"  style="object-fit: cover;" />
+        <div class="item" style="
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+            <a href="https://voiceflow.com"  target="_blank" title="Voiceflow">
+                <img style="width: 300px; max-width: 300px; height: auto;" src="../assets/voiceflow.svg" alt="">
+            </a>
+        </div>
+        <a href="https://boardandbevy.com" target="_blank" class="item" style="display: flex; align-items: center; justify-content: center;">
+            <img style="max-width: 100%; height: auto;" src="../assets/boardandbevy.png" alt="">
+        </a>
+        <a href="https://onepassword.com" target="_blank" class="item" style="display: flex; justify-content: center;">
+            <img style="max-width: 100%; height: auto; max-height: 100%;" src="../assets/1password.webp" alt="">
         </a>
         <div v-if="showAd" class="item" id="extra-item">
             And You?
@@ -61,7 +71,7 @@ const props = defineProps({
     },
     showAd: {
         type: Boolean,
-        default: false,
+        default: true,
         required: false
     }
 });
@@ -102,5 +112,7 @@ a:has(.item) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
+    text-align: center;
 }
 </style>

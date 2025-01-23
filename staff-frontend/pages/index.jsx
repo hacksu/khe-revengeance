@@ -69,7 +69,7 @@ const UsersLineGraph = () => {
             const dataPoints = 20;
 
             const earliest = (await repo.findFirst()).createdAt;
-            const latest = new Date("2024-05-01");
+            const latest = new Date("2025-05-01");
             const range = latest.getTime() - earliest.getTime();
             const rangeBetweenPoints = range / (dataPoints - 1);
 
