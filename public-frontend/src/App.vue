@@ -14,25 +14,25 @@
             <img src="/favicon.ico" style="height: 100%" alt="Logo">
         </p>
         <!-- <p class="banner-link"@click="scrollTo('/', '#about-container')">About</p> -->
-        <p class="banner-link" id="faq-scrollto" @click="this.faq = !this.faq; navigateTo('/')">
+        <p class="banner-link" id="faq-scrollto" @click="closeFAQ">
           FAQ
         </p>
-        <p class="banner-link" @click="this.guide = !this.guide; navigateTo('/')">
+        <p class="banner-link" @click="closeGuide">
           Guide
         </p>
-        <p v-if="showSponsorsLink" class="banner-link" @click="this.sponsors = !this.sponsors; navigateTo('/')">
+        <p v-if="showSponsorsLink" class="banner-link" @click="closeSponsors">
           Sponsors
         </p>
-        <p class="banner-link" @click="this.contact = !this.contact; navigateTo('/')">
+        <p class="banner-link" @click="closeContact">
           Contact
         </p>
         <p v-if="showSchedule" class="banner-link" @click="navigateTo('/schedule')">
           Schedule
         </p>
-        <p class="banner-link" @click="this.profile = !this.profile; navigateTo('/')" v-if="user && showLogin">
+        <p class="banner-link" @click="closeProfile" v-if="user && showLogin">
           Profile
         </p>
-        <p class="banner-link" @click="this.login = !this.login; navigateTo('/')" v-else-if="!user && showLogin">
+        <p class="banner-link" @click="toggleLogin" v-else-if="!user && showLogin">
           Login
         </p>
         <!-- <div id="hamburgMenu">
@@ -72,6 +72,7 @@ export default {
       guide: false,
       contact: false,
       login: false,
+      isMobile: window.matchMedia("(max-width: 500px)").matches,
     };
   },
   setup() {
@@ -85,27 +86,70 @@ export default {
   },
   methods: {
     closeSponsors() {
-      this.sponsors = false;
+      this.sponsors = !this.sponsors;
+      if (this.isMobile){
+        this.faq = false;
+        this.guide = false;
+        this.contact = false;
+        this.login = false;
+        this.profile = false;
+      }
       this.navigateTo('/');
     },
     closeFAQ() {
-      this.faq = false;
+      this.faq = !this.faq;
+      if (this.isMobile){
+        this.sponsors = false;
+        this.guide = false;
+        this.contact = false;
+        this.login = false;
+        this.profile = false;
+      }
       this.navigateTo('/');
     },
     closeGuide() {
-      this.guide = false;
+      this.guide = !this.guide;
+      if (this.isMobile){
+        this.sponsors = false;
+        this.faq = false;
+        this.contact = false;
+        this.login = false;
+        this.profile = false;
+      }
       this.navigateTo('/');
     },
     closeContact() {
-      this.contact = false;
+      this.contact = !this.contact;
+      if (this.isMobile){
+        this.sponsors = false;
+        this.guide = false;
+        this.faq = false;
+        this.login = false;
+        this.profile = false;
+      }
+      console.log(this.sponsors)
       this.navigateTo('/');
     },
     toggleLogin() {
       this.login = !this.login;
+      if (this.isMobile){
+        this.sponsors = false;
+        this.guide = false;
+        this.contact = false;
+        this.faq = false;
+        this.profile = false;
+      }
       this.navigateTo('/');
     },
     closeProfile() {
       this.profile = !this.profile;
+      if (this.isMobile){
+        this.sponsors = false;
+        this.guide = false;
+        this.contact = false;
+        this.login = false;
+        this.faq = false;
+      }
       this.navigateTo('/');
     },
     handleScroll() {
@@ -189,7 +233,7 @@ body {
   justify-content: space-between;
   z-index: 98;
   padding: 0px;
-  height: 30px;
+  height: 50px;
 
   // @include mobile {
   //   @include bg-primary;
