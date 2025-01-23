@@ -19,7 +19,7 @@
         </a>
       </div>
     </div>
-    <div :hidden="!sponsors" id="sponsorWindow" class="window xp" style="width: 600px;">
+    <div :hidden="!sponsors" id="sponsorWindow" class="window xp">
       <div id="sponsorWindowHeader" class="title-bar xp" @mousedown="startDrag('sponsorWindow', $event)">
         <div class="title-bar-text xp">Sponsors</div>
         <div class="title-bar-controls xp">
@@ -28,11 +28,11 @@
           <button aria-label="Close" @click="$emit('closeSponsors')"></button>
         </div>
       </div>
-      <div class="window-body xp" style="height: 600px; overflow-y: scroll;">
+      <div class="window-body xp" style="overflow-y: scroll;">
         <Sponsors></Sponsors>
       </div>
     </div>
-    <div :hidden="!faq" id="faqWindow" class="window xp" style="width: 600px;">
+    <div :hidden="!faq" id="faqWindow" class="window xp">
       <div id="faqWindowsHeader" class="title-bar xp" @mousedown="startDrag('faqWindow', $event)">
         <div class="title-bar-text xp">FAQ</div>
         <div class="title-bar-controls xp">
@@ -45,7 +45,7 @@
         <FAQ/>
       </div>
     </div>
-    <div :hidden="!guide" id="guideWindow" class="window xp" style="width: 800px;">
+    <div :hidden="!guide" id="guideWindow" class="window xp">
       <div id="guideWindowHeader" class="title-bar xp" @mousedown="startDrag('guideWindow', $event)">
         <div class="title-bar-text xp">Hackathon Guide</div>
         <div class="title-bar-controls xp">
@@ -58,7 +58,7 @@
         <Guide/>
       </div>
     </div>
-    <div :hidden="!contact" id="contactWindow" class="window xp" style="width: 600px;">
+    <div :hidden="!contact" id="contactWindow" class="window xp">
       <div id="contactWindowHeader" class="title-bar xp" @mousedown="startDrag('contactWindow', $event)">
         <div class="title-bar-text xp">Contact</div>
         <div class="title-bar-controls xp">
@@ -71,7 +71,7 @@
         <Contact/>
       </div>
     </div>
-    <div :hidden="!login" id="loginWindow" class="window xp" style="width: 600px;">
+    <div :hidden="!login" id="loginWindow" class="window xp">
       <div id="loginWindowHeader" class="title-bar xp" @mousedown="startDrag('loginWindow', $event)">
         <div class="title-bar-text xp">Login</div>
         <div class="title-bar-controls xp">
@@ -84,7 +84,7 @@
         <Login></Login>
       </div>
     </div>
-    <div :hidden="!profile" id="profileWindow" class="window xp" style="width: 600px;">
+    <div :hidden="!profile" id="profileWindow" class="window xp">
       <div id="profileWindowHeader" class="title-bar xp" @mousedown="startDrag('profileWindow', $event)">
         <div class="title-bar-text xp">Profile</div>
         <div class="title-bar-controls xp">
@@ -98,7 +98,9 @@
       </div>
     </div>
     <div>
-      <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:50px;top:0;width:10%;z-index:10000" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=yellow" target="_blank"><img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-yellow.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%"></a>
+      <a id="mlh-trust-badge" style="display:block;max-width:100px;min-width:60px;position:fixed;right:50px;top:0;width:10%;z-index:-1" href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=yellow" target="_blank">
+        <img src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-yellow.svg" alt="Major League Hacking 2025 Hackathon Season" style="width:100%;">
+      </a>
     </div>
   </div>
 </template>
@@ -130,7 +132,7 @@ useHead({
   meta: [
     {
       name: "description",
-      content: "Take 24 hours out of your schedule on April 20th-21st, 2024 to make something amazing."
+      content: "Take 24 hours out of your schedule on Feburary 15th-16th, 2025 to make something amazing."
     },
     {
       property: "og:image",
@@ -188,6 +190,8 @@ const openRegistration = () => {
 .window {
   position: absolute;
   z-index: 9;
+  width: 100%; // Default width for smaller screens
+  max-width: 600px; // Limit the maximum width
 }
 
 .title-bar {
@@ -201,6 +205,7 @@ const openRegistration = () => {
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
+  flex-wrap: nowrap;
   gap: 20px;
 }
 
@@ -227,4 +232,18 @@ const openRegistration = () => {
   text-shadow: 1px 1px 3px #000;
 }
 
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+  .window {
+    width: 70%;
+    max-width: 800px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .window {
+    width: 50%;
+    max-width: 1000px;
+  }
+}
 </style>
