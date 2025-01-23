@@ -8,14 +8,14 @@ import { Button, Card, Layout, Modal, Row, Col, Divider, Tooltip, Menu } from "a
 import { Email, EmailTemplates } from "../../global-includes/email-address";
 const { Content, Sider } = Layout;
 
-function UserModalContent({ user, registration }) {
-    if (!registration || !user) {
-        return <p>No user or registration data available.</p>;
+function UserModalContent({ registration }) {
+    if (!registration) {
+        return <p>No registration data available.</p>;
     }
 
     const dietaryRestrictions = registration.dietaryRestrictions.map(
-        r => r === "Other" ? 
-            `Other (${registration.optionalExtraRestriction || "not specified"})` : 
+        r => r === "Other" ?
+            `Other (${registration.optionalExtraRestriction || "not specified"})` :
             r
     ).join(", ") || "This user has no dietary restrictions.";
 
@@ -23,9 +23,6 @@ function UserModalContent({ user, registration }) {
         <>
             <Divider orientation="left" plain>Personal</Divider>
             <Row gutter={16}>
-                <Col span={8}>
-                    <strong>Email:</strong> {user.email || "No Email Provided"}
-                </Col>
                 <Col span={8}><strong>Age:</strong> {registration.age}</Col>
                 <Col span={8}><strong>School:</strong> {registration.school}</Col>
                 <Col span={8}><strong>Phone:</strong> {registration.phone}</Col>
@@ -47,6 +44,7 @@ function UserModalContent({ user, registration }) {
                 <Col span={8}><strong>Shirt Size:</strong> {registration.shirtSize}</Col>
                 <Col span={8}><strong>State:</strong> {registration.state}</Col>
                 <Col span={8}><strong>Country:</strong> {registration.country}</Col>
+                <Col span={8}><strong>Email:</strong> {registration.email}</Col>
             </Row>
             <Divider orientation="left" plain>Dietary Restrictions</Divider>
             <Row gutter={16}>
