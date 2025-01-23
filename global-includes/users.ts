@@ -210,9 +210,14 @@ export class User extends EntityBase {
   id!: string;
 
   get name() {
-    const { firstName, lastName } = this.registration || {};
+    if (!this.registration) {
+        return "No Name Provided";
+    }
+
+    const { firstName, lastName } = this.registration;
     return firstName && lastName ? `${firstName} ${lastName}` : "No Name Provided";
-  }
+}
+
 
   @Fields.createdAt()
   createdAt = new Date();
