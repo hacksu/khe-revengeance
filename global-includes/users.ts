@@ -209,6 +209,11 @@ export class User extends EntityBase {
   @Fields.uuid()
   id!: string;
 
+  get name() {
+    const { firstName, lastName } = this.registration || {};
+    return firstName && lastName ? `${firstName} ${lastName}` : "No Name Provided";
+  }
+
   @Fields.createdAt()
   createdAt = new Date();
 
