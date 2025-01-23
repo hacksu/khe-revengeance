@@ -15,7 +15,7 @@ function UserModalContent({ registration }) {
 
     const dietaryRestrictions = registration.dietaryRestrictions.map(
         r => r === "Other" ?
-            Other (${registration.optionalExtraRestriction || "not specified"}) :
+            `Other (${registration.optionalExtraRestriction || "not specified"})` :
             r
     ).join(", ") || "This user has no dietary restrictions.";
 
@@ -23,7 +23,6 @@ function UserModalContent({ registration }) {
         <>
             <Divider orientation="left" plain>Personal</Divider>
             <Row gutter={16}>
-                <Col span={8}><strong>Email:</strong> {registration.email}</Col>
                 <Col span={8}><strong>Age:</strong> {registration.age}</Col>
                 <Col span={8}><strong>School:</strong> {registration.school}</Col>
                 <Col span={8}><strong>Phone:</strong> {registration.phone}</Col>
@@ -45,6 +44,7 @@ function UserModalContent({ registration }) {
                 <Col span={8}><strong>Shirt Size:</strong> {registration.shirtSize}</Col>
                 <Col span={8}><strong>State:</strong> {registration.state}</Col>
                 <Col span={8}><strong>Country:</strong> {registration.country}</Col>
+                <Col span={8}><strong>Email:</strong> {registration.email}</Col>
             </Row>
             <Divider orientation="left" plain>Dietary Restrictions</Divider>
             <Row gutter={16}>
@@ -127,7 +127,7 @@ export default function UsersManager() {
 
     const userStatusMenuItems = Object.keys(userStatuses).map(
         key => {
-            const count = userStatusCounts[key] ?  (${userStatusCounts[key]}) : "";
+            const count = userStatusCounts[key] ? ` (${userStatusCounts[key]})` : "";
             const label = userStatuses[key].label + count;
             return { label, key };
         }
