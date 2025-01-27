@@ -1,32 +1,32 @@
 <template>
-    <div id="options-container" style="padding: 0 10px;">
-        <LocalLogin style="width: 75%; height: 100%;"/>
-        <div id="alt-login-container">
-            <a class="loginBar loginBox" href="/login/github">
-                <img src="@/assets/auth_assets/github-mark-white.svg" />
-                <span>Login with GitHub</span>
-            </a>
-            <a class="loginBar loginBox" href="/login/discord">
-                <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
-                <span>Login with Discord</span>
-            </a>
-        </div>
+  <div id="options-container" style="padding: 0 10px">
+    <LocalLogin style="width: 75%" />
+    <div id="alt-login-container">
+      <a class="loginBar loginBox" href="/login/github">
+        <img src="@/assets/auth_assets/github-mark-white.svg" />
+        <span>Login with GitHub</span>
+      </a>
+      <a class="loginBar loginBox" href="/login/discord">
+        <img id="discord-mark" src="@/assets/auth_assets/discord-mark-white.svg" />
+        <span>Login with Discord</span>
+      </a>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 import { user, loadUser } from "../state/user.js";
 import LocalLogin from "../components/localLogin.vue";
 
 const router = useRouter();
 onMounted(() => {
-    loadUser().then(() => {
-        if (user.value) {
-            router.push("/profile");
-        }
-    });
+  loadUser().then(() => {
+    if (user.value) {
+      router.push("/profile");
+    }
+  });
 });
 // TODO:
 // use "lastIDProvider" from localStorage (which is set after a successful login
@@ -39,10 +39,15 @@ onMounted(() => {
 #options-container {
     margin: auto;
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 10px;
     height: 100%;
+    // mobile:
+    flex-direction: column-reverse;
+    // desktop:
+    @media (min-width: 600px) {
+        flex-direction: row;
+    }
 }
 
 #alt-login-container {
@@ -55,7 +60,7 @@ onMounted(() => {
 }
 
 .loginBox {
-    padding: 6px 10px;
+    padding: 20px;
     background: linear-gradient(to bottom, rgb(46, 75, 75), rgb(30, 50, 50));
     height: 100%;
     width: 100%;
