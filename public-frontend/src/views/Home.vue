@@ -80,7 +80,7 @@
           <button aria-label="Close" @click="$emit('toggleLogin')"></button>
         </div>
       </div>
-      <div class="window-body xp" style="height: 375px; overflow-y: scroll;">
+      <div class="window-body xp" style="overflow-y: auto">
         <Login></Login>
       </div>
     </div>
@@ -190,8 +190,10 @@ const openRegistration = () => {
 .window {
   position: absolute;
   z-index: 9;
-  width: 100%; // Default width for smaller screens
-  max-width: 600px; // Limit the maximum width
+  // default width for windows:
+  width: 600px;
+  // limit window width to the actual screen width for smaller devices
+  max-width: 100vw;
 }
 
 .title-bar {
@@ -230,20 +232,5 @@ const openRegistration = () => {
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px 3px #000;
-}
-
-/* Media queries for responsive design */
-@media (min-width: 768px) {
-  .window {
-    width: 70%;
-    max-width: 800px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .window {
-    width: 50%;
-    max-width: 1000px;
-  }
 }
 </style>
